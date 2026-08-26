@@ -1,26 +1,36 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-ink: #1c1c1c;              /* was #141824 — corrected */
+  --color-brand: #4c34d4;            /* verify this hex in Figma */
+  --color-brand-tint: #eeebfd;      /* ✅ confirmed */
+  --color-save: #0e9f5a;            /* ✅ confirmed */
+  --color-hot: #ff6d00;             /* was #f17012 — corrected */
+  --color-bg: #f4f5f9;              /* verify */
+  --color-surface: #ffffff;         /* ✅ */
+  --color-line: #eeebfd;            /* card borders use this */
+  --color-text: #1c1c1c;            /* corrected */
+  --color-muted: #9aa1ad;           /* ✅ confirmed */
+
+  --font-display: "Syne", sans-serif;      /* headings — you confirmed */
+  --font-body: "DM Sans", sans-serif;      /* card/body — Figma confirmed */
+  --font-accent: "IBM Plex Sans", sans-serif; /* inline discount */
+
+  --radius-card: 10px;              /* was 14px — corrected */
+  --radius-btn: 5px;                /* added */
+  --color-telegram: #229ed9;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+:root { --max-width: 1280px; }      /* ✅ your correction */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html { scroll-behavior: smooth; }
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
 }
+/* h1, h2, h3, h4 { font-family: var(--font-display); } */
+.container-wrap { max-width: var(--max-width); margin: 0 auto; padding: 10px 20px; }
+.price-font { font-family: var(--font-body); font-variant-numeric: tabular-nums; }
