@@ -32,5 +32,10 @@ body {
   line-height: 1.5;
 }
 /* h1, h2, h3, h4 { font-family: var(--font-display); } */
-.container-wrap { max-width: var(--max-width); margin: 0 auto; padding: 10px 20px; }
 .price-font { font-family: var(--font-body); font-variant-numeric: tabular-nums; }
+.container-wrap {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}

@@ -37,15 +37,15 @@ export default function Footer() {
           <div className="w-full lg:w-95 shrink-0 flex flex-col gap-5.5 ">
             <div className="space-y-4">
               <Link href="/" className="inline-block">
-                <Image
-                  src="/upcomingofferwhite@2x.png"
-                  alt="UpcomingOffer Logo"
-                  width={160}
-                  height={40}
-                  className="h-10 w-auto object-contain object-left"
-                  priority
-                />
-              </Link>
+      <Image 
+        src="/upcomingofferwhite@2x.png" 
+        alt="UpcomingOffer Logo" 
+        width={160} 
+        height={40} 
+        className="h-10 w-auto object-contain object-left" 
+        priority
+      />
+    </Link>
               <p className="text-[15px] leading-5.5 text-[#8b92a8]">
                 India&apos;s fastest-growing deals feed. Verified loot deals,
                 coupons and offers updated every hour, hand-checked for trust.
