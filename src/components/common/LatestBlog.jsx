@@ -8,8 +8,8 @@ export default async function LatestBlog() {
 
   return (
     <section className="container-wrap py-12">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-[28px] font-bold tracking-[-0.56px] text-text" style={{ fontFamily: "var(--font-display)" }}>
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-7">
+        <h2 className=" font-bold tracking-[-0.56px] text-text" style={{ fontFamily: "var(--font-display)" }}>
           Latest from the Blog
         </h2>
         <Link href="/blog" className="flex items-center gap-[7px] text-[13px] font-semibold text-muted hover:text-brand">

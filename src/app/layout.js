@@ -18,8 +18,8 @@ const syne = Syne({
 });
 
 export const metadata = {
-  title: "UpcomingOffer — India's Deals Feed",
-  description: "Verified loot deals, coupons and offers — updated every hour.",
+  title: "UpcomingOffer India's Deals Feed",
+  description: "Verified loot deals, coupons and offers updated every hour.",
 };
 
 export default function RootLayout({ children }) {
