@@ -7,14 +7,19 @@ const ALL_DEALS_QUERY = `
         id
         title
         slug
-        price
+        date
+        finalPrice
         originalPrice
-        discountPercent
+        priceLabel
         dealType
-        dealStatus
+        couponCode
+        isExpired
         affiliateLink
         featuredImage {
           node { sourceUrl altText }
+        }
+        dealTags {
+          nodes { name slug }
         }
         terms {
           nodes { name taxonomyName }

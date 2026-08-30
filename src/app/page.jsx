@@ -4,6 +4,7 @@ import CommunityBand from "@/components/common/CommunityBand";
 import SaleBanners from "./sale/[slug]/SaleBanners";
 import TrustBar from "@/components/common/TrustBar";
 import CategoryChips from "@/components/common/CategoryChips";
+import TrendingStores from "@/components/common/TrendingStores";
 
 export default async function HomePage() {
 
@@ -12,6 +13,7 @@ export default async function HomePage() {
       <SaleBanners />
       <TrustBar />
       <CategoryChips />
+      <TrendingStores />
       <CommunityBand/>
       <LatestBlog />
       <FAQ />
