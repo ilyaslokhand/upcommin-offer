@@ -42,7 +42,7 @@ export default function SaleCarousel({ sales }) {
         {/* 1. Removed gap-6 and added negative horizontal margin to offset outer edge padding */}
         <div className="flex -ml-6">
           {sales.map((sale) => {
-            const img = sale.featuredImage?.node?.sourceUrl;
+            const img = sale.bannerImage;
             const badge = getBadge(sale);
             return (
               /* 2. Changed flex-basis to 50% on desktop and added pl-6 padding to act as the gap */
@@ -57,7 +57,7 @@ export default function SaleCarousel({ sales }) {
                   {img && (
                     <Image
                       src={img}
-                      alt={sale.title}
+                      alt={sale.name}
                       fill
                       sizes="(max-width:768px) 100vw, 620px"
                       className="object-cover -z-10"

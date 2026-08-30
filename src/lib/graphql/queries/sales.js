@@ -2,10 +2,10 @@ import { fetchGraphQL } from "../client";
 
 const ALL_SALES_QUERY = `
   query AllSales {
-    sales(first: 10) {
+    sales(first: 20) {
       nodes {
         id
-        title
+        name
         slug
         saleHeading
         saleSubtitle
@@ -13,9 +13,8 @@ const ALL_SALES_QUERY = `
         startDate
         endDate
         saleStore
-        featuredImage {
-          node { sourceUrl altText }
-        }
+        bannerImage
+        count
       }
     }
   }

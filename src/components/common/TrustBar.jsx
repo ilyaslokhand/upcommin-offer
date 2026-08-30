@@ -62,7 +62,7 @@ function DotIcon() {
       viewBox="0 0 12 12"
       fill="none"
     >
-      <rect width="12" height="12" rx="6" fill="#10D431" fill-opacity="0.3" />
+      <rect width="12" height="12" rx="6" fill="#10D431" fillOpacity="0.3" />
       <circle cx="6" cy="6" r="4" fill="#0E9F5A" />
     </svg>
   );
@@ -76,7 +76,7 @@ function StoreIcon() {
       viewBox="0 0 20 20"
       fill="none"
     >
-      <g clip-path="url(#clip0_3_333)">
+      <g clipPath="url(#clip0_3_333)">
         <path
           d="M15.5555 16.6667H8.88887V12.2222H7.77776V16.6667H4.44442V12.2222H3.33331V16.6667C3.33331 16.9614 3.45038 17.244 3.65875 17.4523C3.86712 17.6607 4.14974 17.7778 4.44442 17.7778H15.5555C15.8502 17.7778 16.1328 17.6607 16.3412 17.4523C16.5496 17.244 16.6666 16.9614 16.6666 16.6667V12.2222H15.5555V16.6667Z"
           fill="#7A0F2B"
