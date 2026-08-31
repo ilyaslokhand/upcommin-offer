@@ -4,7 +4,7 @@ export default function CommunityBand() {
   return (
     <section className="container-wrap pt-12">
       <div
-        className="rounded-[24px] p-6 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6 overflow-hidden"
+        className="rounded-3xl p-6 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6 overflow-hidden"
         style={{
           background:
             "radial-gradient(120% 180% at 5% 30%, #4b2000 0%, #3d1c09 25%, #301812 50%, #141024 100%)",
@@ -24,7 +24,7 @@ export default function CommunityBand() {
             Get every deal the second it drops
           </h2>
           <p
-            className="text-[15px] leading-6 max-w-[500px]"
+            className="text-[15px] leading-6 max-w-125"
             style={{ color: "rgba(255,255,255,0.9)" }}
           >
             Join {stats.community} smart shoppers getting instant loot alerts on

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { getAllDeals } from "@/lib/graphql/queries/deals";
 import DealsOfDayCarousel from "./DealsOfDayCarousel";
 
@@ -17,7 +16,7 @@ export default async function DealsOfDay() {
   if (!deals.length) return null;
 
   return (
-    <section className="container-wrap py-8">
+    <section className="container-wrap pt-5">
       <div
         className="rounded-[20px] border border-line p-6"
         style={{ background: "linear-gradient(to bottom, #ffffff, #fafbff)" }}

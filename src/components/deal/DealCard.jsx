@@ -76,7 +76,7 @@ export default function DealCard({ deal }) {
             {deal.priceLabel}
           </p>
         ) : (
-          <div className="flex items-end gap-2 flex-wrap">
+          <div className="flex items-end gap-2 whitespace-nowrap overflow-hidden">
             {final && (
               <span className="text-[16px] md:text-[18px] font-bold text-save leading-none price-font">
                 ₹{Number(final).toLocaleString("en-IN")}
@@ -96,14 +96,14 @@ export default function DealCard({ deal }) {
         )}
 
         {/* Footer: store + time + CTA */}
-        <div className="flex items-center justify-between gap-2 pt-2 border-t border-line mt-1">
+        <div className="flex flex-col min-[420px]:flex-row min-[420px]:items-center gap-2.5 min-[420px]:gap-2 min-w-0 justify-between">
           <div className="flex items-center gap-2 min-w-0">
             {store && (
               <span className="text-[13px] font-semibold text-text truncate">
                 {store}
               </span>
             )}
-            <span className="flex items-center gap-1 text-[13px] font-medium text-muted shrink-0">
+            <span className="flex items-center gap-1 text-[12px] font-medium text-muted shrink-0">
               <svg
                 width="12"
                 height="12"
@@ -123,7 +123,7 @@ export default function DealCard({ deal }) {
               Expired
             </span>
           ) : (
-            <span className="bg-[#1c1c1c] text-white px-3 py-1 rounded-[5px] text-[11px] font-semibold shrink-0">
+            <span className="bg-[#1c1c1c] text-white px-3 py-1 rounded-[5px] text-[11px] font-semibold shrink-0 max-w-max">
               Shop Now
             </span>
           )}

@@ -31,7 +31,7 @@ export default function DealsOfDayCarousel({ deals }) {
           {deals.map((deal) => (
             <div
               key={deal.id}
-              className="flex-[0_0_100%] sm:flex-[0_0_calc(50%-8px)] lg:flex-[0_0_calc(25%-12px)] min-w-0"
+              className="flex-[0_0_100%] md:flex-[0_0_calc(50%-8px)] lg:flex-[0_0_calc(25%-12px)] min-w-0"
             >
               <DealCard deal={deal} />
             </div>
