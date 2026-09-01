@@ -2,7 +2,7 @@ import { getAllDeals } from "@/lib/graphql/queries/deals";
 import DealsOfDayCarousel from "./DealsOfDayCarousel";
 
 export default async function DealsOfDay() {
-  const allDeals = await getAllDeals();
+  const { deals: allDeals } = await getAllDeals();
 
   // Filter: only "Deal of the Day" tag AND not expired
   const deals = allDeals.filter((deal) => {

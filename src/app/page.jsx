@@ -8,6 +8,8 @@ import TrendingStores from "@/components/common/TrendingStores";
 import DealsGrid from "@/components/deal/DealsOfDayCarousel";
 import DealsOfDayCarousel from "@/components/deal/DealsOfDayCarousel";
 import DealsOfDay from "@/components/deal/DealsOfDay";
+import LatestDealsClient from "@/components/deal/LatestDealsClient";
+import LatestDeals from "@/components/deal/LatestDeals";
 
 export default async function HomePage() {
 
@@ -17,6 +19,7 @@ export default async function HomePage() {
       <TrustBar />
       <CategoryChips />
       <DealsOfDay />
+      <LatestDeals/>
       <TrendingStores />
       <CommunityBand/>
       <LatestBlog />
