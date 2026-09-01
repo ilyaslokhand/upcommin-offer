@@ -138,7 +138,7 @@ export default function LatestDealsClient() {
           <button
             key={t.value}
             onClick={() => setTab(t.value)}
-            className={`px-4 py-2 rounded-lg text-[13px] font-semibold whitespace-nowrap transition ${tab === t.value ? "bg-[#1c1c1c] text-white" : "bg-white border border-line text-muted hover:border-brand"}`}
+            className={`px-4 py-2 rounded-lg text-[13px] cursor-pointer font-semibold whitespace-nowrap transition ${tab === t.value ? "bg-[#1c1c1c] text-white" : "bg-white border border-line text-muted hover:border-brand"}`}
           >
             {t.label}
           </button>
@@ -171,7 +171,7 @@ export default function LatestDealsClient() {
       {loading && deals.length === 0 ? (
         <p className="text-muted text-center py-10">Loading deals…</p>
       ) : deals.length ? (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {deals.map((deal) => (
             <DealCard key={deal.id} deal={deal} />
           ))}
@@ -264,7 +264,7 @@ function Dropdown({ value, onChange, options, active, activeRing }) {
           isNaN(e.target.value) ? e.target.value : Number(e.target.value),
         )
       }
-      className={`px-3 py-2 border rounded-lg text-[13px] font-medium bg-white cursor-pointer ${active ? activeRing : "border-line"}`}
+      className={`px-3 py-2 border rounded-lg text-[13px] font-medium bg-white cursor-pointer outline-none focus:outline-none ${active ? activeRing : "border-line focus:border-brand"}`}
     >
       {options.map((o) => (
         <option key={o.value} value={o.value}>

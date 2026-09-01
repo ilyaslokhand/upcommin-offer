@@ -5,7 +5,7 @@ export async function fetchGraphQL(query, variables = {}, options = {}) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query, variables }),
-    next: { revalidate: options.revalidate ?? 3600 },
+    next: { revalidate: options.revalidate ?? 0 },
   });
 
   if (!res.ok) {

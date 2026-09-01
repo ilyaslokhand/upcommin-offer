@@ -33,7 +33,7 @@ export default function DealsOfDayCarousel({ deals }) {
               key={deal.id}
               className="flex-[0_0_100%] md:flex-[0_0_calc(50%-8px)] lg:flex-[0_0_calc(25%-12px)] min-w-0"
             >
-              <DealCard deal={deal} />
+              <DealCard deal={deal} compact={true} />
             </div>
           ))}
         </div>

@@ -19,7 +19,7 @@ function getTerm(terms, tax) {
   return terms?.nodes?.find((t) => t.taxonomyName === tax)?.name;
 }
 
-export default function DealCard({ deal }) {
+export default function DealCard({ deal, compact = false }) {
   const img = deal.featuredImage?.node?.sourceUrl;
   const final = deal.finalPrice;
   const original = deal.originalPrice;
@@ -96,7 +96,13 @@ export default function DealCard({ deal }) {
         )}
 
         {/* Footer: store + time + CTA */}
-        <div className="flex flex-col min-[420px]:flex-row min-[420px]:items-center gap-2.5 min-[420px]:gap-2 min-w-0 justify-between">
+        <div
+          className={`flex flex-col min-w-0 justify-between gap-2.5 ${
+            compact
+              ? "min-[420px]:flex-row min-[420px]:items-center min-[420px]:gap-2"
+              : "min-[370px]:flex-row min-[370px]:items-center min-[370px]:gap-2"
+          }`}
+        >
           <div className="flex items-center gap-2 min-w-0">
             {store && (
               <span className="text-[13px] font-semibold text-text truncate">
