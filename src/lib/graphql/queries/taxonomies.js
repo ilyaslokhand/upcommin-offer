@@ -95,3 +95,22 @@ export async function getTrendingStores() {
   const data = await fetchGraphQL(TRENDING_STORES_QUERY);
   return data?.stores?.nodes ?? [];
 }
+
+// fetch category by slug to show category details on category page
+
+const CATEGORY_BY_SLUG_QUERY = `
+  query CategoryBySlug($slug: ID!) {
+    dealCategory(id: $slug, idType: SLUG) {
+      name
+      slug
+      description
+      count
+      categoryIcon
+    }
+  }
+`;
+
+export async function getCategoryBySlug(slug) {
+  const data = await fetchGraphQL(CATEGORY_BY_SLUG_QUERY, { slug });
+  return data?.dealCategory ?? null;
+}

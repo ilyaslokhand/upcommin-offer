@@ -7,6 +7,7 @@ export async function GET(request) {
   const discount = Number(searchParams.get("discount") || 0); // e.g. 50
   const sort = searchParams.get("sort") || "newest";
   const after = searchParams.get("after") || null;
+  
 
   // Build the GraphQL "where" clause from the filters
   const where = {};
