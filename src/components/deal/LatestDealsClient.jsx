@@ -98,7 +98,7 @@ export default function LatestDealsClient() {
           <button
             key={t.value}
             onClick={() => setTab(t.value)}
-            className={`px-4 py-2 rounded-lg text-[13px] font-semibold whitespace-nowrap transition ${tab === t.value ? "bg-[#1c1c1c] text-white" : "bg-white border border-line text-muted hover:border-brand"}`}
+            className={`px-4 py-2 rounded-lg cursor-pointer text-[13px] font-semibold whitespace-nowrap transition ${tab === t.value ? "bg-[#1c1c1c] text-white" : "bg-white border border-line text-muted hover:border-brand"}`}
           >
             {t.label}
           </button>

@@ -27,15 +27,21 @@ export default function DealCard({ deal, compact = false }) {
   const store = getTerm(deal.terms, "store");
   const expired = deal.isExpired === "true";
 
-  const Wrapper = expired ? "div" : Link;
-  const wrapperProps = expired ? {} : { href: `/deals/${deal.slug}` };
-
   return (
-    <Wrapper
-      {...wrapperProps}
-      className={`bg-white border border-line rounded-[10px] overflow-hidden flex flex-row md:flex-col ${expired ? "opacity-60 pointer-events-none" : "hover:shadow-md transition"}`}
+    // CHANGED: was <Wrapper> (Link). Now a plain <div> with `relative`
+    <div
+      className={`relative bg-white border border-line rounded-[10px] overflow-hidden flex flex-row md:flex-col ${expired ? "opacity-60" : "hover:shadow-md transition"}`}
     >
-      {/* Image — smaller: fixed small box on mobile (left), compact on desktop (top) */}
+      {/* ADDED: invisible link covering the whole card → goes to deal details */}
+      {!expired && (
+        <Link
+          href={`/deals/${deal.slug}`}
+          className="absolute inset-0 z-[1]"
+          aria-label={deal.title}
+        />
+      )}
+
+      {/* Image */}
       <div className="relative w-[120px] h-[120px] md:w-full md:h-[150px] shrink-0 bg-[#f4f5f9]">
         {img ? (
           <Image
@@ -50,15 +56,8 @@ export default function DealCard({ deal, compact = false }) {
             No image
           </div>
         )}
-        {/* Discount badge on image */}
-        {/* {discount && (
-          <span className="absolute bottom-2 left-2 bg-[rgba(28,28,28,0.7)] rounded-[4px] px-1.5 py-1 text-[11px] font-bold text-white uppercase leading-none">
-            {discount}% off
-          </span>
-        )} */}
-        {/* Expired ribbon */}
         {expired && (
-          <span className="absolute top-2 left-2 bg-[rgba(28,28,28,0.85)] rounded-[4px] px-2 py-1 text-[10px] font-bold text-white uppercase">
+          <span className="absolute top-2 left-2 bg-[rgba(28,28,28,0.85)] rounded-[4px] px-2 py-1 text-[10px] font-bold text-white uppercase z-10">
             Expired
           </span>
         )}
@@ -70,11 +69,8 @@ export default function DealCard({ deal, compact = false }) {
           {deal.title}
         </h3>
 
-        {/* Price row or price label */}
         {deal.priceLabel ? (
-          <p className="text-[15px] font-semibold text-hot">
-            {deal.priceLabel}
-          </p>
+          <p className="text-[15px] font-semibold text-hot">{deal.priceLabel}</p>
         ) : (
           <div className="flex items-end gap-2 whitespace-nowrap overflow-hidden">
             {final && (
@@ -88,53 +84,48 @@ export default function DealCard({ deal, compact = false }) {
               </span>
             )}
             {discount && (
-              <span className="text-[13px] font-semibold text-hot">
-                {discount}% off
-              </span>
+              <span className="text-[13px] font-semibold text-hot">{discount}% off</span>
             )}
           </div>
         )}
 
-        {/* Footer: store + time + CTA */}
+        {/* Footer */}
         <div
-          className={`flex flex-col min-w-0 justify-between gap-2.5 ${
-            compact
-              ? "min-[420px]:flex-row min-[420px]:items-center min-[420px]:gap-2"
-              : "min-[370px]:flex-row min-[370px]:items-center min-[370px]:gap-2"
-          }`}
+          className={`flex flex-col min-w-0 justify-between gap-2.5 ${compact
+            ? "min-[420px]:flex-row min-[420px]:items-center min-[420px]:gap-2"
+            : "min-[370px]:flex-row min-[370px]:items-center min-[370px]:gap-2"
+            }`}
         >
           <div className="flex items-center gap-2 min-w-0">
             {store && (
-              <span className="text-[13px] font-semibold text-text truncate">
-                {store}
-              </span>
+              <span className="text-[13px] font-semibold text-text truncate">{store}</span>
             )}
             <span className="flex items-center gap-1 text-[12px] font-medium text-muted shrink-0">
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="9" />
                 <path d="M12 7v5l3 2" />
               </svg>
               {timeAgo(deal.date)}
             </span>
           </div>
+
+          {/* CHANGED: Shop Now is now an <a> to affiliate link, with relative z-10 so it sits above the card link */}
           {expired ? (
-            <span className="bg-[#e7e9f1] text-muted px-3 py-1 rounded-[5px] text-[11px] font-semibold shrink-0">
+            <span className="bg-[#e7e9f1] text-muted px-3 py-1 rounded-[5px] text-[11px] font-semibold shrink-0 relative z-10">
               Expired
             </span>
           ) : (
-            <span className="bg-[#1c1c1c] text-white px-3 py-1 rounded-[5px] text-[11px] font-semibold shrink-0 max-w-max">
+
+            <a href={deal.affiliateLink || "#"}
+              target="_blank"
+              rel="noopener noreferrer sponsored"
+              className="bg-[#1c1c1c] text-white px-3 py-1 rounded-[5px] text-[11px] font-semibold shrink-0 max-w-max hover:opacity-90 relative z-10"
+            >
               Shop Now
-            </span>
+            </a>
           )}
         </div>
       </div>
-    </Wrapper>
+    </div >
   );
 }
