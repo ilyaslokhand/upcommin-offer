@@ -51,17 +51,17 @@ h2 { font-size: clamp(1.375rem, 3vw, 1.75rem); }  /* 22px → 28px */
 h3 { font-size: clamp(1.125rem, 2vw, 1.375rem); } /* 18px → 22px */
 h4 { font-size: clamp(1rem, 1.5vw, 1.125rem); }   /* 16px → 18px */
 
-@keyframes shimmer {
+/* @keyframes shimmer {
   0% { background-position: -1000px 0; }
   100% { background-position: 1000px 0; }
-}
+} */
 
-.skeleton {
+/* .skeleton {
   background: linear-gradient(90deg, #eef0f4 25%, #e2e5ec 50%, #eef0f4 75%);
   background-size: 1000px 100%;
   animation: shimmer 1.6s infinite linear;
   border-radius: 10px;
-}
+} */
 
 @keyframes marquee {
   0% { transform: translateX(0); }
@@ -75,4 +75,15 @@ h4 { font-size: clamp(1rem, 1.5vw, 1.125rem); }   /* 16px → 18px */
 /* pause on hover (nice touch) */
 .marquee-track:hover {
   animation-play-state: paused;
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #eef0f4 25%, #e2e5ec 50%, #eef0f4 75%);
+  background-size: 1000px 100%;
+  animation: shimmer 1.6s infinite linear;
+  border-radius: 8px;
 }

@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import DealFeed from "./DealFeed";
+import { SORTS } from "@/lib/siteConfig";
 
 const TABS = [
   { label: "Daily Deals", value: "daily-deal" },
@@ -14,11 +15,7 @@ const DISCOUNTS = [
   { label: "50% & above", value: 50 },
   { label: "70% & above", value: 70 },
 ];
-const SORTS = [
-  { label: "Newest", value: "newest" },
-  { label: "Price: Low to High", value: "price-asc" },
-  { label: "Discount: High to Low", value: "discount-desc" },
-];
+
 
 export default function LatestDealsClient() {
   const [tab, setTab] = useState("daily-deal");
@@ -130,8 +127,7 @@ export default function LatestDealsClient() {
         </div>
       )}
 
-      {/* THE SHARED ENGINE — just pass the filters */}
-      <DealFeed filters={{ tab, discount, sort }} columns={4} />
+      <DealFeed filters={{ tag: tab, discount, sort }} columns={4} />
 
       {/* Mobile bottom sheet */}
       {sheetOpen && (

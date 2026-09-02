@@ -41,3 +41,9 @@ export const faqs = [
     a: "Expired deals are marked clearly and moved out of the live feed, but the page stays up for price history. Always check the store for the final price before buying.",
   },
 ];
+
+export const SORTS = [
+  { label: "Newest", value: "newest" },
+  { label: "Price: Low to High", value: "price-asc" },
+  { label: "Discount: High to Low", value: "discount-desc" },
+];

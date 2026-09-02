@@ -1,28 +1,19 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import DealCard from "./DealCard";
+import DealGridSkeleton from "@/components/ui/DealGridSkeleton";
 
-/**
- * Reusable deal-fetching engine.
- * Handles: fetch from /api/deals, cursor pagination, grid render, load more.
- * The PARENT owns the filter UI and passes the active filters down.
- *
- * Props:
- *  - filters: { category?, tag?, stores?[], discount?, sort? }
- *  - columns: number (grid columns on desktop, default 4)
- */
 export default function DealFeed({ filters = {}, columns = 4 }) {
   const [deals, setDeals] = useState([]);
   const [cursor, setCursor] = useState(null);
   const [hasNext, setHasNext] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Build the query string from filters
   const buildParams = useCallback(
     (after = null) => {
       const params = new URLSearchParams();
       if (filters.category) params.set("category", filters.category);
-      if (filters.tag) params.set("tag", filters.tag);
+      if (filters.tag) params.set("tag", filters.tag); // ← FIXED: filters.tag not filters.tab
       if (filters.discount) params.set("discount", String(filters.discount));
       if (filters.sort) params.set("sort", filters.sort);
       (filters.stores || []).forEach((s) => params.append("store", s));
@@ -45,7 +36,6 @@ export default function DealFeed({ filters = {}, columns = 4 }) {
     [buildParams],
   );
 
-  // Re-fetch fresh whenever filters change
   useEffect(() => {
     fetchDeals(null, false);
   }, [fetchDeals]);
@@ -58,7 +48,7 @@ export default function DealFeed({ filters = {}, columns = 4 }) {
   return (
     <div className="w-full flex flex-col gap-7 items-center">
       {loading && deals.length === 0 ? (
-        <p className="text-muted text-center py-10">Loading deals…</p>
+        <DealGridSkeleton count={8} columns={columns} />
       ) : deals.length ? (
         <div className={`w-full grid ${gridCols} gap-4`}>
           {deals.map((deal) => (
