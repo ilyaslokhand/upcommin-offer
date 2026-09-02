@@ -19,12 +19,18 @@ export async function getStoresCount() {
 
 const CATEGORIES_QUERY = `
   query Categories {
-    dealCategories(first: 100) {
+    dealCategories(first: 50, where: { parent: 0 }) {
       nodes {
-        id
         name
         slug
+        count
         categoryIcon
+        children {
+          nodes {
+            name
+            slug
+          }
+        }
       }
     }
   }
@@ -106,6 +112,14 @@ const CATEGORY_BY_SLUG_QUERY = `
       description
       count
       categoryIcon
+      children {
+        nodes {
+          name
+          slug
+          count
+          categoryIcon
+        }
+      }
     }
   }
 `;

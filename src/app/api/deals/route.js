@@ -8,12 +8,12 @@ export async function GET(request) {
   const sort = searchParams.get("sort") || "newest";
   const after = searchParams.get("after") || null;
   const category = searchParams.get("category");
-  const stores = searchParams.getAll("store"); // can be multiple
+  const subcategories = searchParams.getAll("subcategory"); // multiple
 
   // Build the GraphQL "where" clause
   const where = {};
 
-  // Combine tag + category + store into one taxQuery (all must match)
+  // Combine tag + category + subcategory into one taxQuery (all must match)
   const taxArray = [];
   if (tag) {
     taxArray.push({
@@ -31,11 +31,18 @@ export async function GET(request) {
       operator: "IN",
     });
   }
-  if (stores.length) {
+  if (subcategories.length) {
     taxArray.push({
-      taxonomy: "STORE",
+      taxonomy: "DEALCATEGORY",
       field: "SLUG",
-      terms: stores,
+      terms: subcategories,
+      operator: "IN",
+    });
+  } else if (category) {
+    taxArray.push({
+      taxonomy: "DEALCATEGORY",
+      field: "SLUG",
+      terms: [category],
       operator: "IN",
     });
   }

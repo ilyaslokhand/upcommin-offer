@@ -1,14 +1,13 @@
-import { getCategoryBySlug, getStores } from "@/lib/graphql/queries/taxonomies";
+import { getCategoryBySlug } from "@/lib/graphql/queries/taxonomies";
 import DealListing from "@/components/deal/DealListing";
 import { notFound } from "next/navigation";
 
 export default async function CategoryPage({ params }) {
   const { slug } = await params;
-  const [category, stores] = await Promise.all([
-    getCategoryBySlug(slug),
-    getStores(),
-  ]);
+  const category = await getCategoryBySlug(slug);
   if (!category) notFound();
+  const subcategories = category.children?.nodes ?? [];
+
 
   return (
     <div>
@@ -17,8 +16,8 @@ export default async function CategoryPage({ params }) {
       </h1>
       <DealListing
         baseFilter={{ category: category.slug }}
-        stores={stores}
-        showStoreFilter={true}
+        subcategories={subcategories}
+        showSubcategoryFilter={true}
       />
     </div>
   );

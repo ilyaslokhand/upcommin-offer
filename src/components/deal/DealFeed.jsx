@@ -16,7 +16,7 @@ export default function DealFeed({ filters = {}, columns = 4 }) {
       if (filters.tag) params.set("tag", filters.tag); // ← FIXED: filters.tag not filters.tab
       if (filters.discount) params.set("discount", String(filters.discount));
       if (filters.sort) params.set("sort", filters.sort);
-      (filters.stores || []).forEach((s) => params.append("store", s));
+      (filters.subcategories || []).forEach((s) => params.append("subcategory", s));
       if (after) params.set("after", after);
       return params.toString();
     },

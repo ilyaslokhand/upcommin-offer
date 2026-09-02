@@ -5,12 +5,12 @@ import { SORTS } from "@/lib/siteConfig";
 
 export default function DealListing({
   baseFilter = {},
-  stores = [],
-  showStoreFilter = false,
+  subcategories = [],
+  showSubcategoryFilter = false,
 }) {
   // Filter state (user's choices on top of baseFilter)
   const [tab, setTab] = useState("daily-deal");
-  const [selectedStores, setSelectedStores] = useState([]);
+  const [selectedSubcats, setSelectedSubcats] = useState([]);
   const [discount, setDiscount] = useState(0);
   const [sort, setSort] = useState("newest");
 
@@ -20,20 +20,20 @@ export default function DealListing({
     tag: tab,
     discount,
     sort,
-    stores: showStoreFilter ? selectedStores : [],
+    subcategories: showSubcategoryFilter ? selectedSubcats : [],
   };
 
-  const toggleStore = (slug) => {
-    setSelectedStores((prev) =>
-      prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug],
+  const toggleSubcat = (slug) => {
+    setSelectedSubcats((prev) =>
+      prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]
     );
   };
 
-  const filtersActive =
-    selectedStores.length > 0 || discount !== 0 || sort !== "newest";
+  const filtersActive = selectedSubcats.length > 0 || discount !== 0 || sort !== "newest";
+
 
   const clearFilters = () => {
-    setSelectedStores([]);
+    setSelectedSubcats([]);
     setDiscount(0);
     setSort("newest");
   };
@@ -68,24 +68,24 @@ export default function DealListing({
           )}
         </div>
 
-        {/* Store filter — only on category pages */}
-        {showStoreFilter && stores.length > 0 && (
+        {/* Subcategory filter — only on category pages */}
+        {showSubcategoryFilter && subcategories.length > 0 && (
           <div className="flex flex-col gap-2.5 pb-3.5 border-b border-line">
             <span className="text-[13px] font-semibold text-text uppercase">
-              Store
+              Subcategories
             </span>
-            {stores.map((s) => (
+            {subcategories.map((sc) => (
               <label
-                key={s.slug}
+                key={sc.slug}
                 className="flex items-center gap-2 cursor-pointer"
               >
                 <input
                   type="checkbox"
-                  checked={selectedStores.includes(s.slug)}
-                  onChange={() => toggleStore(s.slug)}
+                  checked={selectedSubcats.includes(sc.slug)}
+                  onChange={() => toggleSubcat(sc.slug)}
                   className="size-4 accent-[#4c34d4] cursor-pointer"
                 />
-                <span className="text-[13px] text-[#6a7180]">{s.name}</span>
+                <span className="text-[13px] text-[#6a7180]">{sc.name}</span>
               </label>
             ))}
           </div>
@@ -101,11 +101,10 @@ export default function DealListing({
               <button
                 key={d.value}
                 onClick={() => setDiscount(discount === d.value ? 0 : d.value)}
-                className={`px-2 py-[3px] rounded-full cursor-pointer text-[13px] border ${
-                  discount === d.value
-                    ? "bg-[#1c1c1c] border-[#1c1c1c] text-white font-bold"
-                    : "border-line text-[#8b92a8] font-medium"
-                }`}
+                className={`px-2 py-[3px] rounded-full cursor-pointer text-[13px] border ${discount === d.value
+                  ? "bg-[#1c1c1c] border-[#1c1c1c] text-white font-bold"
+                  : "border-line text-[#8b92a8] font-medium"
+                  }`}
               >
                 {d.label}
               </button>
@@ -124,9 +123,8 @@ export default function DealListing({
               <button
                 key={t.value}
                 onClick={() => setTab(t.value)}
-                className={`px-3 py-1 rounded-[4px] cursor-pointer text-[13px] font-bold flex items-center gap-1 transition ${
-                  tab === t.value ? "bg-[#1c1c1c] text-white" : "text-[#6a7180]"
-                }`}
+                className={`px-3 py-1 rounded-[4px] cursor-pointer text-[13px] font-bold flex items-center gap-1 transition ${tab === t.value ? "bg-[#1c1c1c] text-white" : "text-[#6a7180]"
+                  }`}
               >
                 {t.label}
                 {t.value === "hot" && " 🔥"}
@@ -138,11 +136,10 @@ export default function DealListing({
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className={`bg-white border rounded-[6px] px-2.5 py-1.5 text-[13px] font-medium text-[#6a7180] cursor-pointer outline-none focus:outline-none ${
-              sort !== "newest"
-                ? "border-[#0e9f5a] ring-1 ring-[#0e9f5a]"
-                : "border-line focus:border-brand"
-            }`}
+            className={`bg-white border rounded-[6px] px-2.5 py-1.5 text-[13px] font-medium text-[#6a7180] cursor-pointer outline-none focus:outline-none ${sort !== "newest"
+              ? "border-[#0e9f5a] ring-1 ring-[#0e9f5a]"
+              : "border-line focus:border-brand"
+              }`}
           >
             {SORTS.map((s) => (
               <option key={s.value} value={s.value}>

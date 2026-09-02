@@ -9,7 +9,14 @@ export default function HeaderNav({ categories, stores, blogCats }) {
   const [mobileSub, setMobileSub] = useState(null);
 
   const dropdowns = {
-    categories: categories.map((c) => ({ label: c.name, href: `/category/${c.slug}` })),
+    categories: categories.map((c) => ({
+      label: c.name,
+      href: `/category/${c.slug}`,
+      children: (c.children?.nodes ?? []).map((sub) => ({
+        label: sub.name,
+        href: `/category/${c.slug}/${sub.slug}`,
+      })),
+    })),
     stores: stores.map((s) => ({ label: s.name, href: `/store/${s.slug}` })),
     blog: blogCats.map((b) => ({ label: b.name, href: `/blog/category/${b.slug}` })),
   };
@@ -41,13 +48,24 @@ export default function HeaderNav({ categories, stores, blogCats }) {
               {item.key && open === item.key && dropdowns[item.key].length > 0 && (
                 <div className="absolute top-full left-0 bg-surface border border-line rounded-lg shadow-lg py-2 min-w-50 z-50">
                   {dropdowns[item.key].map((d) => (
-                    <Link key={d.href} href={d.href} className="block px-4 py-2 text-sm hover:bg-brand-tint hover:text-brand">
-                      {d.label}
-                    </Link>
+                    <div key={d.href}>
+                      <Link href={d.href} className="block px-4 py-2 text-sm font-medium hover:bg-brand-tint hover:text-brand">
+                        {d.label}
+                      </Link>
+                      {/* Subcategories — indented */}
+                      {d.children && d.children.length > 0 && (
+                        <div className="pl-4">
+                          {d.children.map((sub) => (
+                            <Link key={sub.href} href={sub.href} className="block px-4 py-1.5 text-[13px] text-muted hover:text-brand">
+                              {sub.label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   ))}
                 </div>
-              )}
-            </div>
+              )}            </div>
           ))}
         </nav>
 
@@ -74,59 +92,65 @@ export default function HeaderNav({ categories, stores, blogCats }) {
       </button>
 
       {/* Mobile menu panel */}
-{mobileOpen && (
-  <div className="lg:hidden fixed inset-x-0 top-15 bottom-0 w-full bg-surface z-50 overflow-y-auto">
-    <div className="container-wrap py-4 pt-6 flex flex-col gap-1">
-      {/* Search */}
-      <div className="flex gap-2 items-center px-4 py-3 rounded-lg mb-3 bg-bg border border-line">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9aa1ad" strokeWidth="2">
-          <circle cx="11" cy="11" r="7" /><path d="m21 21-4-4" />
-        </svg>
-        <input placeholder="Search deals, coupons & stores" className="bg-transparent outline-none text-[13px] w-full text-text" />
-      </div>
-
-      {navItems.map((item) => (
-        <div key={item.label} className="border-b border-line last:border-0">
-          {item.key ? (
-            // Items WITH a submenu → toggle expand
-            <button
-              onClick={() => setMobileSub(mobileSub === item.key ? null : item.key)}
-              className="w-full flex items-center justify-between py-3 font-medium text-text"
-            >
-              {item.label}
-              <span className={`text-xs transition-transform ${mobileSub === item.key ? "rotate-180" : ""}`}>▾</span>
-            </button>
-          ) : (
-            // Plain links (Home, Hot Deals)
-            <Link href={item.href} className="block py-3 font-medium text-text" onClick={() => setMobileOpen(false)}>
-              {item.label}
-            </Link>
-          )}
-
-          {/* Submenu — 2-column grid, only when expanded */}
-          {item.key && mobileSub === item.key && (
-            <div className="grid grid-cols-2 gap-x-4 gap-y-1 pb-3 pl-1">
-              {dropdowns[item.key].map((d) => (
-                <Link
-                  key={d.href}
-                  href={d.href}
-                  className="py-1.5 text-sm text-muted hover:text-brand"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {d.label}
-                </Link>
-              ))}
+      {mobileOpen && (
+        <div className="lg:hidden fixed inset-x-0 top-15 bottom-0 w-full bg-surface z-50 overflow-y-auto">
+          <div className="container-wrap py-4 pt-6 flex flex-col gap-1">
+            {/* Search */}
+            <div className="flex gap-2 items-center px-4 py-3 rounded-lg mb-3 bg-bg border border-line">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9aa1ad" strokeWidth="2">
+                <circle cx="11" cy="11" r="7" /><path d="m21 21-4-4" />
+              </svg>
+              <input placeholder="Search deals, coupons & stores" className="bg-transparent outline-none text-[13px] w-full text-text" />
             </div>
-          )}
-        </div>
-      ))}
 
-      <a href={social.telegram} target="_blank" rel="noopener noreferrer" className="flex gap-1.5 items-center justify-center px-5 py-2.5 rounded-lg text-white text-[15px] font-medium mt-3 bg-telegram">
-        Join Telegram
-      </a>
-    </div>
-  </div>
-)}
+            {navItems.map((item) => (
+              <div key={item.label} className="border-b border-line last:border-0">
+                {item.key ? (
+                  // Items WITH a submenu → toggle expand
+                  <button
+                    onClick={() => setMobileSub(mobileSub === item.key ? null : item.key)}
+                    className="w-full flex items-center justify-between py-3 font-medium text-text"
+                  >
+                    {item.label}
+                    <span className={`text-xs transition-transform ${mobileSub === item.key ? "rotate-180" : ""}`}>▾</span>
+                  </button>
+                ) : (
+                  // Plain links (Home, Hot Deals)
+                  <Link href={item.href} className="block py-3 font-medium text-text" onClick={() => setMobileOpen(false)}>
+                    {item.label}
+                  </Link>
+                )}
+
+                {/* Submenu — 2-column grid, only when expanded */}
+                {item.key && mobileSub === item.key && (
+                  <div className="flex flex-col pb-3 pl-1">
+                    {dropdowns[item.key].map((d) => (
+                      <div key={d.href}>
+                        <Link href={d.href} className="block py-1.5 text-sm font-medium text-text hover:text-brand" onClick={() => setMobileOpen(false)}>
+                          {d.label}
+                        </Link>
+                        {d.children && d.children.length > 0 && (
+                          <div className="pl-4 flex flex-col">
+                            {d.children.map((sub) => (
+                              <Link key={sub.href} href={sub.href} className="py-1 text-[13px] text-muted hover:text-brand" onClick={() => setMobileOpen(false)}>
+                                {sub.label}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+
+            <a href={social.telegram} target="_blank" rel="noopener noreferrer" className="flex gap-1.5 items-center justify-center px-5 py-2.5 rounded-lg text-white text-[15px] font-medium mt-3 bg-telegram">
+              Join Telegram
+            </a>
+          </div>
+        </div>
+      )}
     </>
   );
 }

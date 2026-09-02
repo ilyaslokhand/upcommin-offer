@@ -44,7 +44,7 @@ export default function LatestDealsClient() {
           {filtersActive && (
             <button
               onClick={clearFilters}
-              className="flex items-center gap-1 text-[13px] font-medium text-muted hover:text-[#0e9f5a]"
+              className="flex items-center gap-1 text-[13px] font-medium text-muted hover:text-[#0e9f5a] cursor-pointer"
             >
               Clear{" "}
               <svg

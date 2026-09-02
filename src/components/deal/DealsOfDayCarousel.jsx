@@ -45,7 +45,7 @@ export default function DealsOfDayCarousel({ deals }) {
           <button
             onClick={() => emblaApi?.scrollPrev()}
             disabled={!canPrev}
-            className="absolute -left-3 top-1/2 -translate-y-1/2 size-9 rounded-full bg-white border border-line shadow-md flex items-center justify-center disabled:opacity-30 hover:border-brand z-10"
+            className="absolute cursor-pointer -left-3 top-1/2 -translate-y-1/2 size-9 rounded-full bg-white border border-line shadow-md flex items-center justify-center disabled:opacity-30 hover:border-brand z-10"
             aria-label="Previous"
           >
             <svg
@@ -62,7 +62,7 @@ export default function DealsOfDayCarousel({ deals }) {
           <button
             onClick={() => emblaApi?.scrollNext()}
             disabled={!canNext}
-            className="absolute -right-3 top-1/2 -translate-y-1/2 size-9 rounded-full bg-white border border-line shadow-md flex items-center justify-center disabled:opacity-30 hover:border-brand z-10"
+            className="absolute cursor-pointer -right-3 top-1/2 -translate-y-1/2 size-9 rounded-full bg-white border border-line shadow-md flex items-center justify-center disabled:opacity-30 hover:border-brand z-10"
             aria-label="Next"
           >
             <svg
