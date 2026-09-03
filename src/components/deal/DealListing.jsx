@@ -2,6 +2,7 @@
 import { useState } from "react";
 import DealFeed from "./DealFeed";
 import { SORTS } from "@/lib/siteConfig";
+import FilterSheet from "@/components/ui/FilterSheet";
 
 export default function DealListing({
   baseFilter = {},
@@ -10,6 +11,7 @@ export default function DealListing({
 }) {
   // Filter state (user's choices on top of baseFilter)
   const [tab, setTab] = useState("daily-deal");
+  const [sheetOpen, setSheetOpen] = useState(false);
   const [selectedSubcats, setSelectedSubcats] = useState([]);
   const [discount, setDiscount] = useState(0);
   const [sort, setSort] = useState("newest");
@@ -52,9 +54,8 @@ export default function DealListing({
   //   const activeRing = "border-[#0e9f5a] ring-1 ring-[#0e9f5a]";
 
   return (
-    <div className="container-wrap py-6 flex flex-col md:flex-row gap-6 items-start">
-      {/* Sidebar (desktop) — placeholder for now */}
-      <aside className="hidden md:flex w-[250px] shrink-0 bg-white border border-line rounded-[16px] px-[18px] py-4 flex-col gap-3.5">
+    <div className="container-wrap py-6 grid grid-cols-1 md:grid-cols-[250px_1fr] gap-6 items-start">
+      <aside className="hidden md:flex bg-white border border-line rounded-[16px] px-[18px] py-4 flex-col gap-3.5">
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-line">
           <span className="text-[15px] font-bold text-[#6a7180]">Filters</span>
@@ -113,12 +114,16 @@ export default function DealListing({
         </div>
       </aside>
 
+
+
       {/* Main: tabs + sort + grid */}
       <div className="flex-1 min-w-0 flex flex-col gap-4">
+        {/* Mobile filter button — shows only on mobile */}
+
         {/* Tabs + Sort row */}
-        <div className="flex items-center justify-between gap-3 ">
-          {/* Tabs */}
-          <div className="bg-white border border-line rounded-[6px] p-1.5 flex gap-0.5">
+        <div className="flex items-center justify-between gap-3 w-full">
+          <div className="bg-white border border-line rounded-[6px] p-1.5 flex gap-0.5 shrink-0">
+
             {TABS.map((t) => (
               <button
                 key={t.value}
@@ -132,22 +137,78 @@ export default function DealListing({
             ))}
           </div>
 
-          {/* Sort dropdown */}
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-            className={`bg-white border rounded-[6px] px-2.5 py-1.5 text-[13px] font-medium text-[#6a7180] cursor-pointer outline-none focus:outline-none ${sort !== "newest"
-              ? "border-[#0e9f5a] ring-1 ring-[#0e9f5a]"
-              : "border-line focus:border-brand"
-              }`}
+          <button
+            onClick={() => setSheetOpen(true)}
+            className="md:hidden flex items-center gap-1.5 px-3 py-2 border border-line rounded-lg text-[13px] font-medium self-start"
           >
-            {SORTS.map((s) => (
-              <option key={s.value} value={s.value}>
-                {s.label}
-              </option>
-            ))}
-          </select>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M4 6h16M7 12h10M10 18h4" />
+            </svg>
+            Filters
+          </button>
+
+          {/* Sort dropdown */}
+          <div className="shrink-0 hidden md:block ">
+            <select
+              name="sort"
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+              className="w-[160px] bg-white border rounded-[6px] px-2.5 py-1.5 text-[13px] font-medium text-[#6a7180] cursor-pointer outline-none focus:outline-none border-line focus:border-brand"
+            >
+              {SORTS.map((s) => (
+                <option key={s.value} value={s.value}>{s.label}</option>
+              ))}
+            </select>
+          </div>
         </div>
+
+        <FilterSheet
+          open={sheetOpen}
+          onClear={clearFilters}
+          filtersActive={filtersActive}
+          onClose={() => setSheetOpen(false)}
+          groups={[
+            // Subcategories — only on category pages, multi-select
+            ...(showSubcategoryFilter && subcategories.length > 0
+              ? [{
+                title: "Subcategories",
+                options: subcategories.map((sc) => ({ label: sc.name, value: sc.slug })),
+                selected: selectedSubcats,
+                onSelect: toggleSubcat,
+                multi: true,
+              }]
+              : []),
+            // Discount — single-select (tap active to clear)
+            {
+              title: "Discount",
+              options: DISCOUNTS,
+              selected: discount,
+              onSelect: (v) => setDiscount(discount === v ? 0 : v),
+              multi: false,
+            },
+            // Sort — single-select
+            {
+              title: "Sort by",
+              options: SORTS,
+              selected: sort,
+              onSelect: setSort,
+              multi: false,
+            },
+          ]}
+        />
+
+        {/* Mobile Clear filters — above the grid, outside the sheet */}
+        {filtersActive && (
+          <button
+            onClick={clearFilters}
+            className="md:hidden flex items-center gap-1 text-[13px] font-medium text-[#0e9f5a] self-start"
+          >
+            Clear filters
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
+        )}
 
         <DealFeed filters={filters} columns={3} />
       </div>

@@ -28,12 +28,12 @@ export default function DealsOfDayCarousel({ deals }) {
     <div className="relative">
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex gap-4">
-          {deals.map((deal) => (
+          {deals.map((deal,i) => (
             <div
               key={deal.id}
               className="flex-[0_0_100%] md:flex-[0_0_calc(50%-8px)] lg:flex-[0_0_calc(25%-12px)] min-w-0"
             >
-              <DealCard deal={deal} compact={true} />
+              <DealCard deal={deal} compact={true} priority={i < 4} />
             </div>
           ))}
         </div>

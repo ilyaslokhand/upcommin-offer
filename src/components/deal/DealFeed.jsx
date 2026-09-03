@@ -42,24 +42,23 @@ export default function DealFeed({ filters = {}, columns = 4 }) {
 
   const gridCols =
     columns === 3
-      ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-      : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+      ? "grid-cols-1 min-[722px]:grid-cols-2 lg:grid-cols-3"
+      : "grid-cols-1 min-[722px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
 
   return (
-    <div className="w-full flex flex-col gap-7 items-center">
-      {loading && deals.length === 0 ? (
-        <DealGridSkeleton count={8} columns={columns} />
-      ) : deals.length ? (
-        <div className={`w-full grid ${gridCols} gap-4`}>
-          {deals.map((deal) => (
-            <DealCard key={deal.id} deal={deal} />
-          ))}
-        </div>
-      ) : (
-        <p className="text-muted text-center py-10">
-          No deals match these filters.
-        </p>
-      )}
+    <div className={`w-full flex flex-col gap-7 items-center ${loading && deals.length === 0 ? "min-h-[600px]" : ""}`}>      {loading && deals.length === 0 ? (
+      <DealGridSkeleton count={8} columns={columns} />
+    ) : deals.length ? (
+      <div className={`w-full grid ${gridCols} gap-4`}>
+        {deals.map((deal, i) => (
+          <DealCard key={deal.id} deal={deal} priority={i < 4} />
+        ))}
+      </div>
+    ) : (
+      <p className="text-muted text-center py-10">
+        No deals match these filters.
+      </p>
+    )}
 
       {hasNext && (
         <button

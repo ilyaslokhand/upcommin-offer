@@ -19,7 +19,7 @@ function getTerm(terms, tax) {
   return terms?.nodes?.find((t) => t.taxonomyName === tax)?.name;
 }
 
-export default function DealCard({ deal, compact = false }) {
+export default function DealCard({ deal, compact = false, priority = false }) {
   const img = deal.featuredImage?.node?.sourceUrl;
   const final = deal.finalPrice;
   const original = deal.originalPrice;
@@ -50,6 +50,7 @@ export default function DealCard({ deal, compact = false }) {
             fill
             sizes="(max-width:768px) 120px, 296px"
             className="object-cover"
+           
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-muted text-xs">
