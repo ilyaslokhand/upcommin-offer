@@ -71,6 +71,14 @@ const DEAL_BY_SLUG_QUERY = `
       featuredImage { node { sourceUrl altText } }
       terms { nodes { name taxonomyName slug } }
       seo { title description canonicalUrl }
+      bankOffers {
+        bankName
+        offerType
+        discountValue
+        minPurchase
+        maxDiscount
+        offerText
+      }
     }
   }
 `;

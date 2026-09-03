@@ -1,7 +1,5 @@
 // decode HTML entities from WordPress (&amp; → &, etc.)
-function decode(str) {
-    return str?.replace(/&amp;/g, "&").replace(/&#8217;/g, "'").replace(/&#8211;/g, "–") ?? "";
-}
+import { decode } from "@/lib/utils/deal";
 
 export default function CategoryHero({ name, description, count, icon }) {
     return (

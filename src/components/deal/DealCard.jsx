@@ -1,23 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
+import { getDiscount, timeAgo, getTerm } from "@/lib/utils/deal";
 
-function getDiscount(final, original) {
-  const f = parseFloat(final),
-    o = parseFloat(original);
-  if (!f || !o || o <= f) return null;
-  return Math.round(((o - f) / o) * 100);
-}
-
-function timeAgo(date) {
-  const diff = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
-  if (diff < 3600) return `${Math.max(1, Math.floor(diff / 60))}m`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
-  return `${Math.floor(diff / 86400)}d`;
-}
-
-function getTerm(terms, tax) {
-  return terms?.nodes?.find((t) => t.taxonomyName === tax)?.name;
-}
 
 export default function DealCard({ deal, compact = false, priority = false }) {
   const img = deal.featuredImage?.node?.sourceUrl;
@@ -50,7 +34,7 @@ export default function DealCard({ deal, compact = false, priority = false }) {
             fill
             sizes="(max-width:768px) 120px, 296px"
             className="object-cover"
-           
+
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-muted text-xs">

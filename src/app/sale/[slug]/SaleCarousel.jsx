@@ -93,14 +93,14 @@ export default function SaleCarousel({ sales }) {
                       </h3>
                       {sale.saleSubtitle && (
                         <p
-                          className="text-[15px] font-semibold leading-6 max-w-87.5"
+                          className="text-[15px] font-semibold leading-6 max-w-[350px]"
                           style={{ color: "#eeebfd" }}
                         >
                           {sale.saleSubtitle}
                         </p>
                       )}
                     </div>
-                    <span className="shrink-0 size-15 rounded-full border-[1.5px] border-white bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition">
+                    <span className="shrink-0 size-[60px] rounded-full border-[1.5px] border-white bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition">
                       <svg
                         width="24"
                         height="24"

@@ -26,7 +26,9 @@ export default function Breadcrumb({ items = [] }) {
                                 {item.label}
                             </Link>
                         ) : (
-                            <span className="text-text font-medium capitalize">{item.label}</span>
+                            <span className="text-text font-medium capitalize truncate max-w-[180px] md:max-w-[400px] block">
+                                {item.label}
+                            </span>
                         )}
                         {!isLast && <span className="text-muted">/</span>}
                     </span>

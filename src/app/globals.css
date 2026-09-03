@@ -1,29 +1,33 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #1c1c1c;              /* was #141824 — corrected */
-  --color-brand: #4c34d4;            /* verify this hex in Figma */
-  --color-brand-tint: #eeebfd;      /* ✅ confirmed */
-  --color-save: #0e9f5a;            /* ✅ confirmed */
-  --color-hot: #ff6d00;             /* was #f17012 — corrected */
-  --color-bg: #f4f5f9;              /* verify */
-  --color-surface: #ffffff;         /* ✅ */
-  --color-line: #eeebfd;            /* card borders use this */
-  --color-text: #1c1c1c;            /* corrected */
-  --color-muted: #9aa1ad;           /* ✅ confirmed */
+  --color-ink: #1c1c1c; /* was #141824 — corrected */
+  --color-brand: #4c34d4; /* verify this hex in Figma */
+  --color-brand-tint: #eeebfd; /* ✅ confirmed */
+  --color-save: #0e9f5a; /* ✅ confirmed */
+  --color-hot: #ff6d00; /* was #f17012 — corrected */
+  --color-bg: #f4f5f9; /* verify */
+  --color-surface: #ffffff; /* ✅ */
+  --color-line: #eeebfd; /* card borders use this */
+  --color-text: #1c1c1c; /* corrected */
+  --color-muted: #9aa1ad; /* ✅ confirmed */
 
-  --font-display: "Syne", sans-serif;      /* headings — you confirmed */
-  --font-body: "DM Sans", sans-serif;      /* card/body — Figma confirmed */
+  --font-display: "Syne", sans-serif; /* headings — you confirmed */
+  --font-body: "DM Sans", sans-serif; /* card/body — Figma confirmed */
   --font-accent: "IBM Plex Sans", sans-serif; /* inline discount */
 
-  --radius-card: 10px;              /* was 14px — corrected */
-  --radius-btn: 5px;                /* added */
+  --radius-card: 10px; /* was 14px — corrected */
+  --radius-btn: 5px; /* added */
   --color-telegram: #229ed9;
 }
 
-:root { --max-width: 1280px; }      /* ✅ your correction */
+:root {
+  --max-width: 1280px;
+} /* ✅ your correction */
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
 body {
   background: var(--color-bg);
   color: var(--color-text);
@@ -32,7 +36,10 @@ body {
   line-height: 1.5;
 }
 /* h1, h2, h3, h4 { font-family: var(--font-display); } */
-.price-font { font-family: var(--font-body); font-variant-numeric: tabular-nums; }
+.price-font {
+  font-family: var(--font-body);
+  font-variant-numeric: tabular-nums;
+}
 .container-wrap {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -40,16 +47,29 @@ body {
   padding-right: 20px;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   /* font-family: var(--font-display); */
   line-height: 1.15;
   letter-spacing: -0.01em;
 }
 
-h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); }    /* 28px → 40px */
-h2 { font-size: clamp(1.375rem, 3vw, 1.75rem); }  /* 22px → 28px */
-h3 { font-size: clamp(1.125rem, 2vw, 1.375rem); } /* 18px → 22px */
-h4 { font-size: clamp(1rem, 1.5vw, 1.125rem); }   /* 16px → 18px */
+h1 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+} /* 24px → 32px */
+h2 {
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+} /* 20px → 24px */
+h3 {
+  font-size: clamp(1.125rem, 2vw, 1.25rem);
+} /* 18px → 20px */
+h4 {
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+} /* 16px → 18px */
 
 /* @keyframes shimmer {
   0% { background-position: -1000px 0; }
@@ -64,8 +84,12 @@ h4 { font-size: clamp(1rem, 1.5vw, 1.125rem); }   /* 16px → 18px */
 } */
 
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .marquee-track {
@@ -78,8 +102,12 @@ h4 { font-size: clamp(1rem, 1.5vw, 1.125rem); }   /* 16px → 18px */
 }
 
 @keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
 }
 .skeleton {
   background: linear-gradient(90deg, #eef0f4 25%, #e2e5ec 50%, #eef0f4 75%);
