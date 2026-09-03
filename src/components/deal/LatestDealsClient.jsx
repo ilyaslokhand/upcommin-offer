@@ -2,6 +2,7 @@
 import { useState } from "react";
 import DealFeed from "./DealFeed";
 import { SORTS } from "@/lib/siteConfig";
+import FilterSheet from "@/components/ui/FilterSheet";
 
 const TABS = [
   { label: "Daily Deals", value: "daily-deal" },
@@ -15,7 +16,6 @@ const DISCOUNTS = [
   { label: "50% & above", value: 50 },
   { label: "70% & above", value: 70 },
 ];
-
 
 export default function LatestDealsClient() {
   const [tab, setTab] = useState("daily-deal");
@@ -34,58 +34,26 @@ export default function LatestDealsClient() {
     <section className="container-wrap pt-5">
       {/* Header */}
       <div className="flex items-center justify-between gap-3 mb-5">
-        <h2
-          className="font-bold tracking-[-0.56px] text-text"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
+        <h2 className="font-bold tracking-[-0.56px] text-text" style={{ fontFamily: "var(--font-display)" }}>
           Latest Deals
         </h2>
         <div className="hidden md:flex items-center gap-2">
           {filtersActive && (
-            <button
-              onClick={clearFilters}
-              className="flex items-center gap-1 text-[13px] font-medium text-muted hover:text-[#0e9f5a] cursor-pointer"
-            >
+            <button onClick={clearFilters} className="flex items-center gap-1 text-[13px] font-medium text-muted hover:text-[#0e9f5a] cursor-pointer">
               Clear{" "}
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M18 6 6 18M6 6l12 12" />
               </svg>
             </button>
           )}
-          <Dropdown
-            value={discount}
-            onChange={setDiscount}
-            options={DISCOUNTS}
-            active={discount !== 0}
-            activeRing={activeRing}
-          />
-          <Dropdown
-            value={sort}
-            onChange={setSort}
-            options={SORTS}
-            active={sort !== "newest"}
-            activeRing={activeRing}
-          />
+          <Dropdown value={discount} onChange={setDiscount} options={DISCOUNTS} active={discount !== 0} activeRing={activeRing} />
+          <Dropdown value={sort} onChange={setSort} options={SORTS} active={sort !== "newest"} activeRing={activeRing} />
         </div>
         <button
           onClick={() => setSheetOpen(true)}
           className={`md:hidden flex items-center gap-1.5 px-3 py-2 border rounded-lg text-[13px] font-medium ${filtersActive ? activeRing : "border-line"}`}
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M4 6h16M7 12h10M10 18h4" />
           </svg>
           Filters
@@ -105,22 +73,12 @@ export default function LatestDealsClient() {
         ))}
       </div>
 
-      {/* Mobile clear */}
+      {/* Mobile clear — above grid */}
       {filtersActive && (
         <div className="md:hidden mb-3">
-          <button
-            onClick={clearFilters}
-            className="flex items-center gap-1 text-[13px] font-medium text-[#0e9f5a]"
-          >
+          <button onClick={clearFilters} className="flex items-center gap-1 text-[13px] font-medium text-[#0e9f5a]">
             Clear filters{" "}
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M18 6 6 18M6 6l12 12" />
             </svg>
           </button>
@@ -129,52 +87,27 @@ export default function LatestDealsClient() {
 
       <DealFeed filters={{ tag: tab, discount, sort }} columns={4} />
 
-      {/* Mobile bottom sheet */}
-      {sheetOpen && (
-        <div
-          className="md:hidden fixed inset-0 z-50 flex items-end"
-          onClick={() => setSheetOpen(false)}
-        >
-          <div className="absolute inset-0 bg-black/40" />
-          <div
-            className="relative w-full bg-white rounded-t-2xl p-5 flex flex-col gap-5"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between">
-              <h3
-                className="text-[16px] font-bold"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
-                Filters
-              </h3>
-              <button
-                onClick={() => setSheetOpen(false)}
-                className="text-2xl leading-none"
-              >
-                &times;
-              </button>
-            </div>
-            <SheetGroup
-              title="Discount"
-              options={DISCOUNTS}
-              value={discount}
-              onChange={setDiscount}
-            />
-            <SheetGroup
-              title="Sort by"
-              options={SORTS}
-              value={sort}
-              onChange={setSort}
-            />
-            <button
-              onClick={() => setSheetOpen(false)}
-              className="mt-2 bg-[#1c1c1c] text-white py-3 rounded-lg font-semibold"
-            >
-              Show results
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Shared FilterSheet — replaces the custom sheet */}
+      <FilterSheet
+        open={sheetOpen}
+        onClose={() => setSheetOpen(false)}
+        groups={[
+          {
+            title: "Discount",
+            options: DISCOUNTS,
+            selected: discount,
+            onSelect: (v) => setDiscount(v),
+            multi: false,
+          },
+          {
+            title: "Sort by",
+            options: SORTS,
+            selected: sort,
+            onSelect: setSort,
+            multi: false,
+          },
+        ]}
+      />
     </section>
   );
 }
@@ -183,37 +116,12 @@ function Dropdown({ value, onChange, options, active, activeRing }) {
   return (
     <select
       value={value}
-      onChange={(e) =>
-        onChange(
-          isNaN(e.target.value) ? e.target.value : Number(e.target.value),
-        )
-      }
+      onChange={(e) => onChange(isNaN(e.target.value) ? e.target.value : Number(e.target.value))}
       className={`px-3 py-2 border rounded-lg text-[13px] font-medium bg-white cursor-pointer outline-none focus:outline-none ${active ? activeRing : "border-line focus:border-brand"}`}
     >
       {options.map((o) => (
-        <option key={o.value} value={o.value}>
-          {o.label}
-        </option>
+        <option key={o.value} value={o.value}>{o.label}</option>
       ))}
     </select>
-  );
-}
-
-function SheetGroup({ title, options, value, onChange }) {
-  return (
-    <div>
-      <p className="text-[13px] font-semibold text-muted mb-2">{title}</p>
-      <div className="flex flex-wrap gap-2">
-        {options.map((o) => (
-          <button
-            key={o.value}
-            onClick={() => onChange(o.value)}
-            className={`px-3 py-2 rounded-lg text-[13px] font-medium border ${value === o.value ? "bg-[#1c1c1c] text-white border-[#1c1c1c]" : "bg-white border-line text-text"}`}
-          >
-            {o.label}
-          </button>
-        ))}
-      </div>
-    </div>
   );
 }
