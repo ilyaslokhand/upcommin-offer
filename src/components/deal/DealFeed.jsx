@@ -46,7 +46,7 @@ export default function DealFeed({ filters = {}, columns = 4 }) {
       : "grid-cols-1 min-[722px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
 
   return (
-    <div className={`w-full flex flex-col gap-7 items-center ${loading && deals.length === 0 ? "min-h-[600px]" : ""}`}>      {loading && deals.length === 0 ? (
+    <div className={`w-full flex flex-col gap-7 items-center ${loading && deals.length === 0 ? "min-h-150" : ""}`}>      {loading && deals.length === 0 ? (
       <DealGridSkeleton count={8} columns={columns} />
     ) : deals.length ? (
       <div className={`w-full grid ${gridCols} gap-4`}>
@@ -64,7 +64,7 @@ export default function DealFeed({ filters = {}, columns = 4 }) {
         <button
           onClick={() => fetchDeals(cursor, true)}
           disabled={loading}
-          className="flex items-center gap-[7px] text-[15px] font-semibold text-text transition disabled:opacity-50 cursor-pointer"
+          className="flex items-center gap-1.75 text-[15px] font-semibold text-text transition disabled:opacity-50 cursor-pointer"
         >
           {loading ? "Loading…" : "Load more deals"}
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

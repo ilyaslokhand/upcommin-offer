@@ -55,7 +55,7 @@ export default function DealListing({
 
   return (
     <div className="container-wrap py-6 grid grid-cols-1 md:grid-cols-[250px_1fr] gap-6 items-start">
-      <aside className="hidden md:flex bg-white border border-line rounded-[16px] px-[18px] py-4 flex-col gap-3.5">
+      <aside className="hidden md:flex bg-white border border-line rounded-2xl px-4.5 py-4 flex-col gap-3.5">
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-line">
           <span className="text-[15px] font-bold text-[#6a7180]">Filters</span>
@@ -102,7 +102,7 @@ export default function DealListing({
               <button
                 key={d.value}
                 onClick={() => setDiscount(discount === d.value ? 0 : d.value)}
-                className={`px-2 py-[3px] rounded-full cursor-pointer text-[13px] border ${discount === d.value
+                className={`px-2 py-0.75 rounded-full cursor-pointer text-[13px] border ${discount === d.value
                   ? "bg-[#1c1c1c] border-[#1c1c1c] text-white font-bold"
                   : "border-line text-[#8b92a8] font-medium"
                   }`}
@@ -122,13 +122,13 @@ export default function DealListing({
 
         {/* Tabs + Sort row */}
         <div className="flex items-center justify-between gap-3 w-full">
-          <div className="bg-white border border-line rounded-[6px] p-1.5 flex gap-0.5 shrink-0">
+          <div className="bg-white border border-line rounded-md p-1.5 flex gap-0.5 shrink-0">
 
             {TABS.map((t) => (
               <button
                 key={t.value}
                 onClick={() => setTab(t.value)}
-                className={`px-3 py-1 rounded-[4px] cursor-pointer text-[13px] font-bold flex items-center gap-1 transition ${tab === t.value ? "bg-[#1c1c1c] text-white" : "text-[#6a7180]"
+                className={`px-3 py-1 rounded-sm cursor-pointer text-[13px] font-bold flex items-center gap-1 transition ${tab === t.value ? "bg-[#1c1c1c] text-white" : "text-[#6a7180]"
                   }`}
               >
                 {t.label}
@@ -153,7 +153,7 @@ export default function DealListing({
               name="sort"
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="w-[160px] bg-white border rounded-[6px] px-2.5 py-1.5 text-[13px] font-medium text-[#6a7180] cursor-pointer outline-none focus:outline-none border-line focus:border-brand"
+              className="w-40 bg-white border rounded-md px-2.5 py-1.5 text-[13px] font-medium text-[#6a7180] cursor-pointer outline-none focus:outline-none border-line focus:border-brand"
             >
               {SORTS.map((s) => (
                 <option key={s.value} value={s.value}>{s.label}</option>

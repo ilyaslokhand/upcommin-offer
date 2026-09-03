@@ -52,7 +52,7 @@ export default function SaleCarousel({ sales }) {
               >
                 <Link
                   href={`/sale/${sale.slug}`}
-                  className="relative h-[300px] rounded-[20px] border border-line overflow-hidden flex flex-col justify-between px-9 py-8 group block"
+                  className="relative h-75 rounded-[20px] border border-line overflow-hidden flex flex-col justify-between px-9 py-8 group"
                 >
                   {img && (
                     <Image
@@ -63,7 +63,7 @@ export default function SaleCarousel({ sales }) {
                       className="object-cover -z-10"
                     />
                   )}
-                  <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent to-black/40" />
+                  <div className="absolute inset-0 -z-10 bg-linear-to-b from-transparent to-black/40" />
 
                   <span
                     className={`self-start rounded-full px-3 py-1 text-[12px] font-extrabold uppercase tracking-tight border ${
@@ -93,14 +93,14 @@ export default function SaleCarousel({ sales }) {
                       </h3>
                       {sale.saleSubtitle && (
                         <p
-                          className="text-[15px] font-semibold leading-6 max-w-[350px]"
+                          className="text-[15px] font-semibold leading-6 max-w-87.5"
                           style={{ color: "#eeebfd" }}
                         >
                           {sale.saleSubtitle}
                         </p>
                       )}
                     </div>
-                    <span className="shrink-0 size-[60px] rounded-full border-[1.5px] border-white bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition">
+                    <span className="shrink-0 size-15 rounded-full border-[1.5px] border-white bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition">
                       <svg
                         width="24"
                         height="24"
