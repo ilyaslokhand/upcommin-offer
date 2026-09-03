@@ -1,6 +1,5 @@
 import { getCategoryBySlug } from "@/lib/graphql/queries/taxonomies";
 import DealListing from "@/components/deal/DealListing";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import CategoryHero from "@/components/common/CategoryHero";
