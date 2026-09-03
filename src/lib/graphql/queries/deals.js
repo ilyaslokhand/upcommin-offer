@@ -49,3 +49,34 @@ export async function getDealsCount() {
   const data = await fetchGraphQL(DEALS_COUNT_QUERY);
   return data?.deals?.nodes?.length ?? 0;
 }
+
+// Single deal by slug (for the deal detail page)
+const DEAL_BY_SLUG_QUERY = `
+  query DealBySlug($slug: ID!) {
+    deal(id: $slug, idType: SLUG) {
+      id
+      title
+      slug
+      date
+      finalPrice
+      originalPrice
+      priceLabel
+      discountPercent
+      dealType
+      couponCode
+      affiliateLink
+      isExpired
+      productDescription
+      moreAbout
+      featuredImage { node { sourceUrl altText } }
+      terms { nodes { name taxonomyName slug } }
+      seo { title description canonicalUrl }
+    }
+  }
+`;
+
+export async function getDealBySlug(slug) {
+  const data = await fetchGraphQL(DEAL_BY_SLUG_QUERY, { slug });
+  return data?.deal ?? null;
+}
+
