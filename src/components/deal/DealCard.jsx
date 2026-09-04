@@ -3,7 +3,7 @@ import Image from "next/image";
 import { getDiscount, timeAgo, getTerm } from "@/lib/utils/deal";
 
 
-export default function DealCard({ deal, compact = false, priority = false }) {
+export default function DealCard({ deal, compact = false, priority = false, horizontal = false }) {
   const img = deal.featuredImage?.node?.sourceUrl;
   const final = deal.finalPrice;
   const original = deal.originalPrice;
@@ -14,7 +14,8 @@ export default function DealCard({ deal, compact = false, priority = false }) {
   return (
     // CHANGED: was <Wrapper> (Link). Now a plain <div> with `relative`
     <div
-      className={`relative bg-white border border-line rounded-card overflow-hidden flex flex-row md:flex-col ${expired ? "opacity-60" : "hover:shadow-md transition"}`}
+      className={`relative bg-white border border-line rounded-[10px] overflow-hidden flex ${horizontal ? "flex-row" : "flex-row md:flex-col"
+        } ${expired ? "opacity-60" : "hover:shadow-md transition"}`}
     >
       {/* ADDED: invisible link covering the whole card → goes to deal details */}
       {!expired && (
@@ -26,7 +27,8 @@ export default function DealCard({ deal, compact = false, priority = false }) {
       )}
 
       {/* Image */}
-      <div className="relative w-30 h-30 md:w-full md:h-37.5 shrink-0 bg-[#f4f5f9]">
+      <div className={`relative shrink-0 bg-[#f4f5f9] ${horizontal ? "w-27.5 h-27.5" : "w-30 h-30 md:w-full md:h-37.5"
+        }`}>
         {img ? (
           <Image
             src={img}

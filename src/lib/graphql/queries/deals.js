@@ -1,6 +1,5 @@
 import { fetchGraphQL } from "../client";
 
-
 const ALL_DEALS_QUERY = `
   query AllDeals($first: Int = 20, $after: String, $where: RootQueryToDealConnectionWhereArgs) {
     deals(first: $first, after: $after, where: $where) {
@@ -29,7 +28,11 @@ const ALL_DEALS_QUERY = `
   }
 `;
 
-export async function getAllDeals({ first = 20, after = null, where = null } = {}) {
+export async function getAllDeals({
+  first = 20,
+  after = null,
+  where = null,
+} = {}) {
   const data = await fetchGraphQL(ALL_DEALS_QUERY, { first, after, where });
   return {
     deals: data?.deals?.nodes ?? [],
@@ -88,3 +91,39 @@ export async function getDealBySlug(slug) {
   return data?.deal ?? null;
 }
 
+const STORE_DEALS_QUERY = `
+  query StoreDeals($store: String!, $first: Int = 10) {
+    deals(first: $first, where: {
+      taxQuery: {
+        taxArray: [
+          { taxonomy: STORE, field: SLUG, terms: [$store], operator: IN }
+        ]
+      },
+      excludeExpired: true
+    }) {
+      nodes {
+        id
+        title
+        slug
+        finalPrice
+        originalPrice
+        priceLabel
+        discountPercent
+        dealType
+        affiliateLink
+        isExpired
+        date
+        featuredImage { node { sourceUrl altText } }
+        terms { nodes { name taxonomyName slug } }
+      }
+    }
+  }
+`;
+
+export async function getStoreDeals(storeSlug, first = 10) {
+  const data = await fetchGraphQL(STORE_DEALS_QUERY, {
+    store: storeSlug,
+    first,
+  });
+  return data?.deals?.nodes ?? [];
+}

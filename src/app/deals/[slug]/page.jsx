@@ -1,8 +1,11 @@
-import { getDealBySlug } from "@/lib/graphql/queries/deals";
+import { getDealBySlug, getStoreDeals } from "@/lib/graphql/queries/deals";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { notFound } from "next/navigation";
 import DealHero from "@/components/deal/DealHero";
 import DealContent from "@/components/deal/DealContent";
+import HowToGet from "@/components/deal/HowToGet";
+import SidebarDeals from "@/components/deal/SidebarDeals";
+
 
 
 // helper to pull a term by taxonomy
@@ -17,6 +20,10 @@ export default async function DealPage({ params }) {
 
     const store = getTerm(deal.terms, "store");
     const category = getTerm(deal.terms, "deal-category");
+
+    const storeDeals = store
+        ? (await getStoreDeals(store.slug, 10)).filter((d) => d.slug !== deal.slug)
+        : [];
 
     return (
         <div>
@@ -43,8 +50,8 @@ export default async function DealPage({ params }) {
 
 
                     {/* How to get — Step 6 */}
-                    <div className="bg-white border border-line rounded-[16px] p-6">
-
+                    <div className="grid md:grid-cols-2 grid-cols-1 md:gap-4 gap-6">
+                        <HowToGet storeName={store?.name} affiliateLink={deal.affiliateLink} />
                         <DealContent title="More about this deal" html={deal.moreAbout} />
                     </div>
 
@@ -58,7 +65,8 @@ export default async function DealPage({ params }) {
                 <aside className="flex flex-col gap-4">
                     {/* Hottest Deals (same store) — Step 7 */}
                     <div className="bg-white border border-line rounded-[12px] p-4">
-                        <p className="text-muted">Hottest Deals — {store?.name} (Step 7)</p>
+                        <SidebarDeals deals={storeDeals} storeName={store?.name} storeSlug={store?.slug} />
+
                     </div>
 
                     {/* Loot band — Step 7 */}
