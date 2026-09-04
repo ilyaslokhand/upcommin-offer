@@ -11,9 +11,10 @@ export default function DealHero({ deal }) {
     const expired = deal.isExpired === "true";
 
     return (
-        <div className="bg-white   rounded-2xl  flex flex-col md:flex-row gap-6 md:gap-8">
+        <div className="  flex flex-col min-[550px]:flex-row gap-4 md:gap-8">
+
             {/* Image */}
-            <div className="w-full md:w-85 shrink-0 flex flex-col gap-3">
+            <div className="w-full max-w-[240px] min-[550px]:max-w-none min-[550px]:w-[180px] md:w-[340px] shrink-0 flex flex-col gap-3">
                 <div className="relative w-full aspect-square border border-line rounded-[14px] overflow-hidden bg-[#f4f5f9]">
                     {img && (
                         <Image src={img} alt={deal.featuredImage?.node?.altText || deal.title} fill sizes="(max-width:768px) 100vw, 340px" className="object-cover" priority />

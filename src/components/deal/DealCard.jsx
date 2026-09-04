@@ -8,7 +8,7 @@ export default function DealCard({ deal, compact = false, priority = false }) {
   const final = deal.finalPrice;
   const original = deal.originalPrice;
   const discount = getDiscount(final, original);
-  const store = getTerm(deal.terms, "store");
+  const store = getTerm(deal.terms, "store")?.name;
   const expired = deal.isExpired === "true";
 
   return (

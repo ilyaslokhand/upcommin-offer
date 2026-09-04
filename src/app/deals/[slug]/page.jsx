@@ -2,6 +2,8 @@ import { getDealBySlug } from "@/lib/graphql/queries/deals";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { notFound } from "next/navigation";
 import DealHero from "@/components/deal/DealHero";
+import DealContent from "@/components/deal/DealContent";
+
 
 // helper to pull a term by taxonomy
 function getTerm(terms, tax) {
@@ -32,18 +34,18 @@ export default async function DealPage({ params }) {
                 <div className="flex flex-col gap-6 min-w-0">
                     {/* Hero — Step 4 */}
                     <div className="bg-white border border-line rounded-[16px] p-6">
-                       
+
                         <DealHero deal={deal} />
                     </div>
 
-                    {/* Description — Step 5 */}
-                    <div className="bg-white border border-line rounded-[16px] p-6">
-                        <p className="text-muted">Description + More about (Step 5)</p>
-                    </div>
+                    {/* Product Description */}
+                    <DealContent title="Product Description" html={deal.productDescription} />
+
 
                     {/* How to get — Step 6 */}
                     <div className="bg-white border border-line rounded-[16px] p-6">
-                        <p className="text-muted">How to get this deal (Step 6)</p>
+
+                        <DealContent title="More about this deal" html={deal.moreAbout} />
                     </div>
 
                     {/* Comments — Step 8 */}
