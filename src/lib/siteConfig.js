@@ -42,8 +42,3 @@ export const faqs = [
   },
 ];
 
-export const SORTS = [
-  { label: "Newest", value: "newest" },
-  { label: "Price: Low to High", value: "price-asc" },
-  { label: "Discount: High to Low", value: "discount-desc" },
-];

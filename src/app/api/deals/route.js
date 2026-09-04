@@ -4,17 +4,15 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url);
 
   const tag = searchParams.get("tag");
-  const discount = Number(searchParams.get("discount") || 0);
-  const sort = searchParams.get("sort") || "newest";
-  const after = searchParams.get("after") || null;
   const category = searchParams.get("category");
-  const subcategories = searchParams.getAll("subcategory"); // multiple
+  const subcategories = searchParams.getAll("subcategory");
+  const after = searchParams.get("after") || null;
 
-  // Build the GraphQL "where" clause
   const where = {};
 
-  // Combine tag + category + subcategory into one taxQuery (all must match)
+  // Combine tag + category/subcategory into one taxQuery (all must match)
   const taxArray = [];
+
   if (tag) {
     taxArray.push({
       taxonomy: "DEALTAG",
@@ -23,14 +21,8 @@ export async function GET(request) {
       operator: "IN",
     });
   }
-  if (category) {
-    taxArray.push({
-      taxonomy: "DEALCATEGORY",
-      field: "SLUG",
-      terms: [category],
-      operator: "IN",
-    });
-  }
+
+  // If subcategories are selected, filter by those; otherwise by the parent category
   if (subcategories.length) {
     taxArray.push({
       taxonomy: "DEALCATEGORY",
@@ -46,17 +38,10 @@ export async function GET(request) {
       operator: "IN",
     });
   }
+
   if (taxArray.length) {
     where.taxQuery = { relation: "AND", taxArray };
   }
-
-  // Discount filter
-  if (discount > 0) {
-    where.minDiscount = discount;
-  }
-
-  // Sort
-  where.sortBy = sort;
 
   // Always exclude expired
   where.excludeExpired = true;

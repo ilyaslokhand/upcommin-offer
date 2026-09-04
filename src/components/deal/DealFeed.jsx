@@ -13,15 +13,14 @@ export default function DealFeed({ filters = {}, columns = 4 }) {
     (after = null) => {
       const params = new URLSearchParams();
       if (filters.category) params.set("category", filters.category);
-      if (filters.tag) params.set("tag", filters.tag); // ← FIXED: filters.tag not filters.tab
-      if (filters.discount) params.set("discount", String(filters.discount));
-      if (filters.sort) params.set("sort", filters.sort);
+      if (filters.tag) params.set("tag", filters.tag);
       (filters.subcategories || []).forEach((s) => params.append("subcategory", s));
       if (after) params.set("after", after);
       return params.toString();
     },
     [filters],
   );
+
 
   const fetchDeals = useCallback(
     async (after = null, append = false) => {

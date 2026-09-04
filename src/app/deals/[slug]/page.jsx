@@ -5,6 +5,7 @@ import DealHero from "@/components/deal/DealHero";
 import DealContent from "@/components/deal/DealContent";
 import HowToGet from "@/components/deal/HowToGet";
 import SidebarDeals from "@/components/deal/SidebarDeals";
+import LootBand from "@/components/common/LootBand";
 
 
 
@@ -66,13 +67,9 @@ export default async function DealPage({ params }) {
                     {/* Hottest Deals (same store) — Step 7 */}
                     <div className="bg-white border border-line rounded-[12px] p-4">
                         <SidebarDeals deals={storeDeals} storeName={store?.name} storeSlug={store?.slug} />
-
                     </div>
+                      <LootBand />
 
-                    {/* Loot band — Step 7 */}
-                    <div className="bg-ink rounded-[12px] p-5">
-                        <p className="text-white">Get this kind of loot daily (Step 7)</p>
-                    </div>
                 </aside>
             </div>
         </div>

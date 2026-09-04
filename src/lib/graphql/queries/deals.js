@@ -108,7 +108,7 @@ const STORE_DEALS_QUERY = `
         finalPrice
         originalPrice
         priceLabel
-        discountPercent
+        discountPercent       
         dealType
         affiliateLink
         isExpired
