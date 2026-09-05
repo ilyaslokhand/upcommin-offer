@@ -6,6 +6,7 @@ import DealContent from "@/components/deal/DealContent";
 import HowToGet from "@/components/deal/HowToGet";
 import SidebarDeals from "@/components/deal/SidebarDeals";
 import LootBand from "@/components/common/LootBand";
+import Comments from "@/components/common/Comments";
 
 
 
@@ -58,7 +59,7 @@ export default async function DealPage({ params }) {
 
                     {/* Comments — Step 8 */}
                     <div className="bg-white border border-line rounded-[16px] p-6">
-                        <p className="text-muted">Comments (Step 8)</p>
+                        <Comments contentId={deal.databaseId} initialCount={deal.commentCount} />
                     </div>
                 </div>
 
@@ -68,7 +69,7 @@ export default async function DealPage({ params }) {
                     <div className="bg-white border border-line rounded-[12px] p-4">
                         <SidebarDeals deals={storeDeals} storeName={store?.name} storeSlug={store?.slug} />
                     </div>
-                      <LootBand />
+                    <LootBand />
 
                 </aside>
             </div>

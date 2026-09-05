@@ -10,9 +10,7 @@ export async function GET(request) {
 
   const where = {};
 
-  // Combine tag + category/subcategory into one taxQuery (all must match)
   const taxArray = [];
-
   if (tag) {
     taxArray.push({
       taxonomy: "DEALTAG",
@@ -21,8 +19,6 @@ export async function GET(request) {
       operator: "IN",
     });
   }
-
-  // If subcategories are selected, filter by those; otherwise by the parent category
   if (subcategories.length) {
     taxArray.push({
       taxonomy: "DEALCATEGORY",
@@ -38,13 +34,9 @@ export async function GET(request) {
       operator: "IN",
     });
   }
-
   if (taxArray.length) {
     where.taxQuery = { relation: "AND", taxArray };
   }
-
-  // Always exclude expired
-  where.excludeExpired = true;
 
   const { deals, pageInfo } = await getAllDeals({ first: 20, after, where });
 

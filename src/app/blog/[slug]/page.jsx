@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getPostBySlug } from "@/lib/graphql/queries/blog";
+import Comments from "@/components/common/Comments";
 
 export default async function BlogPostPage({ params }) {
   const { slug } = await params;
@@ -21,6 +22,9 @@ export default async function BlogPostPage({ params }) {
         <img src={post.featuredImage.node.sourceUrl} alt={post.title} className="w-full rounded-card mb-6" />
       )}
       <article className="blog-content" dangerouslySetInnerHTML={{ __html: post.content }} />
+      <div>
+        <Comments contentId={post.databaseId} initialCount={post.commentCount} />
+      </div>
     </main>
   );
 }

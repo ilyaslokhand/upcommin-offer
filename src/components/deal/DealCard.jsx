@@ -9,22 +9,19 @@ export default function DealCard({ deal, compact = false, priority = false, hori
   const original = deal.originalPrice;
   const discount = getDiscount(final, original);
   const store = getTerm(deal.terms, "store")?.name;
-  const expired = deal.isExpired === "true";
 
   return (
     // CHANGED: was <Wrapper> (Link). Now a plain <div> with `relative`
     <div
       className={`relative bg-white border border-line rounded-[10px] overflow-hidden flex ${horizontal ? "flex-row" : "flex-row md:flex-col"
-        } ${expired ? "opacity-60" : "hover:shadow-md transition"}`}
+        } hover:shadow-md transition`}
     >
-      {/* ADDED: invisible link covering the whole card → goes to deal details */}
-      {!expired && (
-        <Link
-          href={`/deals/${deal.slug}`}
-          className="absolute inset-0 z-1"
-          aria-label={deal.title}
-        />
-      )}
+      {/* Invisible link covering the whole card → goes to deal details */}
+      <Link
+        href={`/deals/${deal.slug}`}
+        className="absolute inset-0 z-1"
+        aria-label={deal.title}
+      />
 
       {/* Image */}
       <div className={`relative shrink-0 bg-[#f4f5f9] ${horizontal ? "w-27.5 h-27.5" : "w-30 h-30 md:w-full md:h-37.5"
@@ -36,17 +33,11 @@ export default function DealCard({ deal, compact = false, priority = false, hori
             fill
             sizes="(max-width:768px) 120px, 296px"
             className="object-cover"
-
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-muted text-xs">
             No image
           </div>
-        )}
-        {expired && (
-          <span className="absolute top-2 left-2 bg-[rgba(28,28,28,0.85)] rounded-sm px-2 py-1 text-[10px] font-bold text-white uppercase z-10">
-            Expired
-          </span>
         )}
       </div>
 
@@ -96,21 +87,15 @@ export default function DealCard({ deal, compact = false, priority = false, hori
             </span>
           </div>
 
-          {/* CHANGED: Shop Now is now an <a> to affiliate link, with relative z-10 so it sits above the card link */}
-          {expired ? (
-            <span className="bg-[#e7e9f1] text-muted px-3 py-1 rounded-btn text-[11px] font-semibold shrink-0 relative z-10">
-              Expired
-            </span>
-          ) : (
-
-            <a href={deal.affiliateLink || "#"}
-              target="_blank"
-              rel="noopener noreferrer sponsored"
-              className="bg-[#1c1c1c] text-white px-3 py-1 rounded-btn text-[11px] font-semibold shrink-0 max-w-max hover:opacity-90 relative z-10"
-            >
-              Shop Now
-            </a>
-          )}
+          {/* Shop Now — always clickable */}
+          <a
+            href={deal.affiliateLink || "#"}
+            target="_blank"
+            rel="noopener noreferrer sponsored"
+            className="bg-[#1c1c1c] text-white px-3 py-1 rounded-btn text-[11px] font-semibold shrink-0 max-w-max hover:opacity-90 relative z-10"
+          >
+            Shop Now
+          </a>
         </div>
       </div>
     </div >

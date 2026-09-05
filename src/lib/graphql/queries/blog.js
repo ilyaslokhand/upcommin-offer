@@ -58,6 +58,7 @@ const POST_BY_SLUG_QUERY = `
     post(id: $slug, idType: SLUG) {
       id
       title
+      databaseId
       slug
       content
       date

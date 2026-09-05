@@ -59,6 +59,8 @@ const DEAL_BY_SLUG_QUERY = `
     deal(id: $slug, idType: SLUG) {
       id
       title
+      databaseId 
+      commentCount     
       slug
       date
       finalPrice

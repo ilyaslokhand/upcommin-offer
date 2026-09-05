@@ -1,7 +1,7 @@
 // Central site configuration — edit these values in one place.
 
 export const social = {
-  telegram: "t.me/Upcomingoffer52",       // ← replace with your Telegram link
+  telegram: "t.me/Upcomingoffer52", // ← replace with your Telegram link
   whatsapp: "https://chat.whatsapp.com/YOUR_INVITE", // ← replace with your WhatsApp invite
   instagram: "",
   twitter: "",
@@ -10,8 +10,8 @@ export const social = {
 
 // Trust-bar / marketing numbers that aren't in the database
 export const stats = {
-  community: "12K+",   // Telegram/WhatsApp members
-  verified: "100%",    // verified links claim
+  community: "12K+", // Telegram/WhatsApp members
+  verified: "100%", // verified links claim
 };
 
 export const site = {
@@ -37,8 +37,7 @@ export const faqs = [
     a: "All day, every day. We post the best loot deals, offers and coupons as they go live join our Telegram to get them the second they drop.",
   },
   {
-    q: "What happens when a deal expires?",
-    a: "Expired deals are marked clearly and moved out of the live feed, but the page stays up for price history. Always check the store for the final price before buying.",
+    q: "Are the prices always up to date?",
+    a: "Prices shown are accurate at the time we post a deal, but they can change anytime. Always check the final price on the store's page (via the Shop Now button) before buying that's the live, current price.",
   },
 ];
-
