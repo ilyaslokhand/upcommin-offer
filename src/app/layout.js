@@ -24,7 +24,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${syne.variable}`}>
+    <html
+      lang="en"
+      style={{ scrollBehavior: "auto" }}
+      className={`${dmSans.variable} ${syne.variable}`}
+    >
       <body className="min-h-screen flex flex-col justify-between">
         <Header />
         <main className="flex-1">{children}</main>

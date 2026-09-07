@@ -128,3 +128,23 @@ export async function getCategoryBySlug(slug) {
   const data = await fetchGraphQL(CATEGORY_BY_SLUG_QUERY, { slug });
   return data?.dealCategory ?? null;
 }
+
+// fetch store by slug to show store details on store page
+
+const STORE_BY_SLUG_QUERY = `
+  query StoreBySlug($slug: ID!) {
+    store(id: $slug, idType: SLUG) {
+      name
+      slug
+      description
+      count
+      storeLogo
+      storeReward
+    }
+  }
+`;
+
+export async function getStoreBySlug(slug) {
+  const data = await fetchGraphQL(STORE_BY_SLUG_QUERY, { slug });
+  return data?.store ?? null;
+}

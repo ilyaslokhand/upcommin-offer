@@ -33,8 +33,12 @@ export default async function CategoryPage({ params }) {
       {/* Listing */}
       <DealListing
         baseFilter={{ category: category.slug }}
-        subcategories={subcategories}
-        showSubcategoryFilter={true}
+        tabs={[{ label: "Latest", value: "daily-deal" }, { label: "Hot", value: "hot" }]}
+        filterOptions={subcategories}
+        filterLabel="Subcategories"
+        filterParam="subcategory"
+        showFilter={true}
+
       />
     </div>
   );
