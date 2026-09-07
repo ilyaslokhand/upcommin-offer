@@ -59,6 +59,7 @@ const POST_BY_SLUG_QUERY = `
       id
       title
       databaseId
+      commentCount
       slug
       content
       date

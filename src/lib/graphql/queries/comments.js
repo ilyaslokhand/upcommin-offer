@@ -27,3 +27,26 @@ export async function getComments(
     },
   };
 }
+
+const CREATE_COMMENT_MUTATION = `
+  mutation CreateComment($contentId: Int!, $content: String!, $author: String!, $authorEmail: String!) {
+    createComment(input: {
+      commentOn: $contentId,
+      content: $content,
+      author: $author,
+      authorEmail: $authorEmail
+    }) {
+      success
+    }
+  }
+`;
+
+export async function postComment({ contentId, content, author, authorEmail }) {
+  const data = await fetchGraphQL(CREATE_COMMENT_MUTATION, {
+    contentId: parseInt(contentId),
+    content,
+    author,
+    authorEmail,
+  });
+  return data?.createComment?.success ?? false;
+}

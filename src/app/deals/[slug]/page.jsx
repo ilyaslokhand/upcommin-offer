@@ -37,41 +37,41 @@ export default async function DealPage({ params }) {
                 { label: deal.title },
             ]} />
 
-            {/* Main layout: content + sidebar */}
+            {/* Main layout */}
             <div className="container-wrap py-4 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-4 items-start">
                 {/* Main column */}
                 <div className="flex flex-col gap-6 min-w-0">
-                    {/* Hero — Step 4 */}
                     <div className="bg-white border border-line rounded-[16px] p-6">
-
                         <DealHero deal={deal} />
                     </div>
 
-                    {/* Product Description */}
                     <DealContent title="Product Description" html={deal.productDescription} />
 
-
-                    {/* How to get — Step 6 */}
                     <div className="grid md:grid-cols-2 grid-cols-1 md:gap-4 gap-6">
                         <HowToGet storeName={store?.name} affiliateLink={deal.affiliateLink} />
                         <DealContent title="More about this deal" html={deal.moreAbout} />
                     </div>
 
-                    {/* Comments — Step 8 */}
-                    <div className="bg-white border border-line rounded-[16px] p-6">
+                    {/* Comments — DESKTOP only (in main column) */}
+                    <div className="hidden lg:block bg-white p-6 border border-line rounded-[16px]">
                         <Comments contentId={deal.databaseId} initialCount={deal.commentCount} />
                     </div>
                 </div>
 
                 {/* Sidebar */}
                 <aside className="flex flex-col gap-4">
-                    {/* Hottest Deals (same store) — Step 7 */}
                     <div className="bg-white border border-line rounded-[12px] p-4">
                         <SidebarDeals deals={storeDeals} storeName={store?.name} storeSlug={store?.slug} />
                     </div>
                     <LootBand />
-
                 </aside>
+            </div>
+
+            {/* Comments — MOBILE only (after everything, last) */}
+            <div className="container-wrap">
+                <div className="pb-8 lg:hidden bg-white p-6 border border-line rounded-[16px]">
+                    <Comments contentId={deal.databaseId} initialCount={deal.commentCount} />
+                </div>
             </div>
         </div>
     );

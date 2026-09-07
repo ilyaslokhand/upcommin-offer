@@ -11,6 +11,27 @@ export default function Comments({ contentId, initialCount = 0 }) {
     const [cursor, setCursor] = useState(null);
     const [hasNext, setHasNext] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [name, setName] = useState("");
+    const [text, setText] = useState("");
+    const [submitting, setSubmitting] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+
+    const handleSubmit = async () => {
+        if (!name.trim() || !text.trim()) return;
+        setSubmitting(true);
+        const res = await fetch("/api/post", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ contentId, content: text, author: name }),
+        });
+        const data = await res.json();
+        setSubmitting(false);
+        if (data.success) {
+            setSubmitted(true);
+            setName("");
+            setText("");
+        }
+    };
 
     const fetchComments = useCallback(async (after = null, append = false) => {
         setLoading(true);
@@ -29,24 +50,39 @@ export default function Comments({ contentId, initialCount = 0 }) {
     useEffect(() => { fetchComments(null, false); }, [fetchComments]);
 
     return (
-        <div className="bg-white border border-line rounded-[16px] px-6 py-7 flex flex-col gap-6">
+        <div className="flex flex-col gap-6">
             <h2 className="text-[20px] font-semibold text-text tracking-[-0.2px]" style={{ fontFamily: "var(--font-body)" }}>
                 Comments ({initialCount})
             </h2>
 
-            {/* Comment form — UI only for now (posting wired later) */}
-            <div className="flex flex-col gap-4">
-                <textarea placeholder="Share your thoughts" className="bg-[#f4f5f9] border border-line rounded-[8px] px-4 py-3 text-[13px] min-h-[94px] resize-none outline-none focus:border-brand" />
-                <div className="flex flex-col sm:flex-row gap-4">
-                    <input placeholder="Name" className="flex-1 bg-[#f4f5f9] border border-line rounded-[8px] px-4 py-3 text-[13px] outline-none focus:border-brand" />
-                    <input placeholder="Email (Not Published)" className="flex-1 bg-[#f4f5f9] border border-line rounded-[8px] px-4 py-3 text-[13px] outline-none focus:border-brand" />
+            {submitted ? (
+                <div className="bg-[#e4f7ee] border border-[#0e9f5a] rounded-[8px] px-4 py-3 text-[13px] text-[#0e9f5a] font-medium">
+                    ✓ Thanks! Your comment is awaiting approval.
                 </div>
-                <button className="bg-[#1c1c1c] text-white px-4 py-2 rounded-[8px] text-[15px] font-semibold self-start flex items-center gap-1.5">
-                    Post Comment
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-                </button>
-            </div>
-
+            ) : (
+                <div className="flex flex-col gap-4">
+                    <textarea
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
+                        placeholder="Share your thoughts"
+                        className="bg-[#f4f5f9] border border-line rounded-[8px] px-4 py-3 text-[13px] min-h-[94px] resize-none outline-none focus:border-brand"
+                    />
+                    <input
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Name"
+                        className="bg-[#f4f5f9] border border-line rounded-[8px] px-4 py-3 text-[13px] outline-none focus:border-brand"
+                    />
+                    <button
+                        onClick={handleSubmit}
+                        disabled={submitting || !name.trim() || !text.trim()}
+                        className="bg-[#1c1c1c] text-white px-4 py-2 rounded-[8px] text-[15px] font-semibold self-start flex items-center gap-1.5 disabled:opacity-50"
+                    >
+                        {submitting ? "Posting…" : "Post Comment"}
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                    </button>
+                </div>
+            )}
             {/* Comments list */}
             {loading && comments.length === 0 ? (
                 <p className="text-muted text-[13px]">Loading comments…</p>
