@@ -1,8 +1,12 @@
 import Link from "next/link";
 import DealCard from "./DealCard";
+import Carousel from "@/components/ui/Carousel";
+
 
 export default function SidebarDeals({ deals, storeName, storeSlug }) {
     if (!deals.length) return null;
+    const shown = deals.slice(0, 5);
+
 
     return (
         <div className=" flex flex-col gap-3">
@@ -10,11 +14,20 @@ export default function SidebarDeals({ deals, storeName, storeSlug }) {
                 More deals from {storeName}
             </h2>
 
-            {/* Deal cards — stacked (desktop sidebar) */}
-            <div className="flex flex-col gap-3">
-                {deals.slice(0, 5).map((deal) => (
+            {/* Desktop: stacked list */}
+            <div className="hidden lg:flex flex-col gap-3">
+                {shown.map((deal) => (
                     <DealCard key={deal.id} deal={deal} horizontal={true} />
                 ))}
+            </div>
+
+            {/* Mobile: carousel */}
+            <div className="lg:hidden">
+                <Carousel slideClass="flex-[0_0_85%]" showArrows={true} gap={12} showDots={false}>
+                    {shown.map((deal) => (
+                        <DealCard key={deal.id} deal={deal} horizontal={true} />
+                    ))}
+                </Carousel>
             </div>
 
             {/* View all */}

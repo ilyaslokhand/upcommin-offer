@@ -8,7 +8,7 @@ const TABS = [
   { label: "Hot", value: "hot" },
 ];
 
-export default function LatestDealsClient() {
+export default function LatestDealsClient({ initialDeals = [], initialPageInfo = null }) {
   const [tab, setTab] = useState("daily-deal");
 
   return (
@@ -34,7 +34,8 @@ export default function LatestDealsClient() {
         ))}
       </div>
 
-      <DealFeed filters={{ tag: tab }} columns={4} />
+      <DealFeed filters={{ tag: tab }} columns={4} initialDeals={initialDeals}
+        initialPageInfo={initialPageInfo} />
     </section>
   );
 }

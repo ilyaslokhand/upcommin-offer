@@ -129,3 +129,4 @@ export async function getStoreDeals(storeSlug, first = 10) {
   });
   return data?.deals?.nodes ?? [];
 }
+

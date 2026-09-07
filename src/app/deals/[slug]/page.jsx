@@ -68,8 +68,8 @@ export default async function DealPage({ params }) {
             </div>
 
             {/* Comments — MOBILE only (after everything, last) */}
-            <div className="container-wrap">
-                <div className="pb-8 lg:hidden bg-white p-6 border border-line rounded-[16px]">
+            <div className="container-wrap pb-8">
+                <div className=" lg:hidden bg-white p-6 border border-line rounded-[16px]">
                     <Comments contentId={deal.databaseId} initialCount={deal.commentCount} />
                 </div>
             </div>

@@ -42,3 +42,44 @@ export async function GET(request) {
 
   return Response.json({ deals, pageInfo });
 }
+
+// Fetch deals server-side (for initial page render)
+export async function getFilteredDeals({
+  tag,
+  category,
+  subcategories = [],
+  first = 20,
+  after = null,
+} = {}) {
+  const where = {};
+  const taxArray = [];
+
+  if (tag) {
+    taxArray.push({
+      taxonomy: "DEALTAG",
+      field: "SLUG",
+      terms: [tag],
+      operator: "IN",
+    });
+  }
+  if (subcategories.length) {
+    taxArray.push({
+      taxonomy: "DEALCATEGORY",
+      field: "SLUG",
+      terms: subcategories,
+      operator: "IN",
+    });
+  } else if (category) {
+    taxArray.push({
+      taxonomy: "DEALCATEGORY",
+      field: "SLUG",
+      terms: [category],
+      operator: "IN",
+    });
+  }
+  if (taxArray.length) {
+    where.taxQuery = { relation: "AND", taxArray };
+  }
+
+  return await getAllDeals({ first, after, where });
+}
