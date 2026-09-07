@@ -32,7 +32,7 @@ export default function StoreHero({ name, description, count, logo, reward }) {
                 </div>
 
                 {/* Count */}
-                <div className="flex items-center gap-2 md:flex-col md:items-end shrink-0">
+                <div className="flex items-center gap-2 md:flex-col md:items-end shrink-0 justify-center">
                     <span className="text-[22px] font-extrabold text-text leading-none">{count ?? 0}</span>
                     <span className="text-[13px] text-[#6a7180]">active deals</span>
                 </div>

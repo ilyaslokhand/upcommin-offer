@@ -140,6 +140,11 @@ const STORE_BY_SLUG_QUERY = `
       count
       storeLogo
       storeReward
+       seoDescription
+      faqs {
+        question
+        answer
+      }
     }
   }
 `;
@@ -147,4 +152,22 @@ const STORE_BY_SLUG_QUERY = `
 export async function getStoreBySlug(slug) {
   const data = await fetchGraphQL(STORE_BY_SLUG_QUERY, { slug });
   return data?.store ?? null;
+}
+
+// fetch store categories by store slug to show store categories on store page
+
+const STORE_CATEGORIES_QUERY = `
+  query StoreCategories($store: String!) {
+    storeCategories(store: $store) {
+      name
+      slug
+      count
+      categoryIcon
+    }
+  }
+`;
+
+export async function getStoreCategories(storeSlug) {
+  const data = await fetchGraphQL(STORE_CATEGORIES_QUERY, { store: storeSlug });
+  return data?.storeCategories ?? [];
 }

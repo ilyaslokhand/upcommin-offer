@@ -12,7 +12,7 @@ export default function LatestDeals() {
       <h2 className="font-bold tracking-[-0.56px] text-text mb-5" style={{ fontFamily: "var(--font-display)" }}>
         Latest Deals
       </h2>
-      <DealListing tabs={TABS} showFilter={false} />
+      <DealListing tabs={TABS} showFilter={false} noContainer={true} />
     </section>
   );
 }

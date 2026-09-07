@@ -12,6 +12,7 @@ export default function DealListing({
   filterParam = "subcategory",    // ← which URL param the filter uses ("subcategory" / "category")
   showFilter = false,             // ← show the sidebar filter?
   showCoupons = false,            // ← show the "Coupons (Coming Soon)" tab?
+  noContainer = false,
 }) {
   const [tab, setTab] = useState(tabs[0]?.value ?? "");
   const [couponMode, setCouponMode] = useState(false);
@@ -41,10 +42,10 @@ export default function DealListing({
   const hasSidebar = showFilter && filterOptions.length > 0;
 
   return (
-    <div className={`container-wrap py-6 grid grid-cols-1 gap-6 items-start ${hasSidebar ? "md:grid-cols-[250px_1fr]" : ""}`}>
+    <div className={`py-6 grid grid-cols-1 gap-6 items-start ${noContainer ? "" : "container-wrap"} ${hasSidebar ? "md:grid-cols-[250px_1fr]" : ""}`}>
       {/* Sidebar — only if there are subcategories */}
       {hasSidebar && (
-        <aside className="hidden md:flex bg-white border border-line rounded-2xl px-4.5 py-4 flex-col gap-3.5">
+        <aside className="hidden md:flex sticky top-[92px] bg-white border border-line rounded-2xl px-4.5 py-4 flex-col gap-3.5">
           <div className="flex items-center justify-between pb-3 border-b border-line">
             <span className="text-[15px] font-bold text-[#6a7180]">Filters</span>
             {filtersActive && (
@@ -55,7 +56,7 @@ export default function DealListing({
           </div>
 
           <div className="flex flex-col gap-2.5">
-            <span className="text-[13px] font-semibold text-text uppercase">Subcategories</span>
+            <span className="text-[13px] font-semibold text-text uppercase">Categories</span>
             {filterOptions.map((opt) => (
               <label key={opt.slug} className="flex items-center gap-2 cursor-pointer">
                 <input
