@@ -9,7 +9,7 @@ const TABS = [
 export default function LatestDeals() {
   return (
     <section className="container-wrap pt-5">
-      <h2 className="font-bold tracking-[-0.56px] text-text mb-5" style={{ fontFamily: "var(--font-display)" }}>
+      <h2 className="font-bold tracking-[-0.56px] text-text " style={{ fontFamily: "var(--font-display)" }}>
         Latest Deals
       </h2>
       <DealListing tabs={TABS} showFilter={false} noContainer={true} />

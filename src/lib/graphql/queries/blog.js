@@ -2,7 +2,7 @@ import { fetchGraphQL } from "../client";
 
 const RECENT_POSTS_QUERY = `
   query RecentPosts {
-    posts(first: 3, where: { orderby: { field: DATE, order: DESC } }) {
+    posts(first: 4, where: { orderby: { field: DATE, order: DESC } }) {
       nodes {
         id
         title
