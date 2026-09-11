@@ -3,6 +3,7 @@ import DealListing from "@/components/deal/DealListing";
 import { notFound } from "next/navigation";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import CategoryHero from "@/components/common/CategoryHero";
+import StoreSeoSection from "@/components/common/StoreSeoSection";
 
 
 export default async function SubcategoryPage({ params }) {
@@ -36,7 +37,15 @@ export default async function SubcategoryPage({ params }) {
             {/* Deals — filtered to this subcategory, no subcategory filter in sidebar */}
             <DealListing
                 baseFilter={{ category: subcat.slug }}
+                tabs={[{ label: "Latest", value: "daily-deal" }, { label: "Hot", value: "hot" }]}  // ← pass tabs
                 showSubcategoryFilter={false}
+
+            />
+
+            <StoreSeoSection
+                seoDescription={subcat.seoDescription}
+                faqs={subcat.faqs}
+                storeName={subcat.name}
             />
         </div>
     );

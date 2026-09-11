@@ -23,7 +23,7 @@ export default function HeaderNav({ categories, stores, blogCats }) {
 
   const navItems = [
     { label: "Home", href: "/" },
-    { label: "Hot Deals", href: "/deals" },
+    { label: "Deals", href: "/deals" },
     { label: "Categories", href: "/category", key: "categories" },
     { label: "Stores", href: "/store", key: "stores" },
     { label: "Blogs", href: "/blog", key: "blog" },

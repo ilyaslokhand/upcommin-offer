@@ -1,30 +1,104 @@
 import { notFound } from "next/navigation";
-import { getPostBySlug } from "@/lib/graphql/queries/blog";
+import { getPostBySlug, getPosts } from "@/lib/graphql/queries/blog";
 import Comments from "@/components/common/Comments";
+import Breadcrumb from "@/components/common/Breadcrumb";
+import BlogCard from "@/components/common/BlogCard";
+import Image from "next/image";
 
 export default async function BlogPostPage({ params }) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const [post, { posts: recentPosts }] = await Promise.all([
+    getPostBySlug(slug),
+    getPosts({ first: 5 }),
+  ]);
   if (!post) notFound();
 
-  const readMin = Math.max(1, Math.ceil((post.content?.replace(/<[^>]*>/g, "").split(/\s+/).length || 0) / 200));
+  const readMin = Math.max(
+    1,
+    Math.ceil((post.content?.replace(/<[^>]*>/g, "").split(/\s+/).length || 0) / 200)
+  );
+  const category = post.categories?.nodes?.[0];
+  const otherPosts = recentPosts.filter((p) => p.slug !== post.slug).slice(0, 4);
 
   return (
-    <main className="container-wrap py-8 max-w-190">
-      <span className="text-xs text-brand font-medium">{post.categories?.nodes?.[0]?.name}</span>
-      <h1 className="text-3xl mt-2 mb-3" style={{ fontFamily: "var(--font-display)" }}>{post.title}</h1>
-      <div className="flex items-center gap-3 text-sm text-muted mb-6">
-        <span>{post.author?.node?.name}</span><span>·</span>
-        <span>{new Date(post.date).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</span>
-        <span>·</span><span>{readMin} min read</span>
+    <div>
+      {/* Breadcrumb */}
+      <Breadcrumb
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Blog", href: "/blog" },
+          { label: post.title },
+        ]}
+      />
+
+      {/* Blog content — 870px centered inside container */}
+      <div className="container-wrap py-6">
+        <article className="w-full">
+          <div className="bg-white border border-[#EEEBFD] rounded-[16px] p-5">
+            {category && (
+              <span className="text-[13px] text-brand font-semibold">{category.name}</span>
+            )}
+
+            <h1 className="text-3xl mt-2 mb-3" style={{ fontFamily: "var(--font-display)" }}>
+              {post.title}
+            </h1>
+
+            <div className="flex items-center gap-3 text-[13px] text-muted mb-5">
+              <span>{post.author?.node?.name}</span>
+              <span>·</span>
+              <span>
+                {new Date(post.date).toLocaleDateString("en-IN", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </span>
+              <span>·</span>
+              <span>{readMin} min read</span>
+            </div>
+
+            {post.featuredImage?.node?.sourceUrl && (
+              <div className="relative w-full aspect-video rounded-[12px] overflow-hidden mb-6">
+                <Image
+                  src={post.featuredImage.node.sourceUrl}
+                  alt={post.title}
+                  fill
+                  sizes="(max-width:870px) 100vw, 870px"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            )}
+
+            {/* Your HTML/CSS content renders as-is */}
+            <div className="blog-content" dangerouslySetInnerHTML={{ __html: post.content }} />
+          </div>
+        </article>
       </div>
-      {post.featuredImage?.node?.sourceUrl && (
-        <img src={post.featuredImage.node.sourceUrl} alt={post.title} className="w-full rounded-card mb-6" />
+
+      {/* Comments — 870px centered inside container */}
+      <div className="container-wrap pb-8">
+        <div className=" w-full  lg:block bg-white p-6 border border-line rounded-[16px]">
+          <Comments contentId={post.databaseId} initialCount={post.commentCount} />
+        </div>
+      </div>
+
+      {/* Recent Posts — full width */}
+      {otherPosts.length > 0 && (
+        <div className="container-wrap pb-12">
+          <h2
+            className="font-bold tracking-[-0.56px] text-text mb-5"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            Recent Posts
+          </h2>
+          <div className="grid grid-cols-1 min-[500px]:grid-cols-2 md:grid-cols-4 gap-5">
+            {otherPosts.map((p) => (
+              <BlogCard key={p.slug} post={p} />
+            ))}
+          </div>
+        </div>
       )}
-      <article className="blog-content" dangerouslySetInnerHTML={{ __html: post.content }} />
-      <div>
-        <Comments contentId={post.databaseId} initialCount={post.commentCount} />
-      </div>
-    </main>
+    </div>
   );
 }

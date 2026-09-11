@@ -1,8 +1,12 @@
 import { fetchGraphQL } from "../client";
 
-const RECENT_POSTS_QUERY = `
-  query RecentPosts {
-    posts(first: 4, where: { orderby: { field: DATE, order: DESC } }) {
+const POSTS_QUERY = `
+  query Posts($first: Int = 12, $after: String) {
+    posts(first: $first, after: $after, where: { orderby: { field: DATE, order: DESC } }) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
       nodes {
         id
         title
@@ -20,9 +24,12 @@ const RECENT_POSTS_QUERY = `
   }
 `;
 
-export async function getRecentPosts() {
-  const data = await fetchGraphQL(RECENT_POSTS_QUERY);
-  return data?.posts?.nodes ?? [];
+export async function getPosts({ first = 12, after = null } = {}) {
+  const data = await fetchGraphQL(POSTS_QUERY, { first, after });
+  return {
+    posts: data?.posts?.nodes ?? [],
+    pageInfo: data?.posts?.pageInfo ?? { hasNextPage: false, endCursor: null },
+  };
 }
 
 // Posts in a specific category

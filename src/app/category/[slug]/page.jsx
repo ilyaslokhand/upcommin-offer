@@ -3,6 +3,7 @@ import DealListing from "@/components/deal/DealListing";
 import { notFound } from "next/navigation";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import CategoryHero from "@/components/common/CategoryHero";
+import StoreSeoSection from "@/components/common/StoreSeoSection";
 
 
 export default async function CategoryPage({ params }) {
@@ -40,6 +41,13 @@ export default async function CategoryPage({ params }) {
         showFilter={true}
 
       />
+
+       <StoreSeoSection
+      seoDescription={category.seoDescription}
+      faqs={category.faqs}
+      storeName={category.name}
+    />
+   
     </div>
   );
 }

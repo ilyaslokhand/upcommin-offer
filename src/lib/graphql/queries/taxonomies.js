@@ -41,22 +41,25 @@ export async function getCategories() {
   return data?.dealCategories?.nodes ?? [];
 }
 
-// fetch stores from wordpress for mega menu
 
+// fetch stores from wordpress (mega menu, homepage trending, store index)
 const STORES_QUERY = `
-  query Stores {
-    stores(first: 100) {
+  query Stores($first: Int = 100) {
+    stores(first: $first) {
       nodes {
         id
         name
         slug
+        count
+        storeReward
+        storeLogo
       }
     }
   }
 `;
 
-export async function getStores() {
-  const data = await fetchGraphQL(STORES_QUERY);
+export async function getStores({ first = 100 } = {}) {
+  const data = await fetchGraphQL(STORES_QUERY, { first });
   return data?.stores?.nodes ?? [];
 }
 
@@ -80,27 +83,7 @@ export async function getBlogCategories() {
   return data?.categories?.nodes ?? [];
 }
 
-// fetch trending stores which are used in homepage to show trending stores with their logo and reward points
 
-const TRENDING_STORES_QUERY = `
-  query TrendingStores {
-    stores(first: 12) {
-      nodes {
-        id
-        name
-        slug
-        count
-        storeReward
-        storeLogo
-      }
-    }
-  }
-`;
-
-export async function getTrendingStores() {
-  const data = await fetchGraphQL(TRENDING_STORES_QUERY);
-  return data?.stores?.nodes ?? [];
-}
 
 // fetch category by slug to show category details on category page
 
@@ -170,4 +153,31 @@ const STORE_CATEGORIES_QUERY = `
 export async function getStoreCategories(storeSlug) {
   const data = await fetchGraphQL(STORE_CATEGORIES_QUERY, { store: storeSlug });
   return data?.storeCategories ?? [];
+}
+
+
+const ALL_CATEGORIES_WITH_CHILDREN_QUERY = `
+  query AllCategoriesWithChildren {
+    dealCategories(first: 100, where: { parent: 0 }) {
+      nodes {
+        name
+        slug
+        count
+        categoryIcon
+        children {
+          nodes {
+            name
+            slug
+            count
+            categoryIcon
+          }
+        }
+      }
+    }
+  }
+`;
+
+export async function getAllCategoriesWithChildren() {
+  const data = await fetchGraphQL(ALL_CATEGORIES_WITH_CHILDREN_QUERY);
+  return data?.dealCategories?.nodes ?? [];
 }
