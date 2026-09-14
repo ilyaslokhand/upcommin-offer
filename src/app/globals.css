@@ -164,3 +164,60 @@ h4 {
   font-weight: 600;
   margin: 14px 0 8px;
 }
+
+.page-content {
+  color: #6a7180;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+/* Headings — more space above, clear hierarchy */
+.page-content h2 {
+  color: #1c1c1c;
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: 40px;
+  margin-bottom: 14px;
+  font-family: var(--font-display, 'Syne', sans-serif);
+}
+.page-content h3 {
+  color: #1c1c1c;
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 28px;
+  margin-bottom: 10px;
+}
+
+/* First heading shouldn't have huge top margin */
+.page-content > h2:first-child,
+.page-content > h3:first-child {
+  margin-top: 0;
+}
+
+/* Paragraphs — comfortable spacing */
+.page-content p {
+  margin-bottom: 16px;
+}
+
+/* Lists */
+.page-content ul,
+.page-content ol {
+  margin-bottom: 16px;
+  padding-left: 24px;
+}
+.page-content ul { list-style: disc; }
+.page-content ol { list-style: decimal; }
+.page-content li {
+  margin-bottom: 8px;
+  line-height: 1.7;
+}
+
+/* Links + emphasis */
+.page-content a {
+  color: #4c34d4;
+  text-decoration: underline;
+}
+.page-content strong {
+  color: #1c1c1c;
+  font-weight: 600;
+}

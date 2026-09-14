@@ -11,6 +11,7 @@ export default async function CategoryPage({ params }) {
   const category = await getCategoryBySlug(slug);
   if (!category || !category.slug) notFound();
 
+
   const subcategories = category.children?.nodes ?? [];
 
   return (
@@ -42,12 +43,12 @@ export default async function CategoryPage({ params }) {
 
       />
 
-       <StoreSeoSection
-      seoDescription={category.seoDescription}
-      faqs={category.faqs}
-      storeName={category.name}
-    />
-   
+      <StoreSeoSection
+        seoDescription={category.seoDescription}
+        faqs={category.faqs}
+        storeName={category.name}
+      />
+
     </div>
   );
 }

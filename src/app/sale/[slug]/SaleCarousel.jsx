@@ -2,15 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import Carousel from "@/components/ui/Carousel";
-
-function getBadge(sale) {
-  if (sale.saleStatus === "ended") return { text: "Ended", tone: "ended" };
-  if (sale.saleStatus === "upcoming") {
-    const d = sale.startDate ? new Date(sale.startDate).toLocaleDateString("en-IN", { day: "numeric", month: "short" }) : "";
-    return { text: d ? `Starts ${d}` : "Upcoming", tone: "upcoming" };
-  }
-  return { text: "Live Now", tone: "live" };
-}
+import { getSaleBadge, saleBadgeClass } from "@/lib/utils/sale";
 
 export default function SaleCarousel({ sales }) {
   return (
@@ -25,17 +17,14 @@ export default function SaleCarousel({ sales }) {
     >
       {sales.map((sale) => {
         const img = sale.bannerImage;
-        const badge = getBadge(sale);
+        const badge = getSaleBadge(sale);
         return (
           <Link key={sale.id} href={`/sale/${sale.slug}`}
             className="relative h-[300px] rounded-[20px] border border-line overflow-hidden flex flex-col justify-between px-9 py-8 group block">
             {img && <Image src={img} alt={sale.name} fill sizes="(max-width:768px) 100vw, 620px" className="object-cover -z-10" />}
             <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent to-black/40" />
 
-            <span className={`self-start rounded-full px-3 py-1 text-[12px] font-extrabold uppercase tracking-tight border ${badge.tone === "live" ? "bg-green-500/90 border-green-300 text-white" :
-              badge.tone === "ended" ? "bg-black/40 border-white/30 text-white/70" :
-                "bg-black/30 border-white/40 text-white"
-              }`}>
+            <span className={`self-start rounded-full px-3 py-1 text-[12px] font-extrabold uppercase tracking-tight border ${saleBadgeClass(badge.tone)}`}>
               {badge.text}
             </span>
 

@@ -4,6 +4,7 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url);
 
   const tag = searchParams.get("tag");
+  const sale = searchParams.get("sale");
   const category = searchParams.get("category");
   const store = searchParams.get("store");
   const subcategories = searchParams.getAll("subcategory");
@@ -17,6 +18,14 @@ export async function GET(request) {
       taxonomy: "DEALTAG",
       field: "SLUG",
       terms: [tag],
+      operator: "IN",
+    });
+  }
+  if (sale) {
+    taxArray.push({
+      taxonomy: "SALE",
+      field: "SLUG",
+      terms: [sale],
       operator: "IN",
     });
   }

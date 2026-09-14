@@ -95,6 +95,11 @@ const CATEGORY_BY_SLUG_QUERY = `
       description
       count
       categoryIcon
+       seoDescription
+      faqs {
+        question
+        answer
+      }
       children {
         nodes {
           name
@@ -180,4 +185,18 @@ const ALL_CATEGORIES_WITH_CHILDREN_QUERY = `
 export async function getAllCategoriesWithChildren() {
   const data = await fetchGraphQL(ALL_CATEGORIES_WITH_CHILDREN_QUERY);
   return data?.dealCategories?.nodes ?? [];
+}
+
+const SALE_CATEGORIES_QUERY = `
+  query SaleCategories($sale: String!) {
+    saleCategories(sale: $sale) {
+      name
+      slug
+    }
+  }
+`;
+
+export async function getSaleCategories(saleSlug) {
+  const data = await fetchGraphQL(SALE_CATEGORIES_QUERY, { sale: saleSlug });
+  return data?.saleCategories ?? [];
 }
