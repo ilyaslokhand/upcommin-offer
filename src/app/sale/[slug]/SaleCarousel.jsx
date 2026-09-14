@@ -23,7 +23,7 @@ export default function SaleCarousel({ sales }) {
         const wrapperProps = isUpcoming ? {} : { href: `/sale/${sale.slug}` };
         return (
           <Wrapper key={sale.id} {...wrapperProps}
-            href={`/sale/${sale.slug}`}
+
             className="relative h-[300px] rounded-[20px] border border-line overflow-hidden flex flex-col justify-between px-9 py-8 group block">
             {img && <Image src={img} alt={sale.name} fill sizes="(max-width:768px) 100vw, 620px" className="object-cover -z-10" />}
             <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent to-black/40" />
