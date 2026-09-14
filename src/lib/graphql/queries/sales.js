@@ -22,7 +22,9 @@ const ALL_SALES_QUERY = `
 
 export async function getAllSales() {
   const data = await fetchGraphQL(ALL_SALES_QUERY);
-  return data?.sales?.nodes ?? [];
+  const sales = data?.sales?.nodes ?? [];
+  // Hide ended sales from the frontend
+  return sales.filter((sale) => sale.saleStatus !== "ended");
 }
 
 const SALE_BY_SLUG_QUERY = `
@@ -46,4 +48,3 @@ export async function getSaleBySlug(slug) {
   const data = await fetchGraphQL(SALE_BY_SLUG_QUERY, { slug });
   return data?.sale ?? null;
 }
-

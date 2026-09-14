@@ -18,8 +18,12 @@ export default function SaleCarousel({ sales }) {
       {sales.map((sale) => {
         const img = sale.bannerImage;
         const badge = getSaleBadge(sale);
+        const isUpcoming = badge.tone === "upcoming";
+        const Wrapper = isUpcoming ? "div" : Link;
+        const wrapperProps = isUpcoming ? {} : { href: `/sale/${sale.slug}` };
         return (
-          <Link key={sale.id} href={`/sale/${sale.slug}`}
+          <Wrapper key={sale.id} {...wrapperProps}
+            href={`/sale/${sale.slug}`}
             className="relative h-[300px] rounded-[20px] border border-line overflow-hidden flex flex-col justify-between px-9 py-8 group block">
             {img && <Image src={img} alt={sale.name} fill sizes="(max-width:768px) 100vw, 620px" className="object-cover -z-10" />}
             <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent to-black/40" />
@@ -38,7 +42,7 @@ export default function SaleCarousel({ sales }) {
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
               </span>
             </div>
-          </Link>
+          </Wrapper>
         );
       })}
     </Carousel>

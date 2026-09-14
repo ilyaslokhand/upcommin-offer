@@ -17,7 +17,6 @@ export default async function SalePage({ params }) {
         <div>
             <Breadcrumb items={[
                 { label: "Home", href: "/" },
-                { label: "Sales", href: "/sale" },
                 { label: sale.name },
             ]} />
 
