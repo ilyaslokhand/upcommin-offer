@@ -33,21 +33,91 @@ export default function Comments({ contentId, initialCount = 0 }) {
         }
     };
 
-    const fetchComments = useCallback(async (after = null, append = false) => {
-        setLoading(true);
-        const params = new URLSearchParams({ contentId: String(contentId) });
-        if (after) params.set("after", after);
+    // Shared helper: only calls the API and returns the response
+    const requestComments = useCallback(
+        async (after = null) => {
+            const params = new URLSearchParams({
+                contentId: String(contentId),
+            });
 
-        const res = await fetch(`/api/comments?${params.toString()}`);
-        const data = await res.json();
+            if (after) {
+                params.set("after", after);
+            }
 
-        setComments((prev) => (append ? [...prev, ...data.comments] : data.comments));
-        setCursor(data.pageInfo?.endCursor ?? null);
-        setHasNext(data.pageInfo?.hasNextPage ?? false);
-        setLoading(false);
-    }, [contentId]);
+            const res = await fetch(
+                `/api/comments?${params.toString()}`
+            );
 
-    useEffect(() => { fetchComments(null, false); }, [fetchComments]);
+            if (!res.ok) {
+                throw new Error("Failed to fetch comments");
+            }
+
+            return res.json();
+        },
+        [contentId]
+    );
+
+
+    // Used when the user clicks "Load more comments"
+    const fetchComments = useCallback(
+        async (after = null, append = false) => {
+            setLoading(true);
+
+            try {
+                const data = await requestComments(after);
+
+                setComments((previousComments) =>
+                    append
+                        ? [...previousComments, ...data.comments]
+                        : data.comments
+                );
+
+                setCursor(data.pageInfo?.endCursor ?? null);
+                setHasNext(data.pageInfo?.hasNextPage ?? false);
+            } catch (error) {
+                console.error("Unable to load comments:", error);
+            } finally {
+                setLoading(false);
+            }
+        },
+        [requestComments]
+    );
+
+
+    // Automatically loads the first comments
+    useEffect(() => {
+        let cancelled = false;
+
+        async function loadInitialComments() {
+            try {
+                const data = await requestComments();
+
+                if (cancelled) return;
+
+                setComments(data.comments);
+                setCursor(data.pageInfo?.endCursor ?? null);
+                setHasNext(data.pageInfo?.hasNextPage ?? false);
+            } catch (error) {
+                if (!cancelled) {
+                    console.error(
+                        "Unable to load initial comments:",
+                        error
+                    );
+                }
+            } finally {
+                if (!cancelled) {
+                    setLoading(false);
+                }
+            }
+        }
+
+        loadInitialComments();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [requestComments]);
+
 
     return (
         <div className="flex flex-col gap-6">

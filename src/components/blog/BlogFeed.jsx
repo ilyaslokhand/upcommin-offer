@@ -23,8 +23,40 @@ export default function BlogFeed() {
     }, []);
 
     useEffect(() => {
-        fetchPosts(null, false);
-    }, [fetchPosts]);
+        let cancelled = false;
+
+        async function loadInitialPosts() {
+            try {
+                const res = await fetch("/api/blog");
+
+                if (!res.ok) {
+                    throw new Error("Failed to fetch blog posts");
+                }
+
+                const data = await res.json();
+
+                if (cancelled) return;
+
+                setPosts(data.posts);
+                setCursor(data.pageInfo?.endCursor ?? null);
+                setHasNext(data.pageInfo?.hasNextPage ?? false);
+            } catch (error) {
+                if (!cancelled) {
+                    console.error("Unable to load blog posts:", error);
+                }
+            } finally {
+                if (!cancelled) {
+                    setLoading(false);
+                }
+            }
+        }
+
+        loadInitialPosts();
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
 
     return (
         <div className="flex flex-col gap-8 items-center">

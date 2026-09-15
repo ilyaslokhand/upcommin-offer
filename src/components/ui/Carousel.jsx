@@ -46,9 +46,12 @@ export default function Carousel({
 
         emblaApi.on("select", onSelect);
         emblaApi.on("reInit", onSelect);
-        onSelect();
+
+        const frame = requestAnimationFrame(onSelect);
 
         return () => {
+            cancelAnimationFrame(frame);
+
             emblaApi.off("select", onSelect);
             emblaApi.off("reInit", onSelect);
         };

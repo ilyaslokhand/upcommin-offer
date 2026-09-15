@@ -49,7 +49,7 @@ export default function ContactPage() {
 
                     {submitted ? (
                         <div className="bg-[#e4f7ee] border border-[#0e9f5a] rounded-[10px] px-5 py-4 text-[#0e9f5a] font-medium">
-                            ✓ Thanks for reaching out! We'll get back to you soon.
+                            ✓ Thanks for reaching out! We&apos;ll get back to you soon.
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit} className="flex flex-col gap-4">

@@ -1,4 +1,5 @@
 import { decode } from "@/lib/utils/deal";
+import Image from "next/image";
 
 /**
  * Store page header — logo + name + description + deal count + reward.
@@ -10,7 +11,15 @@ export default function StoreHero({ name, description, count, logo, reward }) {
                 {/* Logo + name + description */}
                 <div className="flex items-center gap-4 md:gap-5 min-w-0">
                     <div className="size-14 bg-white border border-line rounded-card flex items-center justify-center shrink-0 overflow-hidden p-1.5">
-                        {logo && <img src={logo} alt={name} className="w-full h-full object-contain" />}
+                        {logo && (
+                            <Image
+                                src={logo}
+                                alt={`${name} logo`}
+                                width={44}
+                                height={44}
+                                className="w-full h-full object-contain"
+                            />
+                        )}
                     </div>
                     <div className="flex flex-col gap-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">

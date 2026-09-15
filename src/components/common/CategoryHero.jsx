@@ -1,5 +1,6 @@
 // decode HTML entities from WordPress (&amp; → &, etc.)
 import { decode } from "@/lib/utils/deal";
+import Image from "next/image";
 
 export default function CategoryHero({ name, description, count, icon }) {
     return (
@@ -8,7 +9,9 @@ export default function CategoryHero({ name, description, count, icon }) {
                 {/* Icon + title + description */}
                 <div className="flex items-center gap-4 md:gap-5 min-w-0">
                     <div className="size-12.5 bg-[#f1f1f1] rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
-                        {icon && <img src={icon} alt={name} className="size-7 object-contain" />}
+                        {icon && <Image src={icon} alt={name} width={28}
+                            height={28}
+                            className="size-7 object-contain" />}
                     </div>
                     <div className="flex flex-col gap-1 min-w-0">
                         <h1 className="tracking-[-0.56px] text-text" style={{ fontFamily: "var(--font-display)", fontWeight: 700 }}>

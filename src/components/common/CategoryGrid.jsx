@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 /**
  * Reusable grid of category cards (icon + name + count).
@@ -24,7 +25,9 @@ export default function CategoryGrid({ categories = [], columns = 5 }) {
                 >
                     <div className="size-16 bg-[#f4f5f9] rounded-full flex items-center justify-center overflow-hidden">
                         {cat.categoryIcon ? (
-                            <img src={cat.categoryIcon} alt={cat.name} className="size-9 object-contain" />
+                            <Image src={cat.categoryIcon} alt={cat.name} width={36}
+                                height={36}
+                                className="size-9 object-contain" />
                         ) : (
                             <span className="text-2xl">🏷️</span>
                         )}

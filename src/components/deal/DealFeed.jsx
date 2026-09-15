@@ -7,14 +7,14 @@ export default function DealFeed({ filters = {}, columns = 4 }) {
   const [deals, setDeals] = useState([]);
   const [cursor, setCursor] = useState(null);
   const [hasNext, setHasNext] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const buildParams = useCallback(
     (after = null) => {
       const params = new URLSearchParams();
       if (filters.category) params.set("category", filters.category);
       if (filters.tag) params.set("tag", filters.tag);
-      if (filters.sale) params.set("sale", filters.sale); 
+      if (filters.sale) params.set("sale", filters.sale);
       if (filters.store) params.set("store", filters.store);
       (filters.subcategories || []).forEach((s) => params.append("subcategory", s));
       if (after) params.set("after", after);
@@ -23,23 +23,86 @@ export default function DealFeed({ filters = {}, columns = 4 }) {
     [filters],
   );
 
+  // Only requests and returns the data.
+  // It does not update React state.
+  const requestDeals = useCallback(
+    async (after = null) => {
+      const res = await fetch(`/api/deals?${buildParams(after)}`);
 
+      if (!res.ok) {
+        throw new Error("Failed to fetch deals");
+      }
+
+      return res.json();
+    },
+    [buildParams]
+  );
+
+
+  // Used by the Load More button.
   const fetchDeals = useCallback(
     async (after = null, append = false) => {
       setLoading(true);
-      const res = await fetch(`/api/deals?${buildParams(after)}`);
-      const data = await res.json();
-      setDeals((prev) => (append ? [...prev, ...data.deals] : data.deals));
-      setCursor(data.pageInfo?.endCursor ?? null);
-      setHasNext(data.pageInfo?.hasNextPage ?? false);
-      setLoading(false);
+
+      try {
+        const data = await requestDeals(after);
+
+        setDeals((previousDeals) =>
+          append
+            ? [...previousDeals, ...data.deals]
+            : data.deals
+        );
+
+        setCursor(data.pageInfo?.endCursor ?? null);
+        setHasNext(data.pageInfo?.hasNextPage ?? false);
+      } catch (error) {
+        console.error("Unable to load deals:", error);
+      } finally {
+        setLoading(false);
+      }
     },
-    [buildParams],
+    [requestDeals]
   );
 
+
+  // Loads the first batch when the component mounts
+  // or when the filters change.
   useEffect(() => {
-    fetchDeals(null, false);
-  }, [fetchDeals]);
+    let cancelled = false;
+
+    async function loadInitialDeals() {
+      try {
+        const data = await requestDeals();
+
+        if (cancelled) return;
+
+        setDeals(data.deals);
+        setCursor(data.pageInfo?.endCursor ?? null);
+        setHasNext(data.pageInfo?.hasNextPage ?? false);
+      } catch (error) {
+        if (!cancelled) {
+          console.error("Unable to load initial deals:", error);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadInitialDeals();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [requestDeals]);
+
+  // requestDeals = Get deals from the API
+
+  // fetchDeals = Load and append more deals after a user action
+
+  // useEffect = Automatically load the first deals when the page opens
+
 
   const gridCols =
     columns === 3

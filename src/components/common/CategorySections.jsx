@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 /**
  * Reusable category sections — each category with its subcategory capsules.
@@ -30,7 +31,9 @@ export default function CategorySections({ categories = [] }) {
                             >
                                 <div className="size-10 bg-[#f4f5f9] rounded-full flex items-center justify-center shrink-0 overflow-hidden">
                                     {sub.categoryIcon ? (
-                                        <img src={sub.categoryIcon} alt={sub.name} className="size-6 object-contain" />
+                                        <Image src={sub.categoryIcon} alt={sub.name} width={24}
+                                            height={24}
+                                            className="size-6 object-contain" />
                                     ) : (
                                         <span className="text-sm">🏷️</span>
                                     )}
