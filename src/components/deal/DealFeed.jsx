@@ -3,11 +3,28 @@ import { useState, useEffect, useCallback } from "react";
 import DealCard from "./DealCard";
 import DealGridSkeleton from "@/components/ui/DealGridSkeleton";
 
-export default function DealFeed({ filters = {}, columns = 4 }) {
-  const [deals, setDeals] = useState([]);
-  const [cursor, setCursor] = useState(null);
-  const [hasNext, setHasNext] = useState(false);
-  const [loading, setLoading] = useState(true);
+export default function DealFeed({ filters = {}, columns = 4, initialDeals = [], initialPageInfo = null, }) {
+
+  const hasInitialData = initialPageInfo !== null;
+  console.log({
+  hasInitialData,
+  initialDealsCount: initialDeals.length,
+  initialPageInfo,
+});
+
+
+  const [deals, setDeals] = useState(initialDeals);
+  const [cursor, setCursor] = useState(
+    initialPageInfo?.endCursor ?? null
+  );
+
+  const [hasNext, setHasNext] = useState(
+    initialPageInfo?.hasNextPage ?? false
+  );
+
+  const [loading, setLoading] = useState(
+    !hasInitialData
+  );
 
   const buildParams = useCallback(
     (after = null) => {
@@ -67,7 +84,11 @@ export default function DealFeed({ filters = {}, columns = 4 }) {
 
   // Loads the first batch when the component mounts
   // or when the filters change.
+  // Loads the first batch only when the server
+  // has not already provided initial deals.
   useEffect(() => {
+    if (hasInitialData) return;
+
     let cancelled = false;
 
     async function loadInitialDeals() {
@@ -81,7 +102,10 @@ export default function DealFeed({ filters = {}, columns = 4 }) {
         setHasNext(data.pageInfo?.hasNextPage ?? false);
       } catch (error) {
         if (!cancelled) {
-          console.error("Unable to load initial deals:", error);
+          console.error(
+            "Unable to load initial deals:",
+            error
+          );
         }
       } finally {
         if (!cancelled) {
@@ -95,7 +119,7 @@ export default function DealFeed({ filters = {}, columns = 4 }) {
     return () => {
       cancelled = true;
     };
-  }, [requestDeals]);
+  }, [hasInitialData, requestDeals]);
 
   // requestDeals = Get deals from the API
 

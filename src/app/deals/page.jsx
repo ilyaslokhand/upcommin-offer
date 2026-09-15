@@ -1,7 +1,12 @@
 import Breadcrumb from "@/components/common/Breadcrumb";
 import DealFeed from "@/components/deal/DealFeed";
+import { getAllDeals } from "@/lib/graphql/queries/deals";
 
-export default function DealsPage() {
+export default async function DealsPage() {
+    const { deals, pageInfo } = await getAllDeals({
+        first: 20,
+    });
+
     return (
         <div>
             <Breadcrumb items={[
@@ -16,7 +21,8 @@ export default function DealsPage() {
             </div>
 
             <div className="container-wrap py-6">
-                <DealFeed filters={{}} columns={4} />
+                <DealFeed filters={{}} columns={4} initialDeals={deals}
+                    initialPageInfo={pageInfo} />
             </div>
         </div>
     );
