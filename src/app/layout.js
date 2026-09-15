@@ -2,6 +2,7 @@ import { DM_Sans, Syne } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -22,6 +23,9 @@ export const metadata = {
   description: "Verified loot deals, coupons and offers updated every hour.",
 };
 
+const gaId = process.env.NEXT_PUBLIC_GA_ID;
+
+
 export default function RootLayout({ children }) {
   return (
     <html
@@ -34,6 +38,7 @@ export default function RootLayout({ children }) {
         <main className="flex-1">{children}</main>
         <Footer />
       </body>
+       {gaId && <GoogleAnalytics gaId={gaId} />}
     </html>
   );
 }

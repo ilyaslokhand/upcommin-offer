@@ -4,14 +4,17 @@ import Comments from "@/components/common/Comments";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import BlogCard from "@/components/common/BlogCard";
 import Image from "next/image";
+import { removeInlineStyles } from "@/lib/utils/content";
+
 
 export default async function BlogPostPage({ params }) {
   const { slug } = await params;
   const [post, { posts: recentPosts }] = await Promise.all([
     getPostBySlug(slug),
-    getPosts({ first: 5 }),
+    getPosts({ first: 3}),
   ]);
   if (!post) notFound();
+  
 
   const readMin = Math.max(
     1,
@@ -19,9 +22,10 @@ export default async function BlogPostPage({ params }) {
   );
   const category = post.categories?.nodes?.[0];
   const otherPosts = recentPosts.filter((p) => p.slug !== post.slug).slice(0, 4);
+  const cleanedContent = removeInlineStyles(post.content);
 
   return (
-    <div>
+    <div >
       {/* Breadcrumb */}
       <Breadcrumb
         items={[
@@ -33,7 +37,7 @@ export default async function BlogPostPage({ params }) {
 
       {/* Blog content — 870px centered inside container */}
       <div className="container-wrap py-6">
-        <article className="w-full">
+        <article className="w-full max-w-4xl">
           <div className="bg-white border border-[#EEEBFD] rounded-[16px] p-5">
             {category && (
               <span className="text-[13px] text-brand font-semibold">{category.name}</span>
@@ -71,28 +75,28 @@ export default async function BlogPostPage({ params }) {
             )}
 
             {/* Your HTML/CSS content renders as-is */}
-            <div className="blog-content" dangerouslySetInnerHTML={{ __html: post.content }} />
+            <div className="blog-content" dangerouslySetInnerHTML={{ __html: cleanedContent }} />
           </div>
         </article>
       </div>
 
       {/* Comments — 870px centered inside container */}
-      <div className="container-wrap pb-8">
-        <div className=" w-full  lg:block bg-white p-6 border border-line rounded-[16px]">
+      <div className="container-wrap pb-8 ">
+        <div className=" w-full max-w-4xl  lg:block bg-white p-6 border border-line rounded-[16px]">
           <Comments contentId={post.databaseId} initialCount={post.commentCount} />
         </div>
       </div>
 
       {/* Recent Posts — full width */}
       {otherPosts.length > 0 && (
-        <div className="container-wrap pb-12">
+        <div className="container-wrap  pb-12">
           <h2
             className="font-bold tracking-[-0.56px] text-text mb-5"
             style={{ fontFamily: "var(--font-display)" }}
           >
             Recent Posts
           </h2>
-          <div className="grid grid-cols-1 min-[500px]:grid-cols-2 md:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 min-[500px]:grid-cols-2 md:grid-cols-3 gap-5 max-w-4xl">
             {otherPosts.map((p) => (
               <BlogCard key={p.slug} post={p} />
             ))}

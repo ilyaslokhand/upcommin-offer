@@ -221,3 +221,203 @@ h4 {
   color: #1c1c1c;
   font-weight: 600;
 }
+
+
+/* WordPress blog content */
+.blog-content {
+  color: #6a7180;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+/* Paragraph spacing */
+.blog-content p {
+  margin: 0 0 18px;
+}
+
+/* Headings */
+.blog-content h2,
+.blog-content h3,
+.blog-content h4 {
+  color: #1c1c1c;
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.blog-content h2 {
+  margin: 40px 0 14px;
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+}
+
+.blog-content h3 {
+  margin: 30px 0 12px;
+  font-size: clamp(1.125rem, 2vw, 1.25rem);
+}
+
+.blog-content h4 {
+  margin: 24px 0 10px;
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+}
+
+/* Avoid extra space at the beginning */
+.blog-content > h2:first-child,
+.blog-content > h3:first-child,
+.blog-content > h4:first-child,
+.blog-content > p:first-child {
+  margin-top: 0;
+}
+
+/* Links */
+.blog-content a {
+  color: #4c34d4;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Bold text */
+.blog-content strong {
+  color: #1c1c1c;
+  font-weight: 700;
+}
+
+/* Lists */
+.blog-content ul,
+.blog-content ol {
+  margin: 0 0 20px;
+  padding-left: 24px;
+}
+
+.blog-content ul {
+  list-style: disc;
+}
+
+.blog-content ol {
+  list-style: decimal;
+}
+
+.blog-content li {
+  margin-bottom: 8px;
+}
+
+/* WordPress spacer blocks */
+.blog-content .wp-block-spacer {
+  height: 24px;
+}
+
+/* Divider */
+.blog-content hr {
+  height: 1px;
+  margin: 32px 0;
+  border: 0;
+  background-color: #eeebfd;
+}
+
+/* Images */
+.blog-content .wp-block-image {
+  margin: 28px 0;
+}
+
+.blog-content figure {
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.blog-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+  border-radius: 10px;
+}
+
+.blog-content figcaption {
+  margin-top: 8px;
+  color: #9aa1ad;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Highlighted WordPress paragraphs */
+.blog-content p.has-background {
+  margin: 24px 0;
+  padding: 20px;
+  background-color: #f4f5f9;
+  border: 1px solid #eeebfd;
+  border-radius: 10px;
+}
+
+/* WordPress buttons */
+.blog-content .wp-block-buttons {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0;
+}
+
+.blog-content .wp-block-button__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 20px;
+  color: #ffffff ;
+  background-color: #229ed9;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.blog-content .wp-block-button__link strong{
+   color: #ffffff ;
+}
+
+
+
+/* Tables */
+.blog-content .wp-block-table {
+  max-width: 100%;
+  margin: 24px 0;
+  overflow-x: auto;
+}
+
+.blog-content table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.blog-content th,
+.blog-content td {
+  padding: 12px;
+  border: 1px solid #eeebfd;
+  text-align: left;
+}
+
+.blog-content tr:nth-child(even) {
+  background-color: #f4f5f9;
+}
+
+/* Rank Math FAQ */
+.blog-content .rank-math-list-item {
+  margin-bottom: 12px;
+  padding: 18px;
+  border: 1px solid #eeebfd;
+  border-radius: 10px;
+}
+
+.blog-content .rank-math-question {
+  margin: 0 0 8px;
+  color: #1c1c1c;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.blog-content .rank-math-answer p:last-child {
+  margin-bottom: 0;
+}
+
+.lwptoc_toggle{
+  display: none;
+}
