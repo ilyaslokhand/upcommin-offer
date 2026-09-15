@@ -4,6 +4,8 @@ import Breadcrumb from "@/components/common/Breadcrumb";
 import { notFound } from "next/navigation";
 import DealListing from "@/components/deal/DealListing";
 import StoreSeoSection from "@/components/common/StoreSeoSection";
+import { getAllDeals } from "@/lib/graphql/queries/deals";
+import { buildDealsWhere } from "@/lib/deals/buildDealsWhere";
 
 const STORE_TABS = [
     { label: "Deals", value: "" },   // "" = all deals (no tag filter)
@@ -12,9 +14,22 @@ const STORE_TABS = [
 export default async function StorePage({ params }) {
     const { slug } = await params;
 
-    const [store, categories] = await Promise.all([
+    const storeDealsWhere = buildDealsWhere({
+        store: slug,
+    });
+
+    const [
+        store,
+        categories,
+        { deals: initialDeals, pageInfo: initialPageInfo },
+    ] = await Promise.all([
         getStoreBySlug(slug),
-        getStoreCategories(slug),   // store-specific categories for the sidebar
+        getStoreCategories(slug),
+        getAllDeals({
+            first: 20,
+            after: null,
+            where: storeDealsWhere,
+        }),
     ]);
 
     if (!store || !store.slug) notFound();
@@ -45,6 +60,8 @@ export default async function StorePage({ params }) {
                 filterParam="category"
                 showFilter={true}
                 showCoupons={true}
+                initialDeals={initialDeals}
+                initialPageInfo={initialPageInfo}
             />
             <StoreSeoSection
                 seoDescription={store.seoDescription}

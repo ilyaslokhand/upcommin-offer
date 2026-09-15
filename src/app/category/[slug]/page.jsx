@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import CategoryHero from "@/components/common/CategoryHero";
 import StoreSeoSection from "@/components/common/StoreSeoSection";
+import { getAllDeals } from "@/lib/graphql/queries/deals";
+import { buildDealsWhere } from "@/lib/deals/buildDealsWhere";
 
 
 export default async function CategoryPage({ params }) {
@@ -13,6 +15,21 @@ export default async function CategoryPage({ params }) {
 
 
   const subcategories = category.children?.nodes ?? [];
+
+  const where = buildDealsWhere({
+    category: category.slug,
+    tag: "daily-deal",
+  });
+
+  const {
+    deals: initialDeals,
+    pageInfo: initialPageInfo,
+  } = await getAllDeals({
+    first: 20,
+    after: null,
+    where,
+  });
+
 
   return (
     <div>
@@ -40,6 +57,8 @@ export default async function CategoryPage({ params }) {
         filterLabel="Subcategories"
         filterParam="subcategory"
         showFilter={true}
+        initialDeals={initialDeals}
+        initialPageInfo={initialPageInfo}
 
       />
 

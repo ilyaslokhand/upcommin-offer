@@ -1,4 +1,5 @@
 import { getAllDeals } from "@/lib/graphql/queries/deals";
+import { buildDealsWhere } from "@/lib/deals/buildDealsWhere";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -10,55 +11,19 @@ export async function GET(request) {
   const subcategories = searchParams.getAll("subcategory");
   const after = searchParams.get("after") || null;
 
-  const where = {};
+  const where = buildDealsWhere({
+    tag,
+    sale,
+    category,
+    store,
+    subcategories,
+  });
 
-  const taxArray = [];
-  if (tag) {
-    taxArray.push({
-      taxonomy: "DEALTAG",
-      field: "SLUG",
-      terms: [tag],
-      operator: "IN",
-    });
-  }
-  if (sale) {
-    taxArray.push({
-      taxonomy: "SALE",
-      field: "SLUG",
-      terms: [sale],
-      operator: "IN",
-    });
-  }
-
-  if (store) {
-    taxArray.push({
-      taxonomy: "STORE",
-      field: "SLUG",
-      terms: [store],
-      operator: "IN",
-    });
-  }
-
-  if (subcategories.length) {
-    taxArray.push({
-      taxonomy: "DEALCATEGORY",
-      field: "SLUG",
-      terms: subcategories,
-      operator: "IN",
-    });
-  } else if (category) {
-    taxArray.push({
-      taxonomy: "DEALCATEGORY",
-      field: "SLUG",
-      terms: [category],
-      operator: "IN",
-    });
-  }
-  if (taxArray.length) {
-    where.taxQuery = { relation: "AND", taxArray };
-  }
-
-  const { deals, pageInfo } = await getAllDeals({ first: 20, after, where });
+  const { deals, pageInfo } = await getAllDeals({
+    first: 20,
+    after,
+    where,
+  });
 
   return Response.json({ deals, pageInfo });
 }

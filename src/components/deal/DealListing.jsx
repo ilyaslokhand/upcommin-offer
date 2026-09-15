@@ -13,11 +13,26 @@ export default function DealListing({
   showFilter = false,             // ← show the sidebar filter?
   showCoupons = false,            // ← show the "Coupons (Coming Soon)" tab?
   noContainer = false,
+  initialDeals = [],
+  initialPageInfo = null,
 }) {
   const [tab, setTab] = useState(tabs[0]?.value ?? "");
   const [couponMode, setCouponMode] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState([]);
+
+  //   This means the user:
+
+  // Has not changed the default tab
+  // Has not selected a filter
+  // Has not entered coupon mode
+
+  // Only that default view matches the deals fetched by the server.
+
+  const isInitialView =
+    tab === (tabs[0]?.value ?? "") &&
+    selectedFilters.length === 0 &&
+    !couponMode;
 
 
 
@@ -142,7 +157,15 @@ export default function DealListing({
           </button>
         )}
 
-        <DealFeed filters={filters} columns={hasSidebar ? 3 : 4} />
+        <DealFeed
+          key={JSON.stringify(filters)}
+          filters={filters}
+          columns={hasSidebar ? 3 : 4}
+          initialDeals={isInitialView ? initialDeals : []}
+          initialPageInfo={
+            isInitialView ? initialPageInfo : null
+          }
+        />
       </div>
     </div>
   );
