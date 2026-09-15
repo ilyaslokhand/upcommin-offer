@@ -2,11 +2,24 @@
 import { useState, useEffect, useCallback } from "react";
 import BlogCard from "@/components/common/BlogCard";
 
-export default function BlogFeed() {
-    const [posts, setPosts] = useState([]);
-    const [cursor, setCursor] = useState(null);
-    const [hasNext, setHasNext] = useState(false);
-    const [loading, setLoading] = useState(true);
+export default function BlogFeed({
+    initialPosts = [],
+    initialPageInfo = null,
+}) {
+    const hasInitialData = initialPageInfo !== null;
+
+    const [posts, setPosts] = useState(initialPosts);
+    const [cursor, setCursor] = useState(
+        initialPageInfo?.endCursor ?? null
+    );
+
+    const [hasNext, setHasNext] = useState(
+        initialPageInfo?.hasNextPage ?? false
+    );
+
+    const [loading, setLoading] = useState(
+        !hasInitialData
+    );
 
     const fetchPosts = useCallback(async (after = null, append = false) => {
         setLoading(true);
@@ -23,6 +36,10 @@ export default function BlogFeed() {
     }, []);
 
     useEffect(() => {
+        // The server already provided the first posts,
+        // so don't request them again.
+        if (hasInitialData) return;
+
         let cancelled = false;
 
         async function loadInitialPosts() {
@@ -30,7 +47,9 @@ export default function BlogFeed() {
                 const res = await fetch("/api/blog");
 
                 if (!res.ok) {
-                    throw new Error("Failed to fetch blog posts");
+                    throw new Error(
+                        "Failed to fetch blog posts"
+                    );
                 }
 
                 const data = await res.json();
@@ -38,11 +57,18 @@ export default function BlogFeed() {
                 if (cancelled) return;
 
                 setPosts(data.posts);
-                setCursor(data.pageInfo?.endCursor ?? null);
-                setHasNext(data.pageInfo?.hasNextPage ?? false);
+                setCursor(
+                    data.pageInfo?.endCursor ?? null
+                );
+                setHasNext(
+                    data.pageInfo?.hasNextPage ?? false
+                );
             } catch (error) {
                 if (!cancelled) {
-                    console.error("Unable to load blog posts:", error);
+                    console.error(
+                        "Unable to load blog posts:",
+                        error
+                    );
                 }
             } finally {
                 if (!cancelled) {
@@ -52,10 +78,11 @@ export default function BlogFeed() {
         }
 
         loadInitialPosts();
+
         return () => {
             cancelled = true;
         };
-    }, []);
+    }, [hasInitialData]);
 
 
     return (

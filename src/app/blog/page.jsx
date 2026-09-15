@@ -1,7 +1,13 @@
 import Breadcrumb from "@/components/common/Breadcrumb";
 import BlogFeed from "@/components/blog/BlogFeed";
+import { getPosts } from "@/lib/graphql/queries/blog";
 
-export default function BlogPage() {
+export default async function BlogPage() {
+
+    const { posts, pageInfo } = await getPosts({
+        first: 20,
+    });
+
     return (
         <div>
             <Breadcrumb items={[
@@ -16,7 +22,10 @@ export default function BlogPage() {
             </div>
 
             <div className="container-wrap py-6">
-                <BlogFeed />
+                <BlogFeed
+                    initialPosts={posts}
+                    initialPageInfo={pageInfo}
+                />
             </div>
         </div>
     );

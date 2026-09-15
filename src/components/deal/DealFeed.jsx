@@ -6,12 +6,7 @@ import DealGridSkeleton from "@/components/ui/DealGridSkeleton";
 export default function DealFeed({ filters = {}, columns = 4, initialDeals = [], initialPageInfo = null, }) {
 
   const hasInitialData = initialPageInfo !== null;
-  console.log({
-  hasInitialData,
-  initialDealsCount: initialDeals.length,
-  initialPageInfo,
-});
-
+ 
 
   const [deals, setDeals] = useState(initialDeals);
   const [cursor, setCursor] = useState(
