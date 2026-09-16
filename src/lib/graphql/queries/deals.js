@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { fetchGraphQL } from "../client";
 
 const ALL_DEALS_QUERY = `
@@ -88,10 +89,10 @@ const DEAL_BY_SLUG_QUERY = `
   }
 `;
 
-export async function getDealBySlug(slug) {
+export const getDealBySlug = cache(async (slug) => {
   const data = await fetchGraphQL(DEAL_BY_SLUG_QUERY, { slug });
   return data?.deal ?? null;
-}
+});
 
 const STORE_DEALS_QUERY = `
   query StoreDeals($store: String!, $first: Int = 10) {
@@ -129,4 +130,3 @@ export async function getStoreDeals(storeSlug, first = 10) {
   });
   return data?.deals?.nodes ?? [];
 }
-

@@ -7,6 +7,24 @@ import HowToGet from "@/components/deal/HowToGet";
 import SidebarDeals from "@/components/deal/SidebarDeals";
 import LootBand from "@/components/common/LootBand";
 import Comments from "@/components/common/Comments";
+import { buildMetadata } from "@/lib/seo/buildMetadata";
+import { createMetaDescription } from "@/lib/seo/createMetaDescription";
+
+export async function generateMetadata({ params }) {
+    const { slug } = await params;
+    const deal = await getDealBySlug(slug);
+
+    if (!deal) return {};
+
+    return buildMetadata({
+        seo: deal.seo,
+        title: deal.title,
+        description: createMetaDescription(deal.productDescription),
+        path: `/deals/${deal.slug}`,
+        image: deal.featuredImage?.node?.sourceUrl,
+        type: "website",
+    });
+}
 
 
 

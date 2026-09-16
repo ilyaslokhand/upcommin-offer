@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import CategoryHero from "@/components/common/CategoryHero";
 import StoreSeoSection from "@/components/common/StoreSeoSection";
+import { getAllDeals } from "@/lib/graphql/queries/deals";
+import { buildDealsWhere } from "@/lib/deals/buildDealsWhere";
 
 
 export default async function SubcategoryPage({ params }) {
@@ -16,6 +18,20 @@ export default async function SubcategoryPage({ params }) {
     if (!subcat || !subcat.slug) {
         notFound();
     }
+
+    const where = buildDealsWhere({
+        category: subcat.slug,
+        tag: "daily-deal",
+    });
+
+    const {
+        deals: initialDeals,
+        pageInfo: initialPageInfo,
+    } = await getAllDeals({
+        first: 20,
+        after: null,
+        where,
+    });
 
     return (
         <div>
@@ -37,9 +53,13 @@ export default async function SubcategoryPage({ params }) {
             {/* Deals — filtered to this subcategory, no subcategory filter in sidebar */}
             <DealListing
                 baseFilter={{ category: subcat.slug }}
-                tabs={[{ label: "Latest", value: "daily-deal" }, { label: "Hot", value: "hot" }]}  // ← pass tabs
-                showSubcategoryFilter={false}
-
+                tabs={[
+                    { label: "Latest", value: "daily-deal" },
+                    { label: "Hot", value: "hot" },
+                ]}
+                showFilter={false}
+                initialDeals={initialDeals}
+                initialPageInfo={initialPageInfo}
             />
 
             <StoreSeoSection

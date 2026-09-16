@@ -5,6 +5,8 @@ import DealListing from "@/components/deal/DealListing";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { getAllDeals } from "@/lib/graphql/queries/deals";
+import { buildDealsWhere } from "@/lib/deals/buildDealsWhere";
 
 export default async function SalePage({ params }) {
     const { slug } = await params;
@@ -14,6 +16,24 @@ export default async function SalePage({ params }) {
     ]);
     if (!sale || !sale.slug) notFound();
     const isEnded = sale.saleStatus === "ended";
+    let initialDeals = [];
+    let initialPageInfo = null;
+
+    if (!isEnded) {
+        const where = buildDealsWhere({
+            sale: sale.slug,
+            tag: "daily-deal",
+        });
+
+        const result = await getAllDeals({
+            first: 20,
+            after: null,
+            where,
+        });
+
+        initialDeals = result.deals;
+        initialPageInfo = result.pageInfo;
+    }
 
     return (
         <div>
@@ -73,6 +93,8 @@ export default async function SalePage({ params }) {
                     filterLabel="Categories"
                     filterParam="category"
                     showFilter={true}
+                    initialDeals={initialDeals}
+                    initialPageInfo={initialPageInfo}
                 />
             )}
         </div>
