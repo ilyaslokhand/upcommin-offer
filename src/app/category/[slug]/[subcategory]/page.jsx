@@ -6,6 +6,25 @@ import CategoryHero from "@/components/common/CategoryHero";
 import StoreSeoSection from "@/components/common/StoreSeoSection";
 import { getAllDeals } from "@/lib/graphql/queries/deals";
 import { buildDealsWhere } from "@/lib/deals/buildDealsWhere";
+import { buildMetadata } from "@/lib/seo/buildMetadata";
+
+export async function generateMetadata({ params }) {
+    const { slug, subcategory } = await params;
+    const subcat = await getCategoryBySlug(subcategory);
+
+    if (!subcat) return {};
+
+    return buildMetadata({
+        seo: {
+            title: subcat.rankMathTitle,
+            description: subcat.rankMathDescription,
+            canonicalUrl: subcat.rankMathCanonical,
+        },
+        title: subcat.name,
+        path: `/category/${slug}/${subcat.slug}`,
+        type: "website",
+    });
+}
 
 
 export default async function SubcategoryPage({ params }) {

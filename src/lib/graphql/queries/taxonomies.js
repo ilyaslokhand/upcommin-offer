@@ -1,5 +1,5 @@
+import { cache } from "react";
 import { fetchGraphQL } from "../client";
-
 // fetch store count to show live count of stores on homepage
 
 const STORES_COUNT_QUERY = `
@@ -40,7 +40,6 @@ export async function getCategories() {
   const data = await fetchGraphQL(CATEGORIES_QUERY);
   return data?.dealCategories?.nodes ?? [];
 }
-
 
 // fetch stores from wordpress (mega menu, homepage trending, store index)
 const STORES_QUERY = `
@@ -83,8 +82,6 @@ export async function getBlogCategories() {
   return data?.categories?.nodes ?? [];
 }
 
-
-
 // fetch category by slug to show category details on category page
 
 const CATEGORY_BY_SLUG_QUERY = `
@@ -96,6 +93,11 @@ const CATEGORY_BY_SLUG_QUERY = `
       count
       categoryIcon
        seoDescription
+         
+    rankMathTitle
+    rankMathDescription
+    rankMathCanonical
+      
       faqs {
         question
         answer
@@ -112,10 +114,10 @@ const CATEGORY_BY_SLUG_QUERY = `
   }
 `;
 
-export async function getCategoryBySlug(slug) {
+export const getCategoryBySlug = cache(async (slug) => {
   const data = await fetchGraphQL(CATEGORY_BY_SLUG_QUERY, { slug });
   return data?.dealCategory ?? null;
-}
+});
 
 // fetch store by slug to show store details on store page
 
@@ -129,6 +131,9 @@ const STORE_BY_SLUG_QUERY = `
       storeLogo
       storeReward
        seoDescription
+       rankMathTitle
+      rankMathDescription
+      rankMathCanonical
       faqs {
         question
         answer
@@ -137,10 +142,10 @@ const STORE_BY_SLUG_QUERY = `
   }
 `;
 
-export async function getStoreBySlug(slug) {
+export const getStoreBySlug = cache(async (slug) => {
   const data = await fetchGraphQL(STORE_BY_SLUG_QUERY, { slug });
   return data?.store ?? null;
-}
+});
 
 // fetch store categories by store slug to show store categories on store page
 
@@ -159,7 +164,6 @@ export async function getStoreCategories(storeSlug) {
   const data = await fetchGraphQL(STORE_CATEGORIES_QUERY, { store: storeSlug });
   return data?.storeCategories ?? [];
 }
-
 
 const ALL_CATEGORIES_WITH_CHILDREN_QUERY = `
   query AllCategoriesWithChildren {

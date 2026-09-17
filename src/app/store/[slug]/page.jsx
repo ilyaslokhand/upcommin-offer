@@ -6,6 +6,25 @@ import DealListing from "@/components/deal/DealListing";
 import StoreSeoSection from "@/components/common/StoreSeoSection";
 import { getAllDeals } from "@/lib/graphql/queries/deals";
 import { buildDealsWhere } from "@/lib/deals/buildDealsWhere";
+import { buildMetadata } from "@/lib/seo/buildMetadata";
+
+export async function generateMetadata({ params }) {
+    const { slug } = await params;
+    const store = await getStoreBySlug(slug);
+
+    if (!store) return {};
+
+    return buildMetadata({
+        seo: {
+            title: store.rankMathTitle,
+            description: store.rankMathDescription,
+            canonicalUrl: store.rankMathCanonical,
+        },
+        title: store.name,
+        path: `/store/${store.slug}`,
+        type: "website",
+    });
+}
 
 const STORE_TABS = [
     { label: "Deals", value: "" },   // "" = all deals (no tag filter)
