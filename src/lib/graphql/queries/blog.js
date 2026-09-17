@@ -1,4 +1,5 @@
 import { fetchGraphQL } from "../client";
+import { cache } from "react";
 
 const POSTS_QUERY = `
   query Posts($first: Int = 12, $after: String) {
@@ -70,15 +71,34 @@ const POST_BY_SLUG_QUERY = `
       slug
       content
       date
-      author { node { name } }
-      featuredImage { node { sourceUrl altText } }
-      categories(first: 3) { nodes { name slug } }
-      seo { title description canonicalUrl }
+      modified
+      author {
+        node {
+          name
+        }
+      }
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+        }
+      }
+      categories(first: 3) {
+        nodes {
+          name
+          slug
+        }
+      }
+      seo {
+        title
+        description
+        canonicalUrl
+      }
     }
   }
 `;
 
-export async function getPostBySlug(slug) {
+export const getPostBySlug = cache(async (slug) => {
   const data = await fetchGraphQL(POST_BY_SLUG_QUERY, { slug });
   return data?.post ?? null;
-}
+});

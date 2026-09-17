@@ -1,4 +1,5 @@
 import { fetchGraphQL } from "../client";
+import { cache } from "react";
 
 const ALL_SALES_QUERY = `
   query AllSales {
@@ -40,11 +41,14 @@ const SALE_BY_SLUG_QUERY = `
       endDate
       saleStore
       bannerImage
+      rankMathTitle
+      rankMathDescription
+      rankMathCanonical
     }
   }
 `;
 
-export async function getSaleBySlug(slug) {
+export const getSaleBySlug = cache(async (slug) => {
   const data = await fetchGraphQL(SALE_BY_SLUG_QUERY, { slug });
   return data?.sale ?? null;
-}
+});

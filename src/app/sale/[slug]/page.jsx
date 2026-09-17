@@ -7,6 +7,27 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getAllDeals } from "@/lib/graphql/queries/deals";
 import { buildDealsWhere } from "@/lib/deals/buildDealsWhere";
+import { buildMetadata } from "@/lib/seo/buildMetadata";
+
+export async function generateMetadata({ params }) {
+    const { slug } = await params;
+    const sale = await getSaleBySlug(slug);
+
+    if (!sale) return {};
+
+    return buildMetadata({
+        seo: {
+            title: sale.rankMathTitle,
+            description: sale.rankMathDescription,
+            canonicalUrl: sale.rankMathCanonical,
+        },
+        title: sale.name,
+        description: sale.saleSubtitle,
+        path: `/sale/${sale.slug}`,
+        image: sale.bannerImage,
+        type: "website",
+    });
+}
 
 export default async function SalePage({ params }) {
     const { slug } = await params;

@@ -5,16 +5,38 @@ import Breadcrumb from "@/components/common/Breadcrumb";
 import BlogCard from "@/components/common/BlogCard";
 import Image from "next/image";
 import { removeInlineStyles } from "@/lib/utils/content";
+import { buildMetadata } from "@/lib/seo/buildMetadata";
+import { createMetaDescription } from "@/lib/seo/createMetaDescription";
+
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+
+  if (!post) return {};
+
+  return buildMetadata({
+    seo: {
+      title: post.seo?.title,
+      description: post.seo?.description,
+      canonicalUrl: null,
+    },
+    title: post.title,
+    description: createMetaDescription(post.content),
+    path: `/blog/${post.slug}`,
+    image: post.featuredImage?.node?.sourceUrl,
+    type: "article",
+  });
+}
 
 
 export default async function BlogPostPage({ params }) {
   const { slug } = await params;
   const [post, { posts: recentPosts }] = await Promise.all([
     getPostBySlug(slug),
-    getPosts({ first: 3}),
+    getPosts({ first: 3 }),
   ]);
   if (!post) notFound();
-  
+
 
   const readMin = Math.max(
     1,
