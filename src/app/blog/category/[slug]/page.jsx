@@ -2,6 +2,48 @@ import { notFound } from "next/navigation";
 import { getPostsByCategory } from "@/lib/graphql/queries/blog";
 import BlogCard from "@/components/common/BlogCard";
 import Breadcrumb from "@/components/common/Breadcrumb";
+import { buildMetadata } from "@/lib/seo/buildMetadata";
+import { createMetaDescription } from "@/lib/seo/createMetaDescription";
+
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const category = await getPostsByCategory(slug);
+
+  if (!category) return {};
+
+  const defaultTitle =
+    "UpcomingOffer India's Deals Feed";
+
+  const defaultDescription =
+    "Verified loot deals, coupons and offers updated every hour.";
+
+  const seoTitle =
+    category.seo?.title === defaultTitle
+      ? undefined
+      : category.seo?.title;
+
+  const seoDescription =
+    category.seo?.description === defaultDescription
+      ? undefined
+      : category.seo?.description;
+
+  return buildMetadata({
+    seo: {
+      title: seoTitle,
+      description: seoDescription,
+      canonicalUrl: null,
+    },
+
+    title: `${category.name} Articles`,
+
+    description:
+      createMetaDescription(category.description) ||
+      `Read the latest ${category.name} articles, offers, guides and money-saving updates.`,
+
+    path: `/blog/category/${category.slug}`,
+    type: "website",
+  });
+}
 
 export default async function BlogCategoryPage({ params }) {
   const { slug } = await params;

@@ -1,6 +1,15 @@
 import Breadcrumb from "@/components/common/Breadcrumb";
 import BlogFeed from "@/components/blog/BlogFeed";
 import { getPosts } from "@/lib/graphql/queries/blog";
+import { buildMetadata } from "@/lib/seo/buildMetadata";
+
+export const metadata = buildMetadata({
+    title: "Latest Deals, Offers & Savings Guides",
+    description:
+        "Read the latest deals, offers, shopping guides, cashback tips and money-saving articles from UpcomingOffer.",
+    path: "/blog",
+    type: "website",
+});
 
 export default async function BlogPage() {
 

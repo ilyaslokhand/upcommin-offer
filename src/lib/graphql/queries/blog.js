@@ -40,6 +40,11 @@ const POSTS_BY_CATEGORY_QUERY = `
       name
       slug
       description
+      seo {
+        title
+        description
+        canonicalUrl
+      }
       posts(first: 24, where: { orderby: { field: DATE, order: DESC } }) {
         nodes {
           id
@@ -55,10 +60,11 @@ const POSTS_BY_CATEGORY_QUERY = `
   }
 `;
 
-export async function getPostsByCategory(slug) {
+export const getPostsByCategory = cache(async (slug) => {
   const data = await fetchGraphQL(POSTS_BY_CATEGORY_QUERY, { slug });
+
   return data?.category ?? null;
-}
+});
 
 // One full blog post by slug
 const POST_BY_SLUG_QUERY = `
