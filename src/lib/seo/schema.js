@@ -29,3 +29,56 @@ export function buildWebsiteSchema() {
     },
   };
 }
+
+export function buildBreadcrumbSchema(
+  items = [],
+  currentPath = ""
+) {
+  if (
+    !Array.isArray(items) ||
+    items.length === 0 ||
+    !currentPath
+  ) {
+    return null;
+  }
+
+  const validItems = items.filter(
+    (item, index) =>
+      item?.label &&
+      (item.href || index === items.length - 1)
+  );
+
+  if (validItems.length < 2) {
+    return null;
+  }
+
+  const itemListElement = validItems.map(
+    (item, index) => {
+      const isLast =
+        index === validItems.length - 1;
+
+      const path = isLast
+        ? currentPath
+        : item.href;
+
+      const absoluteUrl = path.startsWith("http")
+        ? path
+        : `${SITE_URL}${
+            path.startsWith("/") ? path : `/${path}`
+          }`;
+
+      return {
+        "@type": "ListItem",
+        position: index + 1,
+        name: item.label,
+        item: absoluteUrl,
+      };
+    }
+  );
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement,
+  };
+}

@@ -26,7 +26,7 @@ export default function Breadcrumb({ items = [] }) {
                                 {item.label}
                             </Link>
                         ) : (
-                            <span className="text-text font-medium capitalize truncate max-w-[180px] md:max-w-[400px] block">
+                            <span className="text-text font-medium capitalize truncate max-w-45 md:max-w-100 block">
                                 {item.label}
                             </span>
                         )}

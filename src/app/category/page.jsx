@@ -3,6 +3,8 @@ import CategoryGrid from "@/components/common/CategoryGrid";
 import CategorySections from "@/components/common/CategorySections";
 import { getAllCategoriesWithChildren } from "@/lib/graphql/queries/taxonomies";
 import { buildMetadata } from "@/lib/seo/buildMetadata";
+import JsonLd from "@/lib/seo/JsonLd";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
 
 export const metadata = buildMetadata({
   title: "Shop Deals by Category in India",
@@ -15,9 +17,21 @@ export const metadata = buildMetadata({
 export default async function CategoriesPage() {
   const categories = await getAllCategoriesWithChildren();
 
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Categories" },
+  ];
+
   return (
     <div>
-      <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Categories" }]} />
+      <JsonLd
+        data={buildBreadcrumbSchema(
+          breadcrumbItems,
+          "/category"
+        )}
+      />
+
+      <Breadcrumb items={breadcrumbItems} />
 
       <div className="container-wrap pt-4">
         <h1 className="font-bold tracking-[-0.56px] text-text" style={{ fontFamily: "var(--font-display)" }}>

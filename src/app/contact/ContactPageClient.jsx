@@ -39,7 +39,7 @@ export default function ContactPage() {
             ]} />
 
             <div className="container-wrap py-6">
-                <div className="max-w-[600px]  w-full">
+                <div className="max-w-150  w-full">
                     <h1 className="font-bold tracking-[-0.56px] text-text mb-2" style={{ fontFamily: "var(--font-display)" }}>
                         Contact Us
                     </h1>
@@ -48,7 +48,7 @@ export default function ContactPage() {
                     </p>
 
                     {submitted ? (
-                        <div className="bg-[#e4f7ee] border border-[#0e9f5a] rounded-[10px] px-5 py-4 text-[#0e9f5a] font-medium">
+                        <div className="bg-[#e4f7ee] border border-[#0e9f5a] rounded-card px-5 py-4 text-[#0e9f5a] font-medium">
                             ✓ Thanks for reaching out! We&apos;ll get back to you soon.
                         </div>
                     ) : (
@@ -58,27 +58,27 @@ export default function ContactPage() {
                                 name="name"
                                 placeholder="Your Name"
                                 required
-                                className="bg-white border border-line rounded-[8px] px-4 py-3 text-[14px] outline-none focus:border-brand"
+                                className="bg-white border border-line rounded-lg px-4 py-3 text-[14px] outline-none focus:border-brand"
                             />
                             <input
                                 type="email"
                                 name="email"
                                 placeholder="Your Email"
                                 required
-                                className="bg-white border border-line rounded-[8px] px-4 py-3 text-[14px] outline-none focus:border-brand"
+                                className="bg-white border border-line rounded-lg px-4 py-3 text-[14px] outline-none focus:border-brand"
                             />
                             <input
                                 type="text"
                                 name="subject"
                                 placeholder="Subject"
-                                className="bg-white border border-line rounded-[8px] px-4 py-3 text-[14px] outline-none focus:border-brand"
+                                className="bg-white border border-line rounded-lg px-4 py-3 text-[14px] outline-none focus:border-brand"
                             />
                             <textarea
                                 name="message"
                                 placeholder="Your Message"
                                 required
                                 rows={6}
-                                className="bg-white border border-line rounded-[8px] px-4 py-3 text-[14px] outline-none focus:border-brand resize-none"
+                                className="bg-white border border-line rounded-lg px-4 py-3 text-[14px] outline-none focus:border-brand resize-none"
                             />
 
                             {/* Honeypot (spam protection) */}
@@ -87,7 +87,7 @@ export default function ContactPage() {
                             <button
                                 type="submit"
                                 disabled={submitting}
-                                className="bg-[#1c1c1c] text-white px-6 py-3 rounded-[8px] text-[15px] font-semibold self-start hover:opacity-90 disabled:opacity-50"
+                                className="bg-[#1c1c1c] text-white px-6 py-3 rounded-lg text-[15px] font-semibold self-start hover:opacity-90 disabled:opacity-50"
                             >
                                 {submitting ? "Sending…" : "Send Message"}
                             </button>

@@ -1,7 +1,7 @@
 // Central site configuration — edit these values in one place.
 
 export const social = {
-  telegram: "t.me/Upcomingoffer52", // ← replace with your Telegram link
+  telegram: "https://t.me/Upcomingoffer52", // ← replace with your Telegram link
   whatsapp: "https://chat.whatsapp.com/YOUR_INVITE", // ← replace with your WhatsApp invite
   instagram: "",
   twitter: "",

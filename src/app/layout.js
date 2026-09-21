@@ -4,6 +4,9 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
+import { buildOrganizationSchema, buildWebsiteSchema } from "@/lib/seo/schema";
+import JsonLd from "@/lib/seo/JsonLd";
+
 const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -25,7 +28,6 @@ export const metadata = {
 
 const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
-
 export default function RootLayout({ children }) {
   return (
     <html
@@ -34,11 +36,17 @@ export default function RootLayout({ children }) {
       className={`${dmSans.variable} ${syne.variable}`}
     >
       <body className="min-h-screen flex flex-col justify-between">
+        <JsonLd data={buildOrganizationSchema()} />
+        <JsonLd data={buildWebsiteSchema()} />
+
         <Header />
+
         <main className="flex-1">{children}</main>
+
         <Footer />
+
+        {gaId && <GoogleAnalytics gaId={gaId} />}
       </body>
-       {gaId && <GoogleAnalytics gaId={gaId} />}
     </html>
   );
 }

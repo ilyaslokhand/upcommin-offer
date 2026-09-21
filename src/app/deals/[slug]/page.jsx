@@ -9,6 +9,8 @@ import LootBand from "@/components/common/LootBand";
 import Comments from "@/components/common/Comments";
 import { buildMetadata } from "@/lib/seo/buildMetadata";
 import { createMetaDescription } from "@/lib/seo/createMetaDescription";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
+import JsonLd from "@/lib/seo/JsonLd";
 
 export async function generateMetadata({ params }) {
     const { slug } = await params;
@@ -36,7 +38,7 @@ function getTerm(terms, tax) {
 export default async function DealPage({ params }) {
     const { slug } = await params;
     const deal = await getDealBySlug(slug);
-    if (!deal && slug) notFound();
+    if (!deal) notFound();
 
     const store = getTerm(deal.terms, "store");
     const category = getTerm(deal.terms, "deal-category");
@@ -45,15 +47,21 @@ export default async function DealPage({ params }) {
         ? (await getStoreDeals(store.slug, 10)).filter((d) => d.slug !== deal.slug)
         : [];
 
+
+    const breadcrumbItems = [
+        { label: "Home", href: "/" },
+        ...(store ? [{ label: store.name, href: `/store/${store.slug}` }] : []),
+        ...(category ? [{ label: category.name, href: `/category/${category.slug}` }] : []),
+        { label: deal.title },
+    ];
+
     return (
         <div>
             {/* Breadcrumb */}
-            <Breadcrumb items={[
-                { label: "Home", href: "/" },
-                ...(store ? [{ label: store.name, href: `/store/${store.slug}` }] : []),
-                ...(category ? [{ label: category.name, href: `/category/${category.slug}` }] : []),
-                { label: deal.title },
-            ]} />
+            <JsonLd
+                data={buildBreadcrumbSchema(breadcrumbItems, `/deals/${deal.slug}`)}
+            />
+            <Breadcrumb items={breadcrumbItems} />
 
             {/* Main layout */}
             <div className="container-wrap py-4 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-4 items-start">

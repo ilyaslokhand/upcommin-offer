@@ -7,6 +7,8 @@ import StoreSeoSection from "@/components/common/StoreSeoSection";
 import { getAllDeals } from "@/lib/graphql/queries/deals";
 import { buildDealsWhere } from "@/lib/deals/buildDealsWhere";
 import { buildMetadata } from "@/lib/seo/buildMetadata";
+import JsonLd from "@/lib/seo/JsonLd";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
 
 export async function generateMetadata({ params }) {
     const { slug, subcategory } = await params;
@@ -52,15 +54,23 @@ export default async function SubcategoryPage({ params }) {
         where,
     });
 
+    const breadcrumbItems = [
+        { label: "Home", href: "/" },
+        { label: slug, href: `/category/${slug}` },
+        { label: subcat.name },
+    ];
+
     return (
         <div>
             {/* Breadcrumb */}
-            <Breadcrumb items={[
-                { label: "Home", href: "/" },
-                { label: slug, href: `/category/${slug}` },  // parent category
-                { label: subcat.name },  // current subcategory
-            ]} />
+            <JsonLd
+                data={buildBreadcrumbSchema(
+                    breadcrumbItems,
+                    `/category/${slug}/${subcat.slug}`
+                )}
+            />
 
+            <Breadcrumb items={breadcrumbItems} />
             {/* Header */}
             <CategoryHero
                 name={subcat.name}

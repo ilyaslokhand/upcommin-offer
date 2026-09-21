@@ -7,6 +7,8 @@ import StoreSeoSection from "@/components/common/StoreSeoSection";
 import { getAllDeals } from "@/lib/graphql/queries/deals";
 import { buildDealsWhere } from "@/lib/deals/buildDealsWhere";
 import { buildMetadata } from "@/lib/seo/buildMetadata";
+import JsonLd from "@/lib/seo/JsonLd";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
 
 
 export async function generateMetadata({ params }) {
@@ -51,16 +53,25 @@ export default async function CategoryPage({ params }) {
     where,
   });
 
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Categories", href: "/category" },
+    { label: category.name },
+  ];
+
 
   return (
     <div>
       {/* Breadcrumb */}
 
-      <Breadcrumb items={[
-        { label: "Home", href: "/" },
-        { label: "Categories", href: "/category" },
-        { label: category.name },  // current — no href
-      ]} />
+      <JsonLd
+        data={buildBreadcrumbSchema(
+          breadcrumbItems,
+          `/category/${category.slug}`
+        )}
+      />
+
+      <Breadcrumb items={breadcrumbItems} />
 
       {/* Hero */}
       <CategoryHero
