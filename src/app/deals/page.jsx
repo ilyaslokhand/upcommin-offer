@@ -1,6 +1,15 @@
 import Breadcrumb from "@/components/common/Breadcrumb";
 import DealFeed from "@/components/deal/DealFeed";
 import { getAllDeals } from "@/lib/graphql/queries/deals";
+import { buildMetadata } from "@/lib/seo/buildMetadata";
+
+export const metadata = buildMetadata({
+    title: "Latest Deals, Coupons & Offers in India",
+    description:
+        "Discover the latest online deals, discount coupons and shopping offers from Amazon, Flipkart, Myntra and other popular stores in India.",
+    path: "/deals",
+    type: "website",
+});
 
 export default async function DealsPage() {
     const { deals, pageInfo } = await getAllDeals({

@@ -2,7 +2,15 @@ import Breadcrumb from "@/components/common/Breadcrumb";
 import CategoryGrid from "@/components/common/CategoryGrid";
 import CategorySections from "@/components/common/CategorySections";
 import { getAllCategoriesWithChildren } from "@/lib/graphql/queries/taxonomies";
+import { buildMetadata } from "@/lib/seo/buildMetadata";
 
+export const metadata = buildMetadata({
+  title: "Shop Deals by Category in India",
+  description:
+    "Browse the latest deals and offers across electronics, fashion, grocery, beauty, home appliances and other popular shopping categories.",
+  path: "/category",
+  type: "website",
+});
 
 export default async function CategoriesPage() {
   const categories = await getAllCategoriesWithChildren();
