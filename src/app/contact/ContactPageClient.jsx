@@ -1,9 +1,7 @@
 "use client";
 import { useState } from "react";
-import Breadcrumb from "@/components/common/Breadcrumb";
 import { social } from "@/lib/siteConfig";
-import JsonLd from "@/lib/seo/JsonLd";
-import { buildBreadcrumbSchema } from "@/lib/seo/schema";
+
 
 export default function ContactPage() {
     const [submitting, setSubmitting] = useState(false);

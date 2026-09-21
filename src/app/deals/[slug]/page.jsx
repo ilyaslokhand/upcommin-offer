@@ -9,7 +9,7 @@ import LootBand from "@/components/common/LootBand";
 import Comments from "@/components/common/Comments";
 import { buildMetadata } from "@/lib/seo/buildMetadata";
 import { createMetaDescription } from "@/lib/seo/createMetaDescription";
-import { buildBreadcrumbSchema } from "@/lib/seo/schema";
+import { buildBreadcrumbSchema, buildDealSchema } from "@/lib/seo/schema";
 import JsonLd from "@/lib/seo/JsonLd";
 
 export async function generateMetadata({ params }) {
@@ -47,6 +47,13 @@ export default async function DealPage({ params }) {
         ? (await getStoreDeals(store.slug, 10)).filter((d) => d.slug !== deal.slug)
         : [];
 
+    const dealPath = `/deals/${deal.slug}`;
+
+    const dealSchema = buildDealSchema(deal, {
+        storeName: store?.name,
+        path: dealPath,
+    });
+
 
     const breadcrumbItems = [
         { label: "Home", href: "/" },
@@ -59,8 +66,13 @@ export default async function DealPage({ params }) {
         <div>
             {/* Breadcrumb */}
             <JsonLd
-                data={buildBreadcrumbSchema(breadcrumbItems, `/deals/${deal.slug}`)}
+                data={buildBreadcrumbSchema(
+                    breadcrumbItems,
+                    dealPath
+                )}
             />
+
+            <JsonLd data={dealSchema} />
             <Breadcrumb items={breadcrumbItems} />
 
             {/* Main layout */}
