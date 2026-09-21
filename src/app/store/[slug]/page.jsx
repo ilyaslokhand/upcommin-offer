@@ -8,7 +8,7 @@ import { getAllDeals } from "@/lib/graphql/queries/deals";
 import { buildDealsWhere } from "@/lib/deals/buildDealsWhere";
 import { buildMetadata } from "@/lib/seo/buildMetadata";
 import JsonLd from "@/lib/seo/JsonLd";
-import { buildBreadcrumbSchema } from "@/lib/seo/schema";
+import { buildBreadcrumbSchema, buildFaqSchema } from "@/lib/seo/schema";
 
 export async function generateMetadata({ params }) {
     const { slug } = await params;
@@ -71,6 +71,7 @@ export default async function StorePage({ params }) {
                     `/store/${store.slug}`
                 )}
             />
+            <JsonLd data={buildFaqSchema(store.faqs)} />
 
             <Breadcrumb items={breadcrumbItems} />
 

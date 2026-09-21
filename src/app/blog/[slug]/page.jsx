@@ -8,7 +8,7 @@ import { removeInlineStyles } from "@/lib/utils/content";
 import { buildMetadata } from "@/lib/seo/buildMetadata";
 import { createMetaDescription } from "@/lib/seo/createMetaDescription";
 import JsonLd from "@/lib/seo/JsonLd";
-import { buildBreadcrumbSchema } from "@/lib/seo/schema";
+import { buildBreadcrumbSchema, buildArticleSchema } from "@/lib/seo/schema";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -47,6 +47,12 @@ export default async function BlogPostPage({ params }) {
   const category = post.categories?.nodes?.[0];
   const otherPosts = recentPosts.filter((p) => p.slug !== post.slug).slice(0, 4);
   const cleanedContent = removeInlineStyles(post.content);
+  const articlePath = `/blog/${post.slug}`;
+
+  const articleSchema = buildArticleSchema(post, {
+    path: articlePath,
+  });
+
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
@@ -60,9 +66,11 @@ export default async function BlogPostPage({ params }) {
       <JsonLd
         data={buildBreadcrumbSchema(
           breadcrumbItems,
-          `/blog/${post.slug}`
+          articlePath
         )}
       />
+
+      <JsonLd data={articleSchema} />
 
       <Breadcrumb items={breadcrumbItems} />
 

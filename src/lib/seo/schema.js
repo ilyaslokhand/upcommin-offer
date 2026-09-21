@@ -132,3 +132,114 @@ export function buildDealSchema(deal, { storeName, path } = {}) {
 
   return schema;
 }
+
+export function buildArticleSchema(post, { path } = {}) {
+  if (!post?.title || !path) {
+    return null;
+  }
+
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+
+  const url = `${SITE_URL}${cleanPath}`;
+
+  const schema = {
+    "@context": "https://schema.org",
+
+    "@type": "Article",
+
+    "@id": `${url}#article`,
+
+    headline: post.title,
+
+    url,
+
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
+
+    publisher: {
+      "@id": `${SITE_URL}/#organization`,
+    },
+  };
+
+  if (post.date) {
+    schema.datePublished = post.date;
+  }
+
+  if (post.modified || post.date) {
+    schema.dateModified = post.modified || post.date;
+  }
+
+  const authorName = post.author?.node?.name;
+
+  schema.author = authorName
+    ? {
+        "@type": "Person",
+        name: authorName,
+      }
+    : {
+        "@id": `${SITE_URL}/#organization`,
+      };
+
+  const image = post.featuredImage?.node?.sourceUrl;
+
+  if (image) {
+    schema.image = [image];
+  }
+
+  const description = createMetaDescription(post.content);
+
+  if (description) {
+    schema.description = description;
+  }
+
+  return schema;
+}
+
+export function buildFaqSchema(faqs = []) {
+  // Stop if WordPress did not return an array.
+  if (!Array.isArray(faqs)) {
+    return null;
+  }
+
+  // Remove HTML and unnecessary spaces.
+  const cleanText = (value) =>
+    String(value || "")
+      .replace(/<[^>]*>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  // Convert every valid FAQ into schema format.
+  const mainEntity = faqs
+    .map((faq) => {
+      const question = cleanText(faq?.question);
+      const answer = cleanText(faq?.answer);
+
+      // Ignore incomplete FAQs.
+      if (!question || !answer) {
+        return null;
+      }
+
+      return {
+        "@type": "Question",
+        name: question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: answer,
+        },
+      };
+    })
+    .filter(Boolean);
+
+  // Do not output empty FAQ schema.
+  if (mainEntity.length === 0) {
+    return null;
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity,
+  };
+}

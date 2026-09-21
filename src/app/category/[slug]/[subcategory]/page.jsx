@@ -8,7 +8,7 @@ import { getAllDeals } from "@/lib/graphql/queries/deals";
 import { buildDealsWhere } from "@/lib/deals/buildDealsWhere";
 import { buildMetadata } from "@/lib/seo/buildMetadata";
 import JsonLd from "@/lib/seo/JsonLd";
-import { buildBreadcrumbSchema } from "@/lib/seo/schema";
+import { buildBreadcrumbSchema, buildFaqSchema } from "@/lib/seo/schema";
 
 export async function generateMetadata({ params }) {
     const { slug, subcategory } = await params;
@@ -69,6 +69,8 @@ export default async function SubcategoryPage({ params }) {
                     `/category/${slug}/${subcat.slug}`
                 )}
             />
+
+            <JsonLd data={buildFaqSchema(subcat.faqs)} />
 
             <Breadcrumb items={breadcrumbItems} />
             {/* Header */}
