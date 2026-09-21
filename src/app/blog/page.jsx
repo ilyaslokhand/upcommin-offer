@@ -2,6 +2,8 @@ import Breadcrumb from "@/components/common/Breadcrumb";
 import BlogFeed from "@/components/blog/BlogFeed";
 import { getPosts } from "@/lib/graphql/queries/blog";
 import { buildMetadata } from "@/lib/seo/buildMetadata";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
+import JsonLd from "@/lib/seo/JsonLd";
 
 export const metadata = buildMetadata({
     title: "Latest Deals, Offers & Savings Guides",
@@ -17,12 +19,21 @@ export default async function BlogPage() {
         first: 20,
     });
 
+    const breadcrumbItems = [
+        { label: "Home", href: "/" },
+        { label: "Blog" },
+    ];
+
     return (
         <div>
-            <Breadcrumb items={[
-                { label: "Home", href: "/" },
-                { label: "Blog" },
-            ]} />
+            <JsonLd
+                data={buildBreadcrumbSchema(
+                    breadcrumbItems,
+                    "/blog"
+                )}
+            />
+
+            <Breadcrumb items={breadcrumbItems} />
 
             <div className="container-wrap pt-4">
                 <h1 className="font-bold tracking-[-0.56px] text-text" style={{ fontFamily: "var(--font-display)" }}>

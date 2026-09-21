@@ -8,6 +8,8 @@ import Link from "next/link";
 import { getAllDeals } from "@/lib/graphql/queries/deals";
 import { buildDealsWhere } from "@/lib/deals/buildDealsWhere";
 import { buildMetadata } from "@/lib/seo/buildMetadata";
+import JsonLd from "@/lib/seo/JsonLd";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
 
 export async function generateMetadata({ params }) {
     const { slug } = await params;
@@ -56,12 +58,21 @@ export default async function SalePage({ params }) {
         initialPageInfo = result.pageInfo;
     }
 
+    const breadcrumbItems = [
+        { label: "Home", href: "/" },
+        { label: sale.name },
+    ];
+
     return (
         <div>
-            <Breadcrumb items={[
-                { label: "Home", href: "/" },
-                { label: sale.name },
-            ]} />
+            <JsonLd
+                data={buildBreadcrumbSchema(
+                    breadcrumbItems,
+                    `/sale/${sale.slug}`
+                )}
+            />
+
+            <Breadcrumb items={breadcrumbItems} />
 
             <SaleHero sale={sale} />
 

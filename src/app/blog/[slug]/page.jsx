@@ -7,6 +7,8 @@ import Image from "next/image";
 import { removeInlineStyles } from "@/lib/utils/content";
 import { buildMetadata } from "@/lib/seo/buildMetadata";
 import { createMetaDescription } from "@/lib/seo/createMetaDescription";
+import JsonLd from "@/lib/seo/JsonLd";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -46,16 +48,23 @@ export default async function BlogPostPage({ params }) {
   const otherPosts = recentPosts.filter((p) => p.slug !== post.slug).slice(0, 4);
   const cleanedContent = removeInlineStyles(post.content);
 
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Blog", href: "/blog" },
+    { label: post.title },
+  ];
+
   return (
     <div >
       {/* Breadcrumb */}
-      <Breadcrumb
-        items={[
-          { label: "Home", href: "/" },
-          { label: "Blog", href: "/blog" },
-          { label: post.title },
-        ]}
+      <JsonLd
+        data={buildBreadcrumbSchema(
+          breadcrumbItems,
+          `/blog/${post.slug}`
+        )}
       />
+
+      <Breadcrumb items={breadcrumbItems} />
 
       {/* Blog content — 870px centered inside container */}
       <div className="container-wrap py-6">

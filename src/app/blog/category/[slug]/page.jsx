@@ -4,6 +4,8 @@ import BlogCard from "@/components/common/BlogCard";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { buildMetadata } from "@/lib/seo/buildMetadata";
 import { createMetaDescription } from "@/lib/seo/createMetaDescription";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
+import JsonLd from "@/lib/seo/JsonLd";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -52,16 +54,23 @@ export default async function BlogCategoryPage({ params }) {
 
   const posts = category.posts?.nodes ?? [];
 
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Blog", href: "/blog" },
+    { label: category.name },
+  ];
+
   return (
     <div>
       {/* Breadcrumb */}
-      <Breadcrumb
-        items={[
-          { label: "Home", href: "/" },
-          { label: "Blog", href: "/blog" },
-          { label: category.name },
-        ]}
+      <JsonLd
+        data={buildBreadcrumbSchema(
+          breadcrumbItems,
+          `/blog/category/${category.slug}`
+        )}
       />
+
+      <Breadcrumb items={breadcrumbItems} />
 
       {/* Heading */}
       <div className="container-wrap pt-4">

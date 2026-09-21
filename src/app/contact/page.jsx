@@ -1,5 +1,9 @@
 import ContactPageClient from "./ContactPageClient";
+import Breadcrumb from "@/components/common/Breadcrumb";
+
 import { buildMetadata } from "@/lib/seo/buildMetadata";
+import JsonLd from "@/lib/seo/JsonLd";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
 
 export const metadata = buildMetadata({
   title: "Contact UpcomingOffer",
@@ -10,5 +14,23 @@ export const metadata = buildMetadata({
 });
 
 export default function ContactPage() {
-  return <ContactPageClient />;
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Contact Us" },
+  ];
+
+  return (
+    <>
+      <JsonLd
+        data={buildBreadcrumbSchema(
+          breadcrumbItems,
+          "/contact"
+        )}
+      />
+
+      <Breadcrumb items={breadcrumbItems} />
+
+      <ContactPageClient />
+    </>
+  );
 }

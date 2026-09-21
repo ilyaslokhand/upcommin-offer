@@ -2,6 +2,8 @@
 import { useState } from "react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { social } from "@/lib/siteConfig";
+import JsonLd from "@/lib/seo/JsonLd";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
 
 export default function ContactPage() {
     const [submitting, setSubmitting] = useState(false);
@@ -31,12 +33,11 @@ export default function ContactPage() {
         }
     };
 
+
+
     return (
         <div>
-            <Breadcrumb items={[
-                { label: "Home", href: "/" },
-                { label: "Contact Us" },
-            ]} />
+
 
             <div className="container-wrap py-6">
                 <div className="max-w-150  w-full">

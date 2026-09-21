@@ -2,6 +2,8 @@ import { getPageBySlug } from "@/lib/graphql/queries/pages";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { notFound } from "next/navigation";
 import { buildMetadata } from "@/lib/seo/buildMetadata";
+import JsonLd from "@/lib/seo/JsonLd";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
 
 export const metadata = buildMetadata({
     title: "Privacy Policy",
@@ -15,12 +17,21 @@ export default async function PrivacyPage() {
     const page = await getPageBySlug("privacy-policy");   // your WP slug
     if (!page) notFound();
 
+    const breadcrumbItems = [
+        { label: "Home", href: "/" },
+        { label: page.title },
+    ];
+
     return (
         <div>
-            <Breadcrumb items={[
-                { label: "Home", href: "/" },
-                { label: page.title },
-            ]} />
+            <JsonLd
+                data={buildBreadcrumbSchema(
+                    breadcrumbItems,
+                    `/${page.slug}`
+                )}
+            />
+
+            <Breadcrumb items={breadcrumbItems} />
 
             <div className="container-wrap py-6">
                 <div className=" mx-auto w-full">
