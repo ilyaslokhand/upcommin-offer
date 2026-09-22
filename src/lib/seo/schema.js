@@ -88,11 +88,11 @@ export function buildDealSchema(deal, { storeName, path } = {}) {
     return null;
   }
 
-  const isExpired =
-    deal.isExpired === true ||
-    deal.isExpired === "true" ||
-    deal.isExpired === 1 ||
-    deal.isExpired === "1";
+  // const isExpired =
+  //   deal.isExpired === true ||
+  //   deal.isExpired === "true" ||
+  //   deal.isExpired === 1 ||
+  //   deal.isExpired === "1";
 
   const schema = {
     "@context": "https://schema.org",
@@ -105,9 +105,9 @@ export function buildDealSchema(deal, { storeName, path } = {}) {
       url,
       price: String(priceNumber),
       priceCurrency: "INR",
-      availability: isExpired
-        ? "https://schema.org/OutOfStock"
-        : "https://schema.org/InStock",
+      // availability: isExpired
+      //   ? "https://schema.org/OutOfStock"
+      //   : "https://schema.org/InStock",
     },
   };
 

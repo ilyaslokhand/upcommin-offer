@@ -33,8 +33,9 @@ export async function getAllDeals({
   first = 20,
   after = null,
   where = null,
+  revalidate = 0,
 } = {}) {
-  const data = await fetchGraphQL(ALL_DEALS_QUERY, { first, after, where });
+  const data = await fetchGraphQL(ALL_DEALS_QUERY, { first, after, where }, { revalidate });
   return {
     deals: data?.deals?.nodes ?? [],
     pageInfo: data?.deals?.pageInfo ?? { hasNextPage: false, endCursor: null },

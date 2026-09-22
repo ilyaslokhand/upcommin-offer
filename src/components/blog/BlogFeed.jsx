@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import BlogCard from "@/components/common/BlogCard";
 
 export default function BlogFeed({
+    category = null,
     initialPosts = [],
     initialPageInfo = null,
 }) {
@@ -21,68 +22,74 @@ export default function BlogFeed({
         !hasInitialData
     );
 
+    // Add the category to every request when this feed is on a category page.
+    const buildUrl = useCallback(
+        (after = null) => {
+            const params = new URLSearchParams();
+            if (category) params.set("category", category);
+            if (after) params.set("after", after);
+            return `/api/blog?${params.toString()}`;
+        },
+        [category]
+    );
+
     const fetchPosts = useCallback(async (after = null, append = false) => {
         setLoading(true);
-        const params = new URLSearchParams();
-        if (after) params.set("after", after);
+        try {
+            const res = await fetch(buildUrl(after));
 
-        const res = await fetch(`/api/blog?${params.toString()}`);
-        const data = await res.json();
+            if (!res.ok) {
+                throw new Error("Failed to fetch blog posts");
+            }
 
-        setPosts((prev) => (append ? [...prev, ...data.posts] : data.posts));
-        setCursor(data.pageInfo?.endCursor ?? null);
-        setHasNext(data.pageInfo?.hasNextPage ?? false);
-        setLoading(false);
-    }, []);
+            const data = await res.json();
 
+            setPosts((previous) =>
+                append ? [...previous, ...data.posts] : data.posts
+            );
+            setCursor(data.pageInfo?.endCursor ?? null);
+            setHasNext(data.pageInfo?.hasNextPage ?? false);
+        } catch (error) {
+            console.error("Unable to load blog posts:", error);
+        } finally {
+            setLoading(false);
+        }
+    },
+        [buildUrl]
+    );
+
+    // Fetch the first batch only when the server did not provide it.
     useEffect(() => {
-        // The server already provided the first posts,
-        // so don't request them again.
         if (hasInitialData) return;
 
         let cancelled = false;
 
         async function loadInitialPosts() {
             try {
-                const res = await fetch("/api/blog");
+                const res = await fetch(buildUrl());
 
                 if (!res.ok) {
-                    throw new Error(
-                        "Failed to fetch blog posts"
-                    );
+                    throw new Error("Failed to fetch blog posts");
                 }
 
                 const data = await res.json();
-
                 if (cancelled) return;
 
                 setPosts(data.posts);
-                setCursor(
-                    data.pageInfo?.endCursor ?? null
-                );
-                setHasNext(
-                    data.pageInfo?.hasNextPage ?? false
-                );
+                setCursor(data.pageInfo?.endCursor ?? null);
+                setHasNext(data.pageInfo?.hasNextPage ?? false);
             } catch (error) {
-                if (!cancelled) {
-                    console.error(
-                        "Unable to load blog posts:",
-                        error
-                    );
-                }
+                if (!cancelled) console.error("Unable to load blog posts:", error);
             } finally {
-                if (!cancelled) {
-                    setLoading(false);
-                }
+                if (!cancelled) setLoading(false);
             }
         }
 
         loadInitialPosts();
-
         return () => {
             cancelled = true;
         };
-    }, [hasInitialData]);
+    }, [hasInitialData, buildUrl]);
 
 
     return (
@@ -96,7 +103,9 @@ export default function BlogFeed({
                     ))}
                 </div>
             ) : (
-                <p className="text-muted text-center py-10">No articles yet.</p>
+                <p className="text-muted text-center py-10">
+                    No articles yet.
+                </p>
             )}
 
             {hasNext && (
@@ -106,7 +115,15 @@ export default function BlogFeed({
                     className="flex items-center gap-1.5 text-[15px] font-semibold text-text hover:text-brand transition disabled:opacity-50 cursor-pointer"
                 >
                     {loading ? "Loading…" : "Load more articles"}
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        aria-hidden="true"
+                    >
                         <path d="M5 12h14M13 6l6 6-6 6" />
                     </svg>
                 </button>

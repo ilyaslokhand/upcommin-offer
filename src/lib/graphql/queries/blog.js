@@ -35,7 +35,7 @@ export async function getPosts({ first = 12, after = null } = {}) {
 
 // Posts in a specific category
 const POSTS_BY_CATEGORY_QUERY = `
-  query PostsByCategory($slug: ID!) {
+  query PostsByCategory($slug: ID!, $after: String) {
     category(id: $slug, idType: SLUG) {
       name
       slug
@@ -45,7 +45,15 @@ const POSTS_BY_CATEGORY_QUERY = `
         description
         canonicalUrl
       }
-      posts(first: 24, where: { orderby: { field: DATE, order: DESC } }) {
+      posts(
+        first: 20
+        after: $after
+        where: { orderby: { field: DATE, order: DESC } }
+      ) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
         nodes {
           id
           title
@@ -60,8 +68,8 @@ const POSTS_BY_CATEGORY_QUERY = `
   }
 `;
 
-export const getPostsByCategory = cache(async (slug) => {
-  const data = await fetchGraphQL(POSTS_BY_CATEGORY_QUERY, { slug });
+export const getPostsByCategory = cache(async (slug,after = null) => {
+  const data = await fetchGraphQL(POSTS_BY_CATEGORY_QUERY, { slug, after });
 
   return data?.category ?? null;
 });
