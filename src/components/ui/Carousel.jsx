@@ -111,7 +111,7 @@ export default function Carousel({
                         onClick={() => emblaApi?.scrollPrev()}
                         disabled={!canPrev}
                         aria-label="Previous slide"
-                        className="absolute -left-3 top-1/2 -translate-y-1/2 size-9 rounded-full bg-white border border-line shadow-md flex items-center justify-center disabled:opacity-30 z-10"
+                        className="absolute cursor-pointer -left-3 top-1/2 -translate-y-1/2 size-9 rounded-full bg-white border border-line shadow-md flex items-center justify-center disabled:opacity-30 z-10"
                     >
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1c1c1c" strokeWidth="2">
                             <path d="M15 18l-6-6 6-6" />
@@ -122,7 +122,7 @@ export default function Carousel({
                         onClick={() => emblaApi?.scrollNext()}
                         disabled={!canNext}
                         aria-label="Next slide"
-                        className="absolute -right-3 top-1/2 -translate-y-1/2 size-9 rounded-full bg-white border border-line shadow-md flex items-center justify-center disabled:opacity-30 z-10"
+                        className="absolute -right-3 cursor-pointer top-1/2 -translate-y-1/2 size-9 rounded-full bg-white border border-line shadow-md flex items-center justify-center disabled:opacity-30 z-10"
                     >
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1c1c1c" strokeWidth="2">
                             <path d="M9 18l6-6-6-6" />
@@ -138,7 +138,7 @@ export default function Carousel({
                             key={i}
                             type="button"
                             onClick={() => goToSlide(i)}
-                            className={`h-2 rounded-full transition-all ${i === selected ? "w-6 bg-brand" : "w-2 bg-line"
+                            className={`h-2 rounded-full cursor-pointer transition-all ${i === selected ? "w-6 bg-brand" : "w-2 bg-line"
                                 }`}
                             aria-label={`Go to slide ${i + 1}`}
                         />
