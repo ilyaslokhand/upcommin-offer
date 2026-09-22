@@ -3,6 +3,7 @@ export function buildDealsWhere({
   sale,
   category,
   store,
+  search,
   subcategories = [],
 } = {}) {
   const taxArray = [];
@@ -50,12 +51,17 @@ export function buildDealsWhere({
     });
   }
 
-  return taxArray.length
-    ? {
-        taxQuery: {
-          relation: "AND",
-          taxArray,
-        },
-      }
-    : {};
+  // Add a text search when the keyword is not an exact store match.
+  const where = {};
+  if (search) where.search = search;
+
+  // Keep your existing taxonomy filters.
+  if (taxArray.length) {
+    where.taxQuery = {
+      relation: "AND",
+      taxArray,
+    };
+  }
+
+  return where;
 }

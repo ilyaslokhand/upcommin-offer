@@ -28,6 +28,7 @@ export default function DealFeed({ filters = {}, columns = 4, initialDeals = [],
       if (filters.tag) params.set("tag", filters.tag);
       if (filters.sale) params.set("sale", filters.sale);
       if (filters.store) params.set("store", filters.store);
+      if (filters.search) params.set("search", filters.search);
       (filters.subcategories || []).forEach((s) => params.append("subcategory", s));
       if (after) params.set("after", after);
       return params.toString();

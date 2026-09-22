@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { social } from "@/lib/siteConfig";
+import { useRouter } from "next/navigation";
 
 export default function HeaderNav({ categories, stores, blogCats }) {
   const [open, setOpen] = useState(null);
@@ -20,6 +21,21 @@ export default function HeaderNav({ categories, stores, blogCats }) {
     stores: stores.map((s) => ({ label: s.name, href: `/store/${s.slug}` })),
     blog: blogCats.map((b) => ({ label: b.name, href: `/blog/category/${b.slug}` })),
   };
+
+
+  const router = useRouter();
+
+  function handleSearch(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const keyword = String(formData.get("q") ?? "").trim();
+
+    if (!keyword) return;
+
+    setMobileOpen(false);
+    router.push(`/search?q=${encodeURIComponent(keyword)}`);
+  }
 
   const navItems = [
     { label: "Home", href: "/" },
@@ -69,12 +85,26 @@ export default function HeaderNav({ categories, stores, blogCats }) {
           ))}
         </nav>
 
-        <div className="flex gap-2 items-center px-4 py-3 rounded-lg w-60 xl:w-75 bg-bg border border-line">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9aa1ad" strokeWidth="2">
-            <circle cx="11" cy="11" r="7" /><path d="m21 21-4-4" />
+        {/* Submit the keyword as /search?q=amazon */}
+        <form
+          onSubmit={handleSearch}
+          role="search"
+          className="flex gap-2 items-center px-4 py-3 rounded-lg w-60 xl:w-75 bg-bg border border-line"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9aa1ad" strokeWidth="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m21 21-4-4" />
           </svg>
-          <input placeholder="Search deals, coupons & stores" className="bg-transparent outline-none text-[13px] w-full text-text" />
-        </div>
+
+          <input
+            type="search"
+            name="q"
+            aria-label="Search deals, coupons and stores"
+            placeholder="Search deals, coupons & stores"
+            className="bg-transparent outline-none text-[13px] w-full text-text cursor-pointer"
+            required
+          />
+        </form>
 
         <a href={social.telegram} target="_blank" rel="noopener noreferrer" className="flex gap-1.5 items-center px-5 py-2.5 rounded-lg text-white text-[15px] font-medium shrink-0 bg-telegram">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -96,12 +126,26 @@ export default function HeaderNav({ categories, stores, blogCats }) {
         <div className="lg:hidden fixed inset-x-0 top-15 bottom-0 w-full bg-surface z-50 overflow-y-auto">
           <div className="container-wrap py-4 pt-6 flex flex-col gap-1">
             {/* Search */}
-            <div className="flex gap-2 items-center px-4 py-3 rounded-lg mb-3 bg-bg border border-line">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9aa1ad" strokeWidth="2">
-                <circle cx="11" cy="11" r="7" /><path d="m21 21-4-4" />
+            {/* Close the mobile menu when the search is submitted */}
+            <form
+              onSubmit={handleSearch}
+              role="search"
+              className="flex gap-2 items-center px-4 py-3 rounded-lg mb-3 bg-bg border border-line"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9aa1ad" strokeWidth="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m21 21-4-4" />
               </svg>
-              <input placeholder="Search deals, coupons & stores" className="bg-transparent outline-none text-[13px] w-full text-text" />
-            </div>
+
+              <input
+                type="search"
+                name="q"
+                aria-label="Search deals, coupons and stores"
+                placeholder="Search deals, coupons & stores"
+                className="bg-transparent outline-none text-[13px] w-full text-text"
+                required
+              />
+            </form>
 
             {navItems.map((item) => (
               <div key={item.label} className="border-b border-line last:border-0">

@@ -8,6 +8,7 @@ export async function GET(request) {
   const sale = searchParams.get("sale");
   const category = searchParams.get("category");
   const store = searchParams.get("store");
+  const search = searchParams.get("search");
   const subcategories = searchParams.getAll("subcategory");
   const after = searchParams.get("after") || null;
 
@@ -16,6 +17,7 @@ export async function GET(request) {
     sale,
     category,
     store,
+    search,
     subcategories,
   });
 
