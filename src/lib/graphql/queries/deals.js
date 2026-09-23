@@ -33,9 +33,29 @@ export async function getAllDeals({
   first = 20,
   after = null,
   where = null,
-  revalidate = 0,
 } = {}) {
-  const data = await fetchGraphQL(ALL_DEALS_QUERY, { first, after, where }, { revalidate });
+  /*
+   * Send the deal query to WordPress.
+   *
+   * revalidate: 300
+   * Keep the saved result for a maximum of 5 minutes.
+   * This is only a backup if the WordPress webhook fails.
+   *
+   * tags: ["deals"]
+   * Give this saved data the label "deals".
+   * Our webhook will use this label to clear old deal data.
+   */
+  const data = await fetchGraphQL(
+    ALL_DEALS_QUERY,
+    { first, after, where },
+    {
+      revalidate: 300,
+      tags: ["deals"],
+    },
+  );
+   /*
+   * Return the deals and pagination information.
+   */
   return {
     deals: data?.deals?.nodes ?? [],
     pageInfo: data?.deals?.pageInfo ?? { hasNextPage: false, endCursor: null },
