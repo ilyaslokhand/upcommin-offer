@@ -127,40 +127,46 @@ const nextConfig = {
   },
 
   async redirects() {
-    const [postSlugs, blogCategorySlugs, dealCategorySlugs] = await Promise.all(
-      [
-        getAllSlugs(POST_SLUGS_QUERY, "posts"),
-        getAllSlugs(BLOG_CATEGORY_SLUGS_QUERY, "categories"),
-        getAllSlugs(DEAL_CATEGORY_SLUGS_QUERY, "dealCategories"),
-      ],
-    );
+    try {
+      const [postSlugs, blogCategorySlugs, dealCategorySlugs] =
+        await Promise.all([
+          getAllSlugs(POST_SLUGS_QUERY, "posts"),
+          getAllSlugs(BLOG_CATEGORY_SLUGS_QUERY, "categories"),
+          getAllSlugs(DEAL_CATEGORY_SLUGS_QUERY, "dealCategories"),
+        ]);
 
-    const dealCategorySet = new Set(dealCategorySlugs);
+      const dealCategorySet = new Set(dealCategorySlugs);
 
-    const postRedirects = postSlugs
-      .filter((slug) => !RESERVED_SLUGS.has(slug))
-      .map((slug) => ({
-        source: `/${slug}`,
-        destination: `/blog/${slug}`,
-        permanent: true,
-      }));
+      const postRedirects = postSlugs
+        .filter((slug) => !RESERVED_SLUGS.has(slug))
+        .map((slug) => ({
+          source: `/${slug}`,
+          destination: `/blog/${slug}`,
+          permanent: true,
+        }));
 
-    const blogCategoryRedirects = blogCategorySlugs
-      .filter((slug) => !dealCategorySet.has(slug))
-      .map((slug) => ({
-        source: `/category/${slug}`,
-        destination: `/blog/category/${slug}`,
-        permanent: true,
-      }));
+      const blogCategoryRedirects = blogCategorySlugs
+        .filter((slug) => !dealCategorySet.has(slug))
+        .map((slug) => ({
+          source: `/category/${slug}`,
+          destination: `/blog/category/${slug}`,
+          permanent: true,
+        }));
 
-    return [...postRedirects, ...blogCategoryRedirects];
+      return [...postRedirects, ...blogCategoryRedirects];
+    } catch (error) {
+      console.error(
+        "WordPress redirects could not be loaded during build:",
+        error,
+      );
+
+      // Do not fail the complete Vercel build if WordPress times out.
+      return [];
+    }
   },
 };
 
 export default nextConfig;
-
-
-
 
 /*
 ============================================================
