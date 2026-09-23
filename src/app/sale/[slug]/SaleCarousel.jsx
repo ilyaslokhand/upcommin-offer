@@ -15,7 +15,7 @@ export default function SaleCarousel({ sales }) {
       loop={true}
       gap={24}
     >
-      {sales.map((sale) => {
+      {sales.map((sale, index) => {
         const img = sale.bannerImage;
         const badge = getSaleBadge(sale);
         const isUpcoming = badge.tone === "upcoming";
@@ -25,7 +25,8 @@ export default function SaleCarousel({ sales }) {
           <Wrapper key={sale.id} {...wrapperProps}
 
             className="relative h-[300px] rounded-[20px] border border-line overflow-hidden flex flex-col justify-between px-9 py-8 group block">
-            {img && <Image src={img} alt={sale.name} fill sizes="(max-width:768px) 100vw, 620px" className="object-cover -z-10" />}
+            {img && <Image src={img} alt={sale.name} fill preload={index === 0}
+              sizes="(max-width:768px) 100vw, 620px" className="object-cover -z-10" />}
             <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent to-black/40" />
 
             <span className={`self-start rounded-full px-3 py-1 text-[12px] font-extrabold uppercase tracking-tight border ${saleBadgeClass(badge.tone)}`}>
