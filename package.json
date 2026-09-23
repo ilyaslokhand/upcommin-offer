@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate:redirects": "node --env-file=.env.local scripts/generate-legacy-redirects.mjs"
   },
   "dependencies": {
     "@next/third-parties": "^16.3.5",
