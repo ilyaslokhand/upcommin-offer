@@ -31,6 +31,11 @@ const nextConfig = {
         hostname: "upcomingoffer.com",
         pathname: "/wp-content/uploads/**",
       },
+      {
+        protocol: "https",
+        hostname: "cms.upcomingoffer.com",
+        pathname: "/wp-content/uploads/**",
+      },
     ],
   },
 
