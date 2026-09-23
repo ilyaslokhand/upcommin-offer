@@ -45,6 +45,14 @@ const nextConfig = {
     // overwriting real deal-category pages.
     const dealCategorySet = new Set(dealCategorySlugs);
 
+    const manualRedirects = [
+      {
+        source: "/blog/category",
+        destination: "/blog",
+        permanent: true,
+      },
+    ];
+
     // Old WordPress post:
     // /post-slug → /blog/post-slug
     const postRedirects = postSlugs
@@ -66,7 +74,7 @@ const nextConfig = {
         permanent: true,
       }));
 
-    return [...postRedirects, ...blogCategoryRedirects];
+    return [...postRedirects, ...blogCategoryRedirects, ...manualRedirects];
   },
 };
 
