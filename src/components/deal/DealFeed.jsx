@@ -1,12 +1,11 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import DealCard from "./DealCard";
-import DealGridSkeleton from "@/components/ui/DealGridSkeleton";
 
 export default function DealFeed({ filters = {}, columns = 4, initialDeals = [], initialPageInfo = null, }) {
 
   const hasInitialData = initialPageInfo !== null;
- 
+
 
   const [deals, setDeals] = useState(initialDeals);
   const [cursor, setCursor] = useState(
@@ -131,7 +130,18 @@ export default function DealFeed({ filters = {}, columns = 4, initialDeals = [],
 
   return (
     <div className={`w-full flex flex-col gap-7 items-center ${loading && deals.length === 0 ? "min-h-150" : ""}`}>      {loading && deals.length === 0 ? (
-      <DealGridSkeleton count={8} columns={columns} />
+      <div
+        className="flex min-h-75 w-full items-center justify-center"
+        aria-busy="true"
+        aria-live="polite"
+      >
+        <span
+          className="size-9 animate-spin rounded-full border-[3px] border-line border-t-brand motion-reduce:animate-none"
+          aria-hidden="true"
+        />
+
+        <span className="sr-only">Loading deals</span>
+      </div>
     ) : deals.length ? (
       <div className={`w-full grid ${gridCols} gap-4`}>
         {deals.map((deal, i) => (
