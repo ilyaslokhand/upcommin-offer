@@ -22,9 +22,20 @@ const ALL_SALES_QUERY = `
 `;
 
 export async function getAllSales() {
-  const data = await fetchGraphQL(ALL_SALES_QUERY);
+  const data = await fetchGraphQL(
+    ALL_SALES_QUERY,
+    {},
+    {
+      // Sales are refreshed immediately by the webhook.
+      // One hour is the backup if the webhook fails.
+      revalidate: 3600,
+      tags: ["sales"],
+    },
+  );
+
   const sales = data?.sales?.nodes ?? [];
-  // Hide ended sales from the frontend
+
+  // Hide ended sales from the frontend.
   return sales.filter((sale) => sale.saleStatus !== "ended");
 }
 
@@ -49,6 +60,16 @@ const SALE_BY_SLUG_QUERY = `
 `;
 
 export const getSaleBySlug = cache(async (slug) => {
-  const data = await fetchGraphQL(SALE_BY_SLUG_QUERY, { slug });
+  const data = await fetchGraphQL(
+    SALE_BY_SLUG_QUERY,
+    { slug },
+    {
+      // Save each sale using its own slug label.
+      // This lets WordPress refresh only the sale that changed.
+      revalidate: 86400,
+      tags: [`sale:${slug}`],
+    },
+  );
+
   return data?.sale ?? null;
 });

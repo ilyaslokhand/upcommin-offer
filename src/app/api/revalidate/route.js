@@ -53,7 +53,7 @@ export async function POST(request) {
    * Sale and deal-tag support will be added
    * after their queries have been audited.
    */
-  const allowedTypes = ["deal", "blog", "store", "category"];
+  const allowedTypes = ["deal", "blog", "store", "category", "sale"];
 
   if (!allowedTypes.includes(type)) {
     return Response.json(
@@ -129,6 +129,21 @@ export async function POST(request) {
     }
   }
 
+  /*
+   * Refresh sale caches.
+   */
+  if (type === "sale") {
+    // Refresh sale lists and homepage sale banners.
+    revalidateTag("sales", "max");
+
+    // Refresh the changed sale and its related categories.
+    if (slug) {
+      revalidateTag(`sale:${slug}`, {
+        expire: 0,
+      });
+    }
+  }
+
   return Response.json({
     success: true,
     message: `${type} cache cleared`,
@@ -199,4 +214,20 @@ export async function POST(request) {
  * Refresh that category using "category:slug"
  *                         ↓
  * Visitors receive the updated category information
+ */
+
+/*
+ * SALE FLOW
+ *
+ * Create, edit or delete a sale
+ *                 ↓
+ * WordPress sends type "sale" and the sale slug
+ *                 ↓
+ * Next.js verifies the private password
+ *                 ↓
+ * Refresh sale lists using "sales"
+ *                 ↓
+ * Refresh that sale using "sale:slug"
+ *                 ↓
+ * Visitors receive updated sale information
  */
