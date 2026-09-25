@@ -1,23 +1,14 @@
 import { revalidateTag } from "next/cache";
 
 /*
- * WordPress will send a POST request to this URL
- * whenever a deal is published or updated.
+ * WordPress sends a request here whenever
+ * a deal is published, updated or deleted.
  */
-
 export async function POST(request) {
-  // Read the private password sent by WordPress.
   const receivedSecret = request.headers.get("x-revalidate-secret");
-  //   Read the correct password from .env.local.
-
-  /*
-   * Reject the request if:
-   *
-   * 1. The password is missing from .env.local.
-   * 2. WordPress did not send the correct password.
-   */
-
   const correctSecret = process.env.REVALIDATE_SECRET;
+
+  // Reject requests that do not have the correct password.
   if (!correctSecret || receivedSecret !== correctSecret) {
     return Response.json(
       {
@@ -30,23 +21,65 @@ export async function POST(request) {
     );
   }
 
-  /*
-   * Clear all cached GraphQL requests
-   * carrying the "deals" label.
-   *
-   * expire: 0 means the next request must
-   * retrieve fresh deal data.
-   */
-  revalidateTag("deals", {
-    expire: 0,
-  });
+  // Read the deal information sent by WordPress.
+  let body;
+
+  try {
+    body = await request.json();
+  } catch {
+    return Response.json(
+      {
+        success: false,
+        message: "Invalid JSON body",
+      },
+      {
+        status: 400,
+      },
+    );
+  }
 
   /*
-   * Tell WordPress that the cache
-   * was cleared successfully.
+   * Show the saved deal feeds immediately,
+   * then refresh them quietly in the background.
    */
+  revalidateTag("deals", "max");
+
+  const slug = typeof body?.slug === "string" ? body.slug.trim() : "";
+
+  /*
+   * If WordPress sent a deal slug,
+   * immediately clear that individual deal.
+   */
+  if (slug) {
+    revalidateTag(`deal:${slug}`, {
+      expire: 0,
+    });
+  }
+
   return Response.json({
     success: true,
     message: "Deal cache cleared",
+    slug: slug || null,
   });
 }
+
+
+// You publish, update or delete a deal in WordPress
+//                         ↓
+// WordPress sends the deal slug and private password to Next.js
+//                         ↓
+// Next.js checks the private password
+//                         ↓
+// Wrong password → Request rejected
+//                         ↓
+// Correct password → Continue
+//                         ↓
+// Refresh all deal feeds quietly in the background
+//                         ↓
+// Homepage, deals, store, category and subcategory feeds update
+//                         ↓
+// If a deal slug was provided
+//                         ↓
+// Clear that individual deal’s saved data immediately
+//                         ↓
+// Next visitor receives the fresh deal information

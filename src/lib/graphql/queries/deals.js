@@ -53,7 +53,7 @@ export async function getAllDeals({
       tags: ["deals"],
     },
   );
-   /*
+  /*
    * Return the deals and pagination information.
    */
   return {
@@ -71,7 +71,16 @@ const DEALS_COUNT_QUERY = `
 `;
 
 export async function getDealsCount() {
-  const data = await fetchGraphQL(DEALS_COUNT_QUERY);
+  const data = await fetchGraphQL(
+    DEALS_COUNT_QUERY,
+    {},
+    {
+      revalidate: 300,
+
+      // Refresh the total count whenever deals are added, removed or updated.
+      tags: ["deals"],
+    },
+  );
   return data?.deals?.nodes?.length ?? 0;
 }
 
@@ -111,7 +120,14 @@ const DEAL_BY_SLUG_QUERY = `
 `;
 
 export const getDealBySlug = cache(async (slug) => {
-  const data = await fetchGraphQL(DEAL_BY_SLUG_QUERY, { slug });
+  const data = await fetchGraphQL(
+    DEAL_BY_SLUG_QUERY,
+    { slug },
+    {
+      revalidate: 300,
+      tags: [`deal:${slug}`], // // Save each deal with its own slug label so updating one deal refreshes only that deal.
+    },
+  );
   return data?.deal ?? null;
 });
 
@@ -145,9 +161,18 @@ const STORE_DEALS_QUERY = `
 `;
 
 export async function getStoreDeals(storeSlug, first = 10) {
-  const data = await fetchGraphQL(STORE_DEALS_QUERY, {
-    store: storeSlug,
-    first,
-  });
+  const data = await fetchGraphQL(
+    STORE_DEALS_QUERY,
+    {
+      store: storeSlug,
+      first,
+    },
+    {
+      revalidate: 300,
+
+      // Save this list under "deals" so any deal update refreshes it.
+      tags: ["deals"],
+    },
+  );
   return data?.deals?.nodes ?? [];
 }
