@@ -11,7 +11,16 @@ const STORES_COUNT_QUERY = `
 `;
 
 export async function getStoresCount() {
-  const data = await fetchGraphQL(STORES_COUNT_QUERY);
+  const data = await fetchGraphQL(
+    STORES_COUNT_QUERY,
+    {},
+    {
+      // Store count changes rarely, so keep it cached for one day.
+      revalidate: 86400,
+      tags: ["stores"],
+    },
+  );
+
   return data?.stores?.nodes?.length ?? 0;
 }
 
@@ -37,7 +46,16 @@ const CATEGORIES_QUERY = `
 `;
 
 export async function getCategories() {
-  const data = await fetchGraphQL(CATEGORIES_QUERY);
+  const data = await fetchGraphQL(
+    CATEGORIES_QUERY,
+    {},
+    {
+      // Category names, icons and structure change rarely.
+      revalidate: 86400,
+      tags: ["categories"],
+    },
+  );
+
   return data?.dealCategories?.nodes ?? [];
 }
 
@@ -58,7 +76,16 @@ const STORES_QUERY = `
 `;
 
 export async function getStores({ first = 100 } = {}) {
-  const data = await fetchGraphQL(STORES_QUERY, { first });
+  const data = await fetchGraphQL(
+    STORES_QUERY,
+    { first },
+    {
+      // Store names, logos and rewards change rarely.
+      revalidate: 86400,
+      tags: ["stores"],
+    },
+  );
+
   return data?.stores?.nodes ?? [];
 }
 
@@ -78,7 +105,16 @@ const BLOG_CATEGORIES_QUERY = `
 `;
 
 export async function getBlogCategories() {
-  const data = await fetchGraphQL(BLOG_CATEGORIES_QUERY);
+  const data = await fetchGraphQL(
+    BLOG_CATEGORIES_QUERY,
+    {},
+    {
+      // Blog-category names and structure change rarely.
+      revalidate: 86400,
+      tags: ["blog-categories"],
+    },
+  );
+
   return data?.categories?.nodes ?? [];
 }
 
@@ -115,7 +151,15 @@ const CATEGORY_BY_SLUG_QUERY = `
 `;
 
 export const getCategoryBySlug = cache(async (slug) => {
-  const data = await fetchGraphQL(CATEGORY_BY_SLUG_QUERY, { slug });
+  const data = await fetchGraphQL(
+    CATEGORY_BY_SLUG_QUERY,
+    { slug },
+    {
+      revalidate: 86400,
+      tags: [`category:${slug}`],
+    },
+  );
+
   return data?.dealCategory ?? null;
 });
 
@@ -143,7 +187,15 @@ const STORE_BY_SLUG_QUERY = `
 `;
 
 export const getStoreBySlug = cache(async (slug) => {
-  const data = await fetchGraphQL(STORE_BY_SLUG_QUERY, { slug });
+  const data = await fetchGraphQL(
+    STORE_BY_SLUG_QUERY,
+    { slug },
+    {
+      revalidate: 86400,
+      tags: [`store:${slug}`],
+    },
+  );
+
   return data?.store ?? null;
 });
 
@@ -161,7 +213,15 @@ const STORE_CATEGORIES_QUERY = `
 `;
 
 export async function getStoreCategories(storeSlug) {
-  const data = await fetchGraphQL(STORE_CATEGORIES_QUERY, { store: storeSlug });
+  const data = await fetchGraphQL(
+    STORE_CATEGORIES_QUERY,
+    { store: storeSlug },
+    {
+      revalidate: 86400,
+      tags: ["deals", `store:${storeSlug}`],
+    },
+  );
+
   return data?.storeCategories ?? [];
 }
 
@@ -187,7 +247,15 @@ const ALL_CATEGORIES_WITH_CHILDREN_QUERY = `
 `;
 
 export async function getAllCategoriesWithChildren() {
-  const data = await fetchGraphQL(ALL_CATEGORIES_WITH_CHILDREN_QUERY);
+  const data = await fetchGraphQL(
+    ALL_CATEGORIES_WITH_CHILDREN_QUERY,
+    {},
+    {
+      revalidate: 86400,
+      tags: ["categories"],
+    },
+  );
+
   return data?.dealCategories?.nodes ?? [];
 }
 
@@ -201,6 +269,14 @@ const SALE_CATEGORIES_QUERY = `
 `;
 
 export async function getSaleCategories(saleSlug) {
-  const data = await fetchGraphQL(SALE_CATEGORIES_QUERY, { sale: saleSlug });
+  const data = await fetchGraphQL(
+    SALE_CATEGORIES_QUERY,
+    { sale: saleSlug },
+    {
+      revalidate: 86400,
+      tags: ["deals", `sale:${saleSlug}`],   // This one uses deals because sale categories depend on which deals belong to that sale.
+    },
+  );
+
   return data?.saleCategories ?? [];
 }
