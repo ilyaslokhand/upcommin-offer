@@ -2,7 +2,7 @@ import { revalidateTag } from "next/cache";
 
 /*
  * WordPress sends a request here whenever
- * a deal is published, updated or deleted.
+ * a deal or blog post changes.
  */
 export async function POST(request) {
   const receivedSecret = request.headers.get("x-revalidate-secret");
@@ -21,7 +21,7 @@ export async function POST(request) {
     );
   }
 
-  // Read the deal information sent by WordPress.
+  // Read the information sent by WordPress.
   let body;
 
   try {
@@ -39,30 +39,42 @@ export async function POST(request) {
   }
 
   /*
-   * Show the saved deal feeds immediately,
-   * then refresh them quietly in the background.
+   * The existing deal webhook does not send a type,
+   * so a missing type continues to mean "deal".
    */
-  revalidateTag("deals", "max");
+  const type = body?.type === "blog" ? "blog" : "deal";
 
   const slug = typeof body?.slug === "string" ? body.slug.trim() : "";
 
-  /*
-   * If WordPress sent a deal slug,
-   * immediately clear that individual deal.
-   */
-  if (slug) {
-    revalidateTag(`deal:${slug}`, {
-      expire: 0,
-    });
+  if (type === "blog") {
+    // Refresh all blog lists quietly in the background.
+    revalidateTag("blogs", "max");
+
+    // Refresh the changed blog post immediately.
+    if (slug) {
+      revalidateTag(`blog:${slug}`, {
+        expire: 0,
+      });
+    }
+  } else {
+    // Refresh all deal lists quietly in the background.
+    revalidateTag("deals", "max");
+
+    // Refresh the changed deal immediately.
+    if (slug) {
+      revalidateTag(`deal:${slug}`, {
+        expire: 0,
+      });
+    }
   }
 
   return Response.json({
     success: true,
-    message: "Deal cache cleared",
+    message: `${type} cache cleared`,
+    type,
     slug: slug || null,
   });
 }
-
 
 // You publish, update or delete a deal in WordPress
 //                         ↓

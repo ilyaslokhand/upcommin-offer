@@ -26,7 +26,16 @@ const POSTS_QUERY = `
 `;
 
 export async function getPosts({ first = 12, after = null } = {}) {
-  const data = await fetchGraphQL(POSTS_QUERY, { first, after });
+  const data = await fetchGraphQL(
+    POSTS_QUERY,
+    { first, after },
+    {
+      // Save blog lists for one day as a backup.
+      // The WordPress webhook will normally refresh them immediately.
+      revalidate: 86400,
+      tags: ["blogs"],
+    },
+  );
   return {
     posts: data?.posts?.nodes ?? [],
     pageInfo: data?.posts?.pageInfo ?? { hasNextPage: false, endCursor: null },
@@ -68,8 +77,17 @@ const POSTS_BY_CATEGORY_QUERY = `
   }
 `;
 
-export const getPostsByCategory = cache(async (slug,after = null) => {
-  const data = await fetchGraphQL(POSTS_BY_CATEGORY_QUERY, { slug, after });
+export const getPostsByCategory = cache(async (slug, after = null) => {
+  const data = await fetchGraphQL(
+    POSTS_BY_CATEGORY_QUERY,
+    { slug, after },
+    {
+      // Keep blog-category pages cached for one day.
+      // Blog changes normally refresh them through the webhook.
+      revalidate: 86400,
+      tags: ["blogs"],
+    },
+  );
 
   return data?.category ?? null;
 });
@@ -113,6 +131,15 @@ const POST_BY_SLUG_QUERY = `
 `;
 
 export const getPostBySlug = cache(async (slug) => {
-  const data = await fetchGraphQL(POST_BY_SLUG_QUERY, { slug });
+  const data = await fetchGraphQL(
+    POST_BY_SLUG_QUERY,
+    { slug },
+    {
+      // Save each blog post using its own slug label.
+      // This lets WordPress refresh only the post that changed.
+      revalidate: 86400,
+      tags: [`blog:${slug}`],
+    },
+  );
   return data?.post ?? null;
 });
