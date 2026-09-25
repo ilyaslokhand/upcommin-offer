@@ -53,7 +53,14 @@ export async function POST(request) {
    * Sale and deal-tag support will be added
    * after their queries have been audited.
    */
-  const allowedTypes = ["deal", "blog", "store", "category", "sale"];
+  const allowedTypes = [
+    "deal",
+    "blog",
+    "blog-category",
+    "store",
+    "category",
+    "sale",
+  ];
 
   if (!allowedTypes.includes(type)) {
     return Response.json(
@@ -127,6 +134,17 @@ export async function POST(request) {
         expire: 0,
       });
     }
+  }
+
+  /*
+   * Refresh blog-category caches.
+   */
+  if (type === "blog-category") {
+    // Refresh blog feeds because post cards display category names.
+    revalidateTag("blogs", "max");
+
+    // Refresh category menus and the blog-category list.
+    revalidateTag("blog-categories", "max");
   }
 
   /*
