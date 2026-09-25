@@ -26,7 +26,8 @@ export function buildMetadata({
   const metaDescription =
     seo?.description || description || DEFAULT_DESCRIPTION;
 
-  const canonical = seo?.canonicalUrl || createCanonical(path);
+  // Always build canonical URLs from the public Next.js domain and route.
+  const canonical = createCanonical(path);
 
   return {
     title: metaTitle,

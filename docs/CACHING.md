@@ -134,3 +134,6 @@ The two internal invalidations are expected:
 
 
 Keep these separate from deal caching so changes can be refreshed precisely.
+
+
+curl.exe -s https://upcomingoffer.com/deals/sitovi-transparent-glass-jar-and-container-air-tight-black-lid-for-kitchen-400-ml-mataki-glass-jar-with-airtight-metal-lid-pack-of-6 | findstr "canonical"
