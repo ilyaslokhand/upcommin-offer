@@ -66,26 +66,66 @@ export default function DealHero({ deal }) {
                 {/* Bank & Card Offers */}
                 {deal.bankOffers?.length > 0 && (
                     <div className="bg-[#f4f5f9] border border-line rounded-[12px] px-4 py-3 flex flex-col gap-1.5">
-                        <p className="text-[15px] font-semibold text-muted">Bank & Card Offers</p>
-                        {deal.bankOffers.map((offer, i) => (
-                            <div key={i} className="flex items-start gap-1.5 text-[13px]">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0e9f5a" strokeWidth="2.5" className="mt-0.5 shrink-0"><path d="M5 12l4 4 10-10" /></svg>
-                                <span className="text-muted">
-                                    {offer.offerText ? (
-                                        <span className="text-text font-medium">{offer.offerText}</span>
-                                    ) : (
-                                        <>
-                                            <span className="font-semibold text-text">{offer.discountValue} {offer.offerType}</span>
-                                            {offer.bankName && ` with ${offer.bankName}`}
-                                            {offer.minPurchase && ` (min ₹${offer.minPurchase})`}
-                                            {offer.maxDiscount && ` (up to ₹${offer.maxDiscount})`}
-                                        </>
-                                    )}
-                                </span>
-                            </div>
-                        ))}
+                        <p className="text-[15px] font-semibold text-muted">
+                            Bank & Card Offers
+                        </p>
+
+                        {deal.bankOffers.map((offer, i) => {
+                            const hasStructuredOffer = Boolean(
+                                offer.discountValue || offer.offerType || offer.bankName
+                            );
+
+                            const textAlreadyHasValue = Boolean(
+                                offer.discountValue &&
+                                offer.offerText?.includes(offer.discountValue)
+                            );
+
+                            return (
+                                <div key={i} className="flex items-start gap-1.5 text-[13px]">
+                                    <svg
+                                        width="14"
+                                        height="14"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="#0e9f5a"
+                                        strokeWidth="2.5"
+                                        className="mt-0.5 shrink-0"
+                                    >
+                                        <path d="M5 12l4 4 10-10" />
+                                    </svg>
+
+                                    <span className="text-muted">
+                                        {textAlreadyHasValue || !hasStructuredOffer ? (
+                                            <span className="text-text font-medium">
+                                                {offer.offerText}
+                                            </span>
+                                        ) : (
+                                            <>
+                                                <span className="font-semibold text-text">
+                                                    {[offer.discountValue, offer.offerType]
+                                                        .filter(Boolean)
+                                                        .join(" ")}
+                                                </span>
+                                                {offer.bankName && ` with ${offer.bankName}`}
+                                                {offer.minPurchase &&
+                                                    ` (min ₹${offer.minPurchase})`}
+                                                {offer.maxDiscount &&
+                                                    ` (up to ₹${offer.maxDiscount})`}
+                                                {offer.offerText && (
+                                                    <span className="block text-text">
+                                                        {offer.offerText}
+                                                    </span>
+                                                )}
+                                            </>
+                                        )}
+                                    </span>
+                                </div>
+                            );
+                        })}
                     </div>
                 )}
+
+
 
                 {/* Shop Now button — always clickable */}
                 <div className="flex items-center gap-2.5">
@@ -108,6 +148,6 @@ export default function DealHero({ deal }) {
 
                 {/* ❌ removed the expiry warning ("Deals move fast — this offer might expire soon") */}
             </div>
-        </div>
+        </div >
     );
 }
