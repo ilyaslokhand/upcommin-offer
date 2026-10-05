@@ -32,7 +32,7 @@ export default function DealCard({
 
       {/* Image */}
       <div
-        className={`relative shrink-0 overflow-hidden bg-[#f4f5f9] ${horizontal
+        className={`relative shrink-0 overflow-hidden bg-[#fff] ${horizontal
             ? "w-27.5 h-27.5"
             : "w-30 h-30 md:w-full md:h-37.5"
           }`}
@@ -44,7 +44,7 @@ export default function DealCard({
             fill
             priority={priority}
             sizes="(max-width: 768px) 120px, 296px"
-            className="object-cover transition-transform duration-500 ease-out
+            className="object-contain transition-transform duration-500 ease-out
               group-hover:scale-[1.04] group-hover:-translate-y-0.5
               group-active:scale-[1.06] group-active:-translate-y-1
               motion-reduce:transform-none motion-reduce:transition-none"
