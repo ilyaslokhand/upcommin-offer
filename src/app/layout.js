@@ -24,9 +24,6 @@ const syne = Syne({
 export const metadata = {
   title: "UpcomingOffer India's Deals Feed",
   description: "Verified loot deals, coupons and offers updated every hour.",
-  other: {
-    "mitgo-verification": "15a0feaf-3681-42e3-aa9f-266bd5d4a92c",
-  },
 };
 
 const gaId = process.env.NEXT_PUBLIC_GA_ID;
