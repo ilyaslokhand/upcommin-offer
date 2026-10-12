@@ -25,6 +25,8 @@ const RESERVED_SLUGS = new Set([
 
 const nextConfig = {
   images: {
+     minimumCacheTTL: 2678400,
+
     remotePatterns: [
       {
         protocol: "https",
