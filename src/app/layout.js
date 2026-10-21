@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import NextTopLoader from "nextjs-toploader";
 
 import { buildOrganizationSchema, buildWebsiteSchema } from "@/lib/seo/schema";
 import JsonLd from "@/lib/seo/JsonLd";
@@ -36,6 +37,15 @@ export default function RootLayout({ children }) {
       className={`${dmSans.variable} ${syne.variable}`}
     >
       <body className="min-h-screen flex flex-col justify-between">
+        <NextTopLoader
+          color="var(--color-brand)"
+          height={3}
+          showSpinner={false}
+          shadow={false}
+          crawl={true}
+          speed={200}
+          zIndex={9999}
+        />
         <JsonLd data={buildOrganizationSchema()} />
         <JsonLd data={buildWebsiteSchema()} />
 
