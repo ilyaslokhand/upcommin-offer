@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
       <body className="min-h-screen flex flex-col justify-between">
         <NextTopLoader
           color="var(--color-brand)"
-          height={3}
+          height={5}
           showSpinner={false}
           shadow={false}
           crawl={true}
