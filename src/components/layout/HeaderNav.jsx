@@ -8,6 +8,8 @@ export default function HeaderNav({ categories, stores, blogCats }) {
   const [open, setOpen] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSub, setMobileSub] = useState(null);
+  const [desktopChildOpen, setDesktopChildOpen] = useState(null);
+  const [mobileChildOpen, setMobileChildOpen] = useState(null);
 
   const dropdowns = {
     categories: categories.map((c) => ({
@@ -45,6 +47,8 @@ export default function HeaderNav({ categories, stores, blogCats }) {
     { label: "Blogs", href: "/blog", key: "blog" },
   ];
 
+
+
   return (
     <>
       {/* Desktop nav */}
@@ -55,7 +59,10 @@ export default function HeaderNav({ categories, stores, blogCats }) {
               key={item.label}
               className="relative"
               onMouseEnter={() => item.key && setOpen(item.key)}
-              onMouseLeave={() => setOpen(null)}
+              onMouseLeave={() => {
+                setOpen(null);
+                setDesktopChildOpen(null);
+              }}
             >
               <Link href={item.href} className="hover:text-brand transition-colors py-2 inline-block">
                 {item.label}
@@ -63,23 +70,63 @@ export default function HeaderNav({ categories, stores, blogCats }) {
               </Link>
               {item.key && open === item.key && dropdowns[item.key].length > 0 && (
                 <div className="absolute top-full left-0 bg-surface border border-line rounded-lg shadow-lg py-2 min-w-50 z-50">
-                  {dropdowns[item.key].map((d) => (
-                    <div key={d.href}>
-                      <Link href={d.href} className="block px-4 py-2 text-sm font-medium hover:bg-brand-tint hover:text-brand">
-                        {d.label}
-                      </Link>
-                      {/* Subcategories — indented */}
-                      {d.children && d.children.length > 0 && (
-                        <div className="pl-4">
-                          {d.children.map((sub) => (
-                            <Link key={sub.href} href={sub.href} className="block px-4 py-1.5 text-[13px] text-muted hover:text-brand">
-                              {sub.label}
-                            </Link>
-                          ))}
+                  {dropdowns[item.key].map((d) => {
+                    const hasChildren = d.children?.length > 0;
+                    const isExpanded = desktopChildOpen === d.href;
+
+                    return (
+                      <div key={d.href}>
+                        <div className="flex items-center">
+                          <Link
+                            href={d.href}
+                            className="flex-1 block px-4 py-2 text-sm font-medium hover:bg-brand-tint hover:text-brand"
+                          >
+                            {d.label}
+                          </Link>
+
+                          {hasChildren && (
+                            <button
+                              type="button"
+                              onClick={() => setDesktopChildOpen(isExpanded ? null : d.href)}
+                              aria-label={`${isExpanded ? "Close" : "Open"} ${d.label} subcategories`}
+                              aria-expanded={isExpanded}
+                              className="size-10 shrink-0 flex items-center justify-center text-text hover:text-brand hover:bg-brand-tint rounded-md cursor-pointer transition-colors"
+                            >
+                              <svg
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.25"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                                className={`transition-transform duration-200 ${isExpanded ? "rotate-180" : ""
+                                  }`}
+                              >
+                                <path d="m6 9 6 6 6-6" />
+                              </svg>
+                            </button>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  ))}
+
+                        {hasChildren && isExpanded && (
+                          <div className="pl-4 pb-1">
+                            {d.children.map((sub) => (
+                              <Link
+                                key={sub.href}
+                                href={sub.href}
+                                className="block px-4 py-1.5 text-[13px] text-muted hover:text-brand"
+                              >
+                                {sub.label}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               )}            </div>
           ))}
@@ -168,22 +215,65 @@ export default function HeaderNav({ categories, stores, blogCats }) {
                 {/* Submenu — 2-column grid, only when expanded */}
                 {item.key && mobileSub === item.key && (
                   <div className="flex flex-col pb-3 pl-1">
-                    {dropdowns[item.key].map((d) => (
-                      <div key={d.href}>
-                        <Link href={d.href} className="block py-1.5 text-sm font-medium text-text hover:text-brand" onClick={() => setMobileOpen(false)}>
-                          {d.label}
-                        </Link>
-                        {d.children && d.children.length > 0 && (
-                          <div className="pl-4 flex flex-col">
-                            {d.children.map((sub) => (
-                              <Link key={sub.href} href={sub.href} className="py-1 text-[13px] text-muted hover:text-brand" onClick={() => setMobileOpen(false)}>
-                                {sub.label}
-                              </Link>
-                            ))}
+                    {dropdowns[item.key].map((d) => {
+                      const hasChildren = d.children?.length > 0;
+                      const isExpanded = mobileChildOpen === d.href;
+
+                      return (
+                        <div key={d.href}>
+                          <div className="flex items-center">
+                            <Link
+                              href={d.href}
+                              className="flex-1 block py-2 text-sm font-medium text-text hover:text-brand"
+                              onClick={() => setMobileOpen(false)}
+                            >
+                              {d.label}
+                            </Link>
+
+                            {hasChildren && (
+                              <button
+                                type="button"
+                                onClick={() => setMobileChildOpen(isExpanded ? null : d.href)}
+                                aria-label={`${isExpanded ? "Close" : "Open"} ${d.label} subcategories`}
+                                aria-expanded={isExpanded}
+                                className="size-11 shrink-0 flex items-center justify-center text-text hover:text-brand rounded-md cursor-pointer transition-colors"
+                              >
+                                <svg
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2.25"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  aria-hidden="true"
+                                  className={`transition-transform duration-200 ${isExpanded ? "rotate-180" : ""
+                                    }`}
+                                >
+                                  <path d="m6 9 6 6 6-6" />
+                                </svg>
+                              </button>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    ))}
+
+                          {hasChildren && isExpanded && (
+                            <div className="pl-4 flex flex-col pb-1">
+                              {d.children.map((sub) => (
+                                <Link
+                                  key={sub.href}
+                                  href={sub.href}
+                                  className="py-1.5 text-[13px] text-muted hover:text-brand"
+                                  onClick={() => setMobileOpen(false)}
+                                >
+                                  {sub.label}
+                                </Link>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
