@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { social } from "@/lib/siteConfig";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 
 export default function HeaderNav({ categories, stores, blogCats }) {
   const [open, setOpen] = useState(null);
