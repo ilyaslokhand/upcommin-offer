@@ -10,7 +10,8 @@ export default function SaleHero({ sale }) {
         <div className="container-wrap pt-4">
             <div className="relative rounded-[20px] overflow-hidden border border-line min-h-[280px] flex flex-col justify-between px-6 md:px-10 py-8">
                 {sale.bannerImage && (
-                    <Image src={sale.bannerImage} alt={sale.name} fill sizes="1280px" className="object-cover -z-10" priority />
+                    <Image src={sale.bannerImage} alt={sale.name} fill sizes="(max-width: 768px) 100vw, 1280px"
+                        className="object-cover -z-10" preload />
                 )}
                 <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/30 to-black/60" />
 
